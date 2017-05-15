@@ -10,19 +10,25 @@ var App = App || {};
     App.map = L.map('map').setView([41.779786, -87.644778], 15);
 
     // create the map layer using data from openstreetmap
-    var osmUrl= 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-  	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
+    // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
+    // var osmUrl = 'http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'; // light
+
+  	var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 
   	var osm = new L.TileLayer(osmUrl, {minZoom: 11, maxZoom: 18, attribution: osmAttrib});
 
     App.map.addLayer(osm);
 
     d3.queue()
-      .defer(d3.json, "./data/ChicagoCensusBlockBoundaries.geojson")
-      .defer(d3.json, "./data/ChicagoCensusTractBoundaries.geojson")
+      .defer(d3.json, "./data/EnglewoodCensusBlockBoundaries.geojson")
+      .defer(d3.json, "./data/EnglewoodCensusTractBoundaries.geojson")
+      // .defer(d3.json, "./data/ChicagoCensusBlockBoundaries.geojson")
+      // .defer(d3.json, "./data/ChicagoCensusTractBoundaries.geojson")
       .defer(d3.csv, "./data/ChicagoCensusPopulations.csv")
-      .defer(d3.json, "./data/CommunityAreaBoundaries.geojson")
+      .defer(d3.json, "./data/EnglewoodCommunityAreaBoundaries.geojson")
+      // .defer(d3.json, "./data/CommunityAreaBoundaries.geojson")
       // .defer(d3.json, "./data/EnglewoodColumnHeaders.geojson")
       .defer(d3.csv, "./data/EnglewoodLocations.csv")
       .await(dataLoaded)
@@ -55,7 +61,7 @@ var App = App || {};
     // create a d3 color scale to convert a population number to a color value
     let colorScale = d3.scaleLinear()
       .domain(d3.range(0, 7).map(n => n/6 * maxPop)) // need an array of 6 values to map to the 6 colors
-      .range(['#7fcdbb','#41b6c4','#1d91c0','#225ea8','#253494','#081d58'])
+      .range(['#9ebcda','#8c96c6','#8c6bb1','#88419d','#810f7c','#4d004b'])
       .clamp(true);
 
     // filter out census blocks based on the community to focus on englewood
@@ -87,7 +93,7 @@ var App = App || {};
     L.geoJSON(communityAreas, {
         style: function (feature) {
             return {
-              color: "#00ac9d",
+              color: "#810f7c",
               fill: false
             };
         }
@@ -99,7 +105,7 @@ var App = App || {};
         style: function (feature) {
             return {
               color: colorScale(App.data.populations[feature.properties.tract_bloc]),
-              fillOpacity: 0.5,
+              fillOpacity: 0.4,
               stroke: false
             };
         }
