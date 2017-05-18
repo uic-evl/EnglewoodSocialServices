@@ -23,8 +23,8 @@ var App = App || {};
 
     d3.queue()
       .defer(d3.json, "./data/EnglewoodCensusBlockBoundaries.geojson")
-      .defer(d3.json, "./data/EnglewoodCensusTractBoundaries.geojson")
       // .defer(d3.json, "./data/ChicagoCensusBlockBoundaries.geojson")
+      .defer(d3.json, "./data/EnglewoodCensusTractBoundaries.geojson")
       // .defer(d3.json, "./data/ChicagoCensusTractBoundaries.geojson")
       .defer(d3.csv, "./data/ChicagoCensusPopulations.csv")
       .defer(d3.json, "./data/EnglewoodCommunityAreaBoundaries.geojson")
@@ -43,6 +43,8 @@ var App = App || {};
     // convert populations from an array to a lookup table by census block
     App.data.populations = {};
 
+    console.log(censusPopulations.length);
+
     for (let block of censusPopulations) {
       App.data.populations[block["CENSUS BLOCK"]] = block["TOTAL POPULATION"];
     }
@@ -54,22 +56,28 @@ var App = App || {};
       App.data.tractInfo[tract.properties.tractce10] = tract.properties;
     }
 
+    console.log(Object.keys(App.data.tractInfo).length);
 
     // get the maximum population in any census block
     let maxPop = d3.max(censusPopulations, d => d["TOTAL POPULATION"]);
 
     // create a d3 color scale to convert a population number to a color value
     let colorScale = d3.scaleLinear()
-      .domain(d3.range(0, 7).map(n => n/6 * maxPop)) // need an array of 6 values to map to the 6 colors
-      .range(['#9ebcda','#8c96c6','#8c6bb1','#88419d','#810f7c','#4d004b'])
-      .clamp(true);
+      .domain([0, maxPop])
+      .range(['#9ebcda', '#4d004b'])
+      // .domain(d3.range(0, 7).map(n => n/6 * maxPop)) // need an array of 6 values to map to the 6 colors
+      // .range(['#9ebcda','#8c96c6','#8c6bb1','#88419d','#810f7c','#4d004b'])
+      // .interpolate(d3.interpolateHsl)
+      .clamp(true)
+
+    console.log(blockBoundaries);
 
     // filter out census blocks based on the community to focus on englewood
     blockBoundaries.features = blockBoundaries.features.filter(b => {
       let tract = App.data.tractInfo[b.properties.tractce10];
 
       if (tract) {
-        let comm = parseInt(tract.commarea);
+        let comm = parseInt(tract.commarea_n);
 
         return comm === 67 || comm === 68;
       }
