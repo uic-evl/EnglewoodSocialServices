@@ -2,7 +2,8 @@
   "B": {
     "description": "Basic Needs",
     "children": [
-
+      "Safe Place to Live",
+      "Provision of Food/clothing"
     ]
   },
   "D": {
@@ -20,6 +21,9 @@
   "H": {
     "description": "Education",
     "children": [
+      "Education",
+      "High School/GED Completion",
+      "Tutoring/homework help",
 
     ]
   },
@@ -44,6 +48,10 @@
   "P": {
     "description": "Individual and Family Life",
     "children": [
+      "Family Stability",
+      "Foster care",
+      "Adoption services",
+      "Family support",
 
     ]
   },

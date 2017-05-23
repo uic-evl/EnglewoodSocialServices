@@ -16,8 +16,7 @@ var App = App || {};
 
     App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
       .then(function() {
-        console.log(App.models.socialServices.getData());
-
+        App.views.map.plotServices(App.models.socialServices.getData());
       })
       .catch(function(err) {
         console.log(err);
