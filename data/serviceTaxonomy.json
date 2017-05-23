@@ -1,0 +1,62 @@
+{
+  "B": {
+    "description": "Basic Needs",
+    "children": [
+
+    ]
+  },
+  "D": {
+    "description": "Consumer Services",
+    "children": [
+
+    ]
+  },
+  "F": {
+    "description": "Criminal Justice and Legal Services",
+    "children": [
+
+    ]
+  },
+  "H": {
+    "description": "Education",
+    "children": [
+
+    ]
+  },
+  "J": {
+    "description": "Environment and Public Health/Safety",
+    "children": [
+
+    ]
+  },
+  "L": {
+    "description": "Health Care",
+    "children": [
+
+    ]
+  },
+  "N": {
+    "description": "Income Support and Employment",
+    "children": [
+
+    ]
+  },
+  "P": {
+    "description": "Individual and Family Life",
+    "children": [
+
+    ]
+  },
+  "R": {
+    "description": "Mental Health and Substance Use Disorder Services",
+    "children": [
+
+    ]
+  },
+  "T": {
+    "description": "Organizational/Community/International Services",
+    "children": [
+
+    ]
+  }
+}
