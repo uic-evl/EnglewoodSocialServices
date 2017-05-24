@@ -7,7 +7,18 @@ let MapView = function(div) {
     map: null,
     serviceLayer: null,
     icons: {},
-    iconColors: ["blue", "red", "green", "orange", "yellow", "violet", "grey", "black"]
+
+    iconColorNames: ["blue", "red", "green", "orange", "yellow", "violet", "grey", "black"],
+    iconColors: {
+      "blue": "#2e84cb",
+      "red": "#cb2d40",
+      "green": "#28ad25",
+      "orange": "#cc852a",
+      "yellow": "#cac428",
+      "violet": "#9c2bcb",
+      "grey": "#7b7b7b",
+      "black": "#3e3e3e"
+    }
   };
 
   init();
@@ -43,8 +54,9 @@ let MapView = function(div) {
     }, 0);
   }
 
+  // initialize the different icon options by color
   function initIcons() {
-    for (let color of self.iconColors) {
+    for (let color of self.iconColorNames) {
       self.icons[color] = new L.Icon({
         iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-' + color + '.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -68,7 +80,7 @@ let MapView = function(div) {
       // create a marker for each social services location
       L.marker(
         L.latLng(lat, lng), {
-          icon: self.icons[self.iconColors[Math.floor(Math.random() * self.iconColors.length)]],
+          icon: self.icons[self.iconColorNames[Math.floor(Math.random() * self.iconColorNames.length)]],
           riseOnHover: true, // moves the marker to the front on mouseover
           opacity: (Math.random() > 0.75 ? 1 : 0.25)
         }

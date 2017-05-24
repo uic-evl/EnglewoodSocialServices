@@ -3,7 +3,7 @@
     "description": "Basic Needs",
     "children": [
       "Safe Place to Live",
-      "Provision of Food/clothing"
+      "Provision of Food/clothing",
       "Residency"
     ]
   },
@@ -25,14 +25,14 @@
       "Education",
       "High School/GED Completion",
       "Tutoring/homework help",
-      "College/career prep"
-      "Academic counseling"
-      "Enrichment field trips"
-      "Student clubs"
-      "Curriculum enhancement"
-      "Arts/language programs"
-      "Field Trips"
-      "In School Performance"
+      "College/career prep",
+      "Academic counseling",
+      "Enrichment field trips",
+      "Student clubs",
+      "Curriculum enhancement",
+      "Arts/language programs",
+      "Field Trips",
+      "In School Performance",
       "After School Programs"
     ]
   },
@@ -45,22 +45,22 @@
   "L": {
     "description": "Health Care",
     "children": [
-      "Health"
-      "Preventive health visits"
-      "Vaccinations"
-      "Cessation programs"
-      "Nutrition & Wellness programs/counseling"
-      "Management of chronic conditions"
+      "Health",
+      "Preventive health visits",
+      "Vaccinations",
+      "Cessation programs",
+      "Nutrition & Wellness programs/counseling",
+      "Management of chronic conditions",
       "HIV/AIDS programs"
     ]
   },
   "N": {
     "description": "Income Support and Employment",
     "children": [
-      "Service learning"
-      "Job training"
-      "youth employment (internships)"
-      "Job placement (long-term)"
+      "Service learning",
+      "Job training",
+      "youth employment (internships)",
+      "Job placement (long-term)",
       "Professional development"
     ]
   },
@@ -71,38 +71,38 @@
       "Foster care",
       "Adoption services",
       "Family support",
-      "Parenting classes/workshops"
-      "Early childhood"
-      "Family planning"
-      "Leadership/character development programs (through mentoring)"
-      "Home visiting"
-      "Family & child counseling"
-      "Sexual assault counseling"
-      "Domestic violence support/counseling"
-      "Physical activity/sports"
-      "Dance"
-      "Media Arts"
-      "Music"
-      "Theater"
-      "Visual Arts"
-      "DIscNA"
-      "Writing/poetry"
+      "Parenting classes/workshops",
+      "Early childhood",
+      "Family planning",
+      "Leadership/character development programs (through mentoring)",
+      "Home visiting",
+      "Family & child counseling",
+      "Sexual assault counseling",
+      "Domestic violence support/counseling",
+      "Physical activity/sports",
+      "Dance",
+      "Media Arts",
+      "Music",
+      "Theater",
+      "Visual Arts",
+      "DIscNA",
+      "Writing/poetry",
       "Arts & crafts"
     ]
   },
   "R": {
     "description": "Mental Health and Substance Use Disorder Services",
     "children": [
-      "Behavioral/self-management programs/workshops"
-      "Mental health counseling (general)"
-      "Substance abuse/addiction treatment"
+      "Behavioral/self-management programs/workshops",
+      "Mental health counseling (general)",
+      "Substance abuse/addiction treatment",
       "Anger management counseling"
     ]
   },
   "T": {
     "description": "Organizational/Community/International Services",
     "children": [
-      "Engage youth to prevent gang participation"
+      "Engage youth to prevent gang participation",
       "Workshops focused on violence prevention"
     ]
   }
