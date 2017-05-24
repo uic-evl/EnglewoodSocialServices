@@ -35,7 +35,7 @@
     <script src="./src/js/views/serviceListView.js"></script>
 
     <!-- Controllers -->
-    <script src="./src/js/controllers/tabController.js"></script>
+    <script src="./src/js/controllers/filterDropdownController.js"></script>
 
     <!-- Main Script -->
     <script src="./src/js/finder.js"></script>
@@ -47,8 +47,16 @@
             <div class="navbar-header">
                 <a class="navbar-brand">Englewood Social Services</a>
             </div>
-            <button class="btn btn-success navbar-btn" id="allServicesLink">Show All Services</button>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Filter Services<span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="filterDropdownList">
+                      <!-- Programmatically added from taxonomy file -->
+                    </ul>
+                </li>
+            </ul>
 
+            <button class="btn btn-success navbar-btn" id="allServicesButton">Show All Services</button>
             <button class="btn btn-info navbar-btn">
               <span class="glyphicon glyphicon-map-marker"></span>
               Jump to Location
@@ -58,7 +66,7 @@
         <div class="container-fluid">
             <ul class="nav nav-pills" id="serviceTabList">
                 <li class="nav-item">
-                  <!-- <a class="nav-link" href="#" >All Services</a> -->
+                    <!-- <a class="nav-link" href="#" >All Services</a> -->
                 </li>
             </ul>
 
@@ -71,61 +79,61 @@
     <div class="container-fluid appContent">
         <div class="row h-100">
             <div class="col-md-8 h-100 mapWrapper">
-              <div id="serviceMap">
+                <div id="serviceMap">
 
-              </div>
+                </div>
             </div>
             <div class="col-md-4 h-100">
-              <div class="well well-lg" id="serviceList">
-                <div class="serviceEntry">
-                  <h3>Name</h3>
-                  <h4>Address</h4>
-                  <p>Description</p>
-                  <p>Hours/Other Info</p>
-                </div>
-                <div class="serviceEntry">
-                  <h3>Name</h3>
-                  <h4>Address</h4>
-                  <p>Description</p>
-                  <p>Hours/Other Info</p>
-                </div>
+                <div class="well well-lg" id="serviceList">
+                    <div class="serviceEntry">
+                        <h3>Name</h3>
+                        <h4>Address</h4>
+                        <p>Description</p>
+                        <p>Hours/Other Info</p>
+                    </div>
+                    <div class="serviceEntry">
+                        <h3>Name</h3>
+                        <h4>Address</h4>
+                        <p>Description</p>
+                        <p>Hours/Other Info</p>
+                    </div>
 
-                <div class="serviceEntry">
-                  <h3>Name</h3>
-                  <h4>Address</h4>
-                  <p>Description</p>
-                  <p>Hours/Other Info</p>
-                </div>
+                    <div class="serviceEntry">
+                        <h3>Name</h3>
+                        <h4>Address</h4>
+                        <p>Description</p>
+                        <p>Hours/Other Info</p>
+                    </div>
 
-                <div class="serviceEntry">
-                  <h3>Name</h3>
-                  <h4>Address</h4>
-                  <p>Description</p>
-                  <p>Hours/Other Info</p>
-                </div>
+                    <div class="serviceEntry">
+                        <h3>Name</h3>
+                        <h4>Address</h4>
+                        <p>Description</p>
+                        <p>Hours/Other Info</p>
+                    </div>
 
-                <div class="serviceEntry">
-                  <h3>Name</h3>
-                  <h4>Address</h4>
-                  <p>Description</p>
-                  <p>Hours/Other Info</p>
-                </div>
+                    <div class="serviceEntry">
+                        <h3>Name</h3>
+                        <h4>Address</h4>
+                        <p>Description</p>
+                        <p>Hours/Other Info</p>
+                    </div>
 
-                <div class="serviceEntry">
-                  <h3>Name</h3>
-                  <h4>Address</h4>
-                  <p>Description</p>
-                  <p>Hours/Other Info</p>
-                </div>
+                    <div class="serviceEntry">
+                        <h3>Name</h3>
+                        <h4>Address</h4>
+                        <p>Description</p>
+                        <p>Hours/Other Info</p>
+                    </div>
 
-                <div class="serviceEntry">
-                  <h3>Name</h3>
-                  <h4>Address</h4>
-                  <p>Description</p>
-                  <p>Hours/Other Info</p>
-                </div>
+                    <div class="serviceEntry">
+                        <h3>Name</h3>
+                        <h4>Address</h4>
+                        <p>Description</p>
+                        <p>Hours/Other Info</p>
+                    </div>
 
-              </div>
+                </div>
 
             </div>
         </div>

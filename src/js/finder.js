@@ -10,7 +10,7 @@ var App = App || {};
   App.models.socialServices = new SocialServiceModel();
   App.models.serviceTaxonomy = new ServiceTaxonomyModel();
 
-  App.controllers.serviceTypeTabs = new TabController();
+  App.controllers.serviceFilterDropdown = new FilterDropdownController();
 
   App.init = function() {
     console.log("Loading Finder");
@@ -18,9 +18,8 @@ var App = App || {};
     App.views.map = new MapView("serviceMap");
     App.views.serviceList = new ServiceListView("#serviceList")
 
-    App.controllers.serviceTypeTabs.setTabList("#serviceTabList");
-    App.controllers.serviceTypeTabs.setTabContentDiv("#serviceTabContentDiv");
-    App.controllers.serviceTypeTabs.attachAllServicesLink("#allServicesLink");
+    App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
+    App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
@@ -30,7 +29,7 @@ var App = App || {};
         App.views.map.plotServices(App.models.socialServices.getData());
         App.views.serviceList.populateList(App.models.socialServices.getData());
 
-        // App.controllers.serviceTypeTabs.populateTabs();
+        App.controllers.serviceFilterDropdown.populateDropdown();
 
 
         console.log(App.models.serviceTaxonomy.getTier1Categories());
