@@ -74,8 +74,8 @@ let MapView = function(div) {
         }
       ).bindPopup(function(layer) { // allow for the popup on click with the name of the location
         return "<strong>" + loc["Organization Name"] + "</strong><br>" +
-          loc["Description of Services Provided in Englewood"] + "<br>" +
-          "<a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>Google Maps</a>";
+          loc["Description of Services Provided in Englewood"] + "<br><br>" +
+          "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>Google Maps</a></strong>";
       }).addTo(self.serviceGroup);
     }
   }
