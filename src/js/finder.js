@@ -11,6 +11,7 @@ var App = App || {};
   App.models.serviceTaxonomy = new ServiceTaxonomyModel();
 
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
+  App.controllers.locationButton = new LocationButtonController();
 
   App.init = function() {
     console.log("Loading Finder");
@@ -20,6 +21,8 @@ var App = App || {};
 
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
+
+    App.controllers.locationButton.attachLocationButton("#locationButton");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");

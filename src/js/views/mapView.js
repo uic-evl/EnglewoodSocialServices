@@ -42,9 +42,7 @@ let MapView = function(div) {
     });
 
     self.map.addLayer(osm);
-    self.map.setView([41.779786, -87.644778], 15, {
-      // reset: true
-    });
+    self.map.setView([41.779786, -87.644778], 15);
 
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
 

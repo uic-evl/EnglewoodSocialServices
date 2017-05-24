@@ -5,14 +5,14 @@ var App = App || {};
 let FilterDropdownController = function() {
   let self = {
     filterDropdownList: null,
-    allServicesButton: null
+    allServicesButton: null,
+
+    filters: {}
   };
 
   init();
 
-  function init() {
-
-  }
+  function init() {}
 
   function attachAllServicesButton(id) {
     self.allServicesButton = d3.select(id)
@@ -41,7 +41,21 @@ let FilterDropdownController = function() {
         listItem.append("a")
           .attr("tabindex", -1)
           .attr("href", "#")
-          .text(c1);
+          .html("<span class='glyphicon glyphicon-ok glyphicon-hidden'></span>  " + c1)
+          .on("click", function(c1) {
+            d3.event.stopPropagation(); // prevent menu close on label click
+            let check = d3.select(this).select(".glyphicon");
+
+            let selected = !check.classed("glyphicon-hidden");
+            check.classed("glyphicon-hidden", selected);
+
+            console.log(c1);
+
+            d3.select(this).select("ul").selectAll(".serviceSubtype")
+              .each(function(d) {
+                console.log("Selected:", d);
+              })
+          });
 
         let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1);
 
@@ -60,10 +74,18 @@ let FilterDropdownController = function() {
               subType: c2
             };
           })
-          .text(function(d) {
-            return d.subType;
+          .html(function(d) {
+            return "<span class='glyphicon glyphicon-ok glyphicon-hidden'></span>  " + d.subType;
           })
           .on("click", function(d) {
+            d3.event.stopPropagation(); // prevent menu close on label click
+            let check = d3.select(this).select(".glyphicon");
+
+            let selected = !check.classed("glyphicon-hidden");
+            check.classed("glyphicon-hidden", selected);
+
+            self.filters[d.subType] = selected;
+
             console.log(d);
           });
 
