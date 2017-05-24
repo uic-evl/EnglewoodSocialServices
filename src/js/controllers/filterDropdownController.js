@@ -21,6 +21,10 @@ let FilterDropdownController = function() {
 
   function resetFilters() {
     console.log("Reset Filters");
+
+    self.filters = {}
+    self.filterDropdownList.selectAll(".glyphicon")
+      .classed("glyphicon-hidden", true);
   }
 
   function setFilterDropdown(id) {
@@ -41,20 +45,26 @@ let FilterDropdownController = function() {
         listItem.append("a")
           .attr("tabindex", -1)
           .attr("href", "#")
-          .html("<span class='glyphicon glyphicon-ok glyphicon-hidden'></span>  " + c1)
+          .html("<span class='glyphicon glyphicon-minus glyphicon-hidden'></span>  " + c1)
           .on("click", function(c1) {
             d3.event.stopPropagation(); // prevent menu close on label click
             let check = d3.select(this).select(".glyphicon");
 
-            let selected = !check.classed("glyphicon-hidden");
-            check.classed("glyphicon-hidden", selected);
+            let selected = check.classed("glyphicon-hidden");
+            check.classed("glyphicon-hidden", !selected);
 
-            console.log(c1);
-
-            d3.select(this).select("ul").selectAll(".serviceSubtype")
+            listItem.select("ul").selectAll(".serviceSubtype")
               .each(function(d) {
-                console.log("Selected:", d);
-              })
+                let check = d3.select(this).select(".glyphicon");
+
+                check.classed("glyphicon-hidden", !selected);
+
+                console.log(d);
+                self.filters[d] = selected;
+              });
+
+
+              console.log(self.filters);
           });
 
         let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1);
