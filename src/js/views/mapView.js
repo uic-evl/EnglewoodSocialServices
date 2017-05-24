@@ -80,7 +80,7 @@ let MapView = function(div) {
       // create a marker for each social services location
       L.marker(
         L.latLng(lat, lng), {
-          icon: self.icons[self.iconColorNames[Math.floor(Math.random() * self.iconColorNames.length)]],
+          icon: self.icons[self.iconColorNames[0]],
           riseOnHover: true, // moves the marker to the front on mouseover
           opacity: (Math.random() > 0.75 ? 1 : 0.25)
         }

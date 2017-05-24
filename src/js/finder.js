@@ -16,6 +16,7 @@ var App = App || {};
     console.log("Loading Finder");
 
     App.views.map = new MapView("serviceMap");
+    App.views.serviceList = new ServiceListView("#serviceList")
 
     App.controllers.serviceTypeTabs.setTabList("#serviceTabList");
     App.controllers.serviceTypeTabs.setTabContentDiv("#serviceTabContentDiv");
@@ -27,6 +28,7 @@ var App = App || {};
     Promise.all([socialServiceP, serviceTaxonomyP])
       .then(function(values) {
         App.views.map.plotServices(App.models.socialServices.getData());
+        App.views.serviceList.populateList(App.models.socialServices.getData());
 
         // App.controllers.serviceTypeTabs.populateTabs();
 
