@@ -28,10 +28,10 @@ let LocationButtonController = function() {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             }
-          console.log("Latitude: " + pos.lat + "   Longitude: " + pos.lng); 
-          // App.views.map.setView([pos.lat, pos.lng], 15);
+          console.log("Latitude: " + pos.lat + "   Longitude: " + pos.lng);
+          App.views.map.jumpToUsersLocation(pos);
         });
-      
+
     }
     else {
       console.log('wait shit')

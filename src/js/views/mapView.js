@@ -103,18 +103,14 @@ let MapView = function(div) {
     });
   }
 
-  function hasAnyFilters(serviceFilters) {
-
-  }
-
-  function getMap() {
-    return self.map;
+  function jumpToUsersLocation(position) {
+    self.map.setView([position.lat, position.lng], 17);
   }
 
   return {
     plotServices,
     updateServicesWithFilter,
 
-    getMap
+    jumpToUsersLocation
   };
 };
