@@ -127,8 +127,29 @@ let MapView = function(div) {
     }
   }
 
+  var circle;
+
+  function drawCircle(position){
+    circle = L.circle(position, {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.3,
+    radius: 50
+    });
+
+    self.map.addLayer(circle);
+  }
+
   function jumpToLocation(position) {
+    //remove previous circle marker
+    if(circle != undefined)
+      self.map.removeLayer(circle);
+
+    //move map to new poisition
     self.map.setView([position.lat, position.lng], 17);
+
+    //draw a circle marker at new position
+    drawCircle(position);
   }
 
   return {
