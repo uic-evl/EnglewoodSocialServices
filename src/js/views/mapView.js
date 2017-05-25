@@ -80,19 +80,22 @@ let MapView = function(div) {
         L.latLng(lat, lng), {
           icon: self.icons[self.iconColorNames[0]],
           riseOnHover: true, // moves the marker to the front on mouseover
-          opacity: (Math.random() > 0.75 ? 1 : 0.25)
+          opacity: (Math.random() > 0.75 ? 1 : 0.25),
+          // bind data to marker inside options
+          data: loc
         }
       ).bindPopup(function(layer) { // allow for the popup on click with the name of the location
         return "<strong>" + loc["Organization Name"] + "</strong><br>" +
           loc["Description of Services Provided in Englewood"] + "<br><br>" +
-          "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>Google Maps</a></strong>";
+          "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
+          "<span class='glyphicon glyphicon-share-alt'></span> Google Maps</a></strong>";
       }).addTo(self.serviceGroup);
     }
   }
 
   function updateServicesWithFilter(serviceFilters) {
     self.serviceGroup.eachLayer(function(layer) {
-      console.log(layer);
+      layer.setOpacity(1);
     });
   }
 
@@ -102,6 +105,8 @@ let MapView = function(div) {
 
   return {
     plotServices,
+    updateServicesWithFilter,
+
     getMap
   };
 };
