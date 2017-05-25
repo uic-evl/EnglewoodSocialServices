@@ -28,8 +28,25 @@ let SocialServiceModel = function() {
     return self.data;
   }
 
+  function getFilteredData(serviceFilters) {
+    if (Object.keys(serviceFilters).length == 0) {
+      return self.data
+    }
+
+    return _.filter(self.data, function(el) {
+      for (let property of Object.keys(serviceFilters)) {
+        if (el[property] == 1) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+  }
+
   return {
     loadData,
-    getData
+    getData,
+    getFilteredData
   };
 };

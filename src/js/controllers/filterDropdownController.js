@@ -182,7 +182,10 @@ let FilterDropdownController = function() {
       }
     }
 
-    console.log(filtersToSend);
+    App.views.map.updateServicesWithFilter(filtersToSend);
+    App.views.serviceList.populateList(
+      App.models.socialServices.getFilteredData(filtersToSend)
+    );
   }
 
   return {

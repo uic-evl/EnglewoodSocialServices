@@ -80,7 +80,6 @@ let MapView = function(div) {
         L.latLng(lat, lng), {
           icon: self.icons[self.iconColorNames[0]],
           riseOnHover: true, // moves the marker to the front on mouseover
-          opacity: (Math.random() > 0.75 ? 1 : 0.25),
           // bind data to marker inside options
           data: loc
         }
@@ -94,13 +93,34 @@ let MapView = function(div) {
   }
 
   function updateServicesWithFilter(serviceFilters) {
-    if (serviceFilters) {
+    if (Object.keys(serviceFilters).length === 0) {
+      // if there are no filters, show all locations
+      self.serviceGroup.eachLayer(function(layer) {
+        layer.setOpacity(1);
+      });
+    } else {
+      // otherwise only show locations that match at least one of the selected properties
+      self.serviceGroup.eachLayer(function(layer) {
+        let loc = layer.options.data;
+        let show = false;
 
+        for (let property of Object.keys(serviceFilters)) {
+          if (loc[property] == 1) {
+            show = true;
+            break;
+          }
+        }
+
+        if (show) {
+          layer.setOpacity(1);
+        } else {
+          layer.setOpacity(0.2);
+        }
+
+      });
     }
 
-    self.serviceGroup.eachLayer(function(layer) {
-      layer.setOpacity(1);
-    });
+
   }
 
   function jumpToLocation(position) {
