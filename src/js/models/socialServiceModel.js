@@ -30,7 +30,7 @@ let SocialServiceModel = function() {
 
   function getFilteredData(serviceFilters) {
     if (Object.keys(serviceFilters).length == 0) {
-      return self.data
+      return self.data;
     }
 
     return _.filter(self.data, function(el) {

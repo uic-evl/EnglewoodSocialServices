@@ -2,22 +2,30 @@
 
 var App = App || {};
 
+$(document).ready(function() {
+  App.init();
+});
+
 (function() {
   App.models = {};
   App.views = {};
   App.controllers = {};
 
+  // models
   App.models.socialServices = new SocialServiceModel();
   App.models.serviceTaxonomy = new ServiceTaxonomyModel();
 
+  // views
+
+
+  // controllers
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
   App.controllers.locationButton = new LocationButtonController();
 
   App.init = function() {
     console.log("Loading Finder");
-
     App.views.map = new MapView("serviceMap");
-    App.views.serviceList = new ServiceListView("#serviceList")
+    App.views.serviceList = new ServiceListView("#serviceList");
 
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
@@ -30,6 +38,8 @@ var App = App || {};
 
     Promise.all([socialServiceP, serviceTaxonomyP])
       .then(function(values) {
+        // App.views.map.createMap();
+
         App.views.map.plotServices(App.models.socialServices.getData());
         App.views.serviceList.populateList(App.models.socialServices.getData());
 

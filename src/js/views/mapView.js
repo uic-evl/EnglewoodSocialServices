@@ -25,8 +25,14 @@ let MapView = function(div) {
 
   function init() {
     initIcons(); // create icon references for map use
+    createMap();
+  }
+
+  function createMap() {
+    console.log(d3.select("#" + div).node().clientWidth);
 
     self.map = L.map(div);
+    console.log(self.map.getSize());
     // create the map layer using data from openstreetmap
 
     var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
@@ -47,9 +53,9 @@ let MapView = function(div) {
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
 
     // causes map to recalculate size... (I shouldn't need to do this)
-    setTimeout(function() {
-      self.map.invalidateSize();
-    }, 0);
+    // setTimeout(function() {
+    //   self.map.invalidateSize();
+    // }, 0);
   }
 
   // initialize the different icon options by color
@@ -128,6 +134,7 @@ let MapView = function(div) {
   }
 
   return {
+    createMap,
     plotServices,
     updateServicesWithFilter,
 
