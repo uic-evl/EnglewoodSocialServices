@@ -36,7 +36,7 @@ let MapView = function(div) {
     // create the map layer using data from openstreetmap
 
     var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
-    // var osmUrl = 'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
+    // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
     // var osmUrl = 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'; // light
 
     var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
@@ -125,8 +125,6 @@ let MapView = function(div) {
 
       });
     }
-
-
   }
 
   function jumpToLocation(position) {

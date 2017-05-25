@@ -5,7 +5,9 @@ var App = App || {};
 let LocationButtonController = function() {
   let self = {
     locationButton: null,
-    addressLookupButton: null
+    addressLookupButton: null,
+
+    currentlyEnteredLocation: null
   };
 
   init();
@@ -21,7 +23,8 @@ let LocationButtonController = function() {
 
   function attachAddressLookupButton(id) {
     self.addressLookupButton = d3.select(id)
-    .on('click', getLatLngFromAddress)
+    .on('click', getLatLngFromAddress);
+
     console.log('adding event handler to ', id);
   }
 
@@ -34,7 +37,8 @@ let LocationButtonController = function() {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         }
-        App.views.map.jumpToLocation(pos);
+
+        updateCurrentLocation(pos);
       });
 
     }
@@ -45,7 +49,7 @@ let LocationButtonController = function() {
     //    https://developers.google.com/maps/documentation/geocoding/start#get-a-key
     // API Key: AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI
 
-    console.log(d3.select('#addressInput').node().value);  
+    console.log(d3.select('#addressInput').node().value);
 
     var address = d3.select('#addressInput').node().value;
 
@@ -53,10 +57,18 @@ let LocationButtonController = function() {
     console.log(replaced);
 
     var object = d3.json("https://maps.googleapis.com/maps/api/geocode/json?address="+replaced+"&key=AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI", function(err,d){
-    console.log(d.results[0].geometry.location);
-    App.views.map.jumpToLocation(d.results[0].geometry.location);
-    })
+      let pos = d.results[0].geometry.location;
 
+      updateCurrentLocation(pos);
+    });
+
+  }
+
+  function updateCurrentLocation(pos) {
+    console.log(pos);
+
+    self.currentlyEnteredLocation = pos;
+    App.views.map.jumpToLocation(pos);
   }
 
 return {
