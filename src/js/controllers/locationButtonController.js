@@ -69,6 +69,7 @@ let LocationButtonController = function() {
 
     self.currentlyEnteredLocation = pos;
     App.views.map.jumpToLocation(pos);
+    App.views.serviceList.sortLocations(pos);
   }
 
 return {

@@ -4,7 +4,9 @@ var App = App || {};
 
 let ServiceListView = function(listID) {
   let self = {
-    serviceList: null
+    serviceList: null,
+
+    currentLocation: null
   };
 
   init();
@@ -41,7 +43,14 @@ let ServiceListView = function(listID) {
       // add organization name to heading
       panelHeading.append("h4")
         .attr("class", "orgName")
-        .text(function(d) { return d["Organization Name"]; });
+        .text(function(d) { return d["Organization Name"]; })
+      .append("small")
+        .attr("class", "serviceDistance");
+        // .html("<br>");
+
+      if (self.currentLocation) {
+        sortLocations(self.currentLocation);
+      }
 
       // add description to body
       panelBody.append("p").text(function(d) { return d["Description of Services Provided in Englewood"]; });
@@ -59,8 +68,34 @@ let ServiceListView = function(listID) {
 
   }
 
-  function sortLocations() {
-    
+  function sortLocations(currentLocation) {
+    self.currentLocation = currentLocation;
+
+    if (!currentLocation) {
+      self.serviceList.selectAll(".serviceEntry")
+        .selectAll(".panel-heading")
+        .selectAll(".serviceDistance")
+        .text("");
+    } else {
+      self.serviceList.selectAll(".serviceEntry")
+        .sort(function(a, b) {
+          let locA = {lat: a.Y, lng: a.X};
+          let locB = {lat: b.Y, lng: b.X};
+
+          let distA = calculateDistance(locA, currentLocation);
+          let distB = calculateDistance(locB, currentLocation);
+
+          return distA - distB;
+        })
+        .selectAll(".panel-heading")
+        .selectAll(".serviceDistance")
+        .html(function(d) {
+          let loc = {lat: d.Y, lng: d.X};
+
+          return "<br>" + calculateDistance(loc, currentLocation).toFixed(2) + " m";
+        });
+    }
+
   }
 
   function calculateDistance(pos1, pos2) {
@@ -87,6 +122,6 @@ let ServiceListView = function(listID) {
   return {
     populateList,
 
-    calculateDistance
+    sortLocations
   };
 };
