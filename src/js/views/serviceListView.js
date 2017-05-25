@@ -25,7 +25,7 @@ let ServiceListView = function(listID) {
     .append("div").attr("class", "panel panel-info serviceEntry")
     .each(function(d){
       let panel = d3.select(this);
-      
+
       // create heading
       let panelHeading = panel.append("div")
         .attr("class", "panel-heading");
@@ -39,7 +39,9 @@ let ServiceListView = function(listID) {
         .attr("class", "panel-footer");
 
       // add organization name to heading
-      panelHeading.append("h4").text(function(d) { return d["Organization Name"]; });
+      panelHeading.append("h4")
+        .attr("class", "orgName")
+        .text(function(d) { return d["Organization Name"]; });
 
       // add description to body
       panelBody.append("p").text(function(d) { return d["Description of Services Provided in Englewood"]; });
