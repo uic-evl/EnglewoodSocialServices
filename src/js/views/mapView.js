@@ -6,6 +6,7 @@ let MapView = function(div) {
   let self = {
     map: null,
     serviceLayer: null,
+    currentLocationMarker: null,
     icons: {},
 
     iconColorNames: ["blue", "red", "green", "orange", "yellow", "violet", "grey", "black"],
@@ -127,23 +128,20 @@ let MapView = function(div) {
     }
   }
 
-  var circle;
-
   function drawCircle(position){
-    circle = L.circle(position, {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.3,
-    radius: 50
+
+    self.currentLocationMarker = L.marker(position, {
+      icon: self.icons[self.iconColorNames[1]],
+      zIndexOffset: 200
     });
 
-    self.map.addLayer(circle);
+    self.map.addLayer(self.currentLocationMarker);
   }
 
   function jumpToLocation(position) {
     //remove previous circle marker
-    if(circle != undefined)
-      self.map.removeLayer(circle);
+    if(self.currentLocationMarker != undefined)
+      self.map.removeLayer(self.currentLocationMarker);
 
     //move map to new poisition
     self.map.setView([position.lat, position.lng], 17);
