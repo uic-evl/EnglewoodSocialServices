@@ -94,9 +94,17 @@ let MapView = function(div) {
   }
 
   function updateServicesWithFilter(serviceFilters) {
+    if (serviceFilters) {
+
+    }
+
     self.serviceGroup.eachLayer(function(layer) {
       layer.setOpacity(1);
     });
+  }
+
+  function hasAnyFilters(serviceFilters) {
+
   }
 
   function getMap() {

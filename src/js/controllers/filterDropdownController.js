@@ -7,7 +7,14 @@ let FilterDropdownController = function() {
     filterDropdownList: null,
     allServicesButton: null,
 
-    filters: {}
+    filters: {}, // equivalent to subcategory states
+
+    mainCategoryStates: {},
+    mainStateToIcon: {
+      "none": "glyphicon-unchecked",
+      "some": "glyphicon-plus",
+      "all": "glyphicon-ok"
+    }
   };
 
   init();
@@ -23,8 +30,15 @@ let FilterDropdownController = function() {
     console.log("Reset Filters");
 
     self.filters = {}
+
+    for (let mainCategory of Object.keys(self.mainCategoryStates)) {
+      self.mainCategoryStates[mainCategory] = "none";
+    }
+
     self.filterDropdownList.selectAll(".glyphicon")
-      .classed("glyphicon-hidden", true);
+      .attr("class", "glyphicon glyphicon-unchecked");
+
+    filtersUpdated();
   }
 
   function setFilterDropdown(id) {
@@ -34,39 +48,48 @@ let FilterDropdownController = function() {
   function populateDropdown() {
     let tier1Categories = App.models.serviceTaxonomy.getTier1Categories();
 
+    for (let category of tier1Categories) {
+      self.mainCategoryStates[category] = "none"; // "some", "all"
+    }
+
     self.filterDropdownList.selectAll(".mainType")
       .data(tier1Categories)
     .enter().append("li")
       .attr("class", "dropdown-submenu serviceType")
       .each(function(c1) {
         let listItem = d3.select(this);
+        let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1);
 
         // create link within tab
         listItem.append("a")
           .attr("tabindex", -1)
           .attr("href", "#")
-          .html("<span class='glyphicon glyphicon-minus glyphicon-hidden'></span>  " + c1)
+          .attr("id", "main_" + convertPropertyToID(c1))
+          .html("<span class='glyphicon glyphicon-unchecked'></span>" + c1)
           .on("click", function(c1) {
-            d3.event.stopPropagation(); // prevent menu close on label click
-            let check = d3.select(this).select(".glyphicon");
+            d3.event.stopPropagation(); // prevent menu close on link click
 
-            let selected = check.classed("glyphicon-hidden");
-            check.classed("glyphicon-hidden", !selected);
+            let selected;
+
+            if (self.mainCategoryStates[c1] === "all") {
+              self.mainCategoryStates[c1] = "none";
+              selected = false;
+            } else {
+              self.mainCategoryStates[c1] = "all";
+              selected = true;
+            }
+
+            updateMainCategoryIcon(c1);
 
             listItem.select("ul").selectAll(".serviceSubtype")
               .each(function(d) {
-                let check = d3.select(this).select(".glyphicon");
-
-                check.classed("glyphicon-hidden", !selected);
-
-                console.log(d);
                 self.filters[d] = selected;
+
+                updateSubCategoryIcon(d);
               });
 
-
+            filtersUpdated();
           });
-
-        let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1);
 
         // create tab content div for this t1 category
         let secondaryDropdown = listItem.append("ul")
@@ -83,27 +106,83 @@ let FilterDropdownController = function() {
               subType: c2
             };
           })
+          .attr("id", d => "sub_" + convertPropertyToID(d.subType))
           .html(function(d) {
-            return "<span class='glyphicon glyphicon-ok glyphicon-hidden'></span>  " + d.subType;
+            return "<span class='glyphicon glyphicon-unchecked'></span>" + d.subType;
           })
           .on("click", function(d) {
-            d3.event.stopPropagation(); // prevent menu close on label click
-            let check = d3.select(this).select(".glyphicon");
+            d3.event.stopPropagation(); // prevent menu close on link click
 
-            let selected = !check.classed("glyphicon-hidden");
-            check.classed("glyphicon-hidden", selected);
+            // toggle whether or not it is selected
+            self.filters[d.subType] = !self.filters[d.subType];
 
-            self.filters[d.subType] = selected;
+            updateSubCategoryIcon(d.subType);
+            updateMainCategoryOnSubUpdate(d.mainType);
 
-            console.log(d);
+            filtersUpdated();
           });
 
       });
-
   }
 
   function convertPropertyToID(propertyName) {
     return propertyName.replace(/\W+/g, '_')
+  }
+
+  function updateMainCategoryOnSubUpdate(category) {
+    let subcategories = App.models.serviceTaxonomy.getTier2CategoriesOf(category);
+    let hasChecked = false;
+    let hasUnchecked = false;
+
+    for (let subC of subcategories) {
+      if (self.filters[subC]) {
+        hasChecked = true;
+      } else {
+        hasUnchecked = true;
+      }
+    }
+
+    if (hasChecked && hasUnchecked) {
+      self.mainCategoryStates[category] = "some";
+    } else if (hasChecked) {
+      self.mainCategoryStates[category] = "all";
+    } else {
+      self.mainCategoryStates[category] = "none";
+    }
+
+    updateMainCategoryIcon(category);
+  }
+
+  function updateMainCategoryIcon(category) {
+    let id = "#main_" + convertPropertyToID(category);
+
+    let item = self.filterDropdownList.select(id);
+    let state = self.mainCategoryStates[category];
+
+    item.select(".glyphicon")
+      .attr("class", "glyphicon " + self.mainStateToIcon[state]);
+  }
+
+  function updateSubCategoryIcon(category) {
+    let id = "#sub_" + convertPropertyToID(category);
+
+    let item = self.filterDropdownList.select(id);
+    let state = self.filters[category];
+
+    item.select(".glyphicon")
+        .attr("class", "glyphicon " + (state ? "glyphicon-ok" : "glyphicon-unchecked"));
+  }
+
+  function filtersUpdated() {
+    let filtersToSend = {};
+
+    for (let subcategory of Object.keys(self.filters)) {
+      if (self.filters[subcategory]) {
+        filtersToSend[subcategory] = true;
+      }
+    }
+
+    console.log(filtersToSend);
   }
 
   return {
