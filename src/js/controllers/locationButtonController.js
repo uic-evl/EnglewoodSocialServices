@@ -4,7 +4,8 @@ var App = App || {};
 
 let LocationButtonController = function() {
   let self = {
-    locationButton: null
+    locationButton: null,
+    addressLookupButton: null
   };
 
   init();
@@ -12,10 +13,15 @@ let LocationButtonController = function() {
   function init(){}
 
   function attachLocationButton(id) {
-    self.allServicesButton = d3.select(id)
+    self.locationButton = d3.select(id)
       .on('click', updateLocationOnMap);
     console.log('adding event handler to ', id);
 
+  }
+
+  function attachAddressLookupButton(id) {
+
+    console.log('adding event handler to ', id);
   }
 
   function updateLocationOnMap() {
@@ -29,7 +35,7 @@ let LocationButtonController = function() {
               lng: position.coords.longitude
             }
           console.log("Latitude: " + pos.lat + "   Longitude: " + pos.lng);
-          App.views.map.jumpToUsersLocation(pos);
+          App.views.map.jumpToLocation(pos);
         });
 
     }
@@ -38,7 +44,14 @@ let LocationButtonController = function() {
     }
   }
 
+  function getLatLngFromAddress(address) {
+    // Google Maps Geocoding API:
+    //    https://developers.google.com/maps/documentation/geocoding/start#get-a-key
+    // API Key: AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI
+  }
+
   return {
-    attachLocationButton
+    attachLocationButton,
+    attachAddressLookupButton
   };
 };

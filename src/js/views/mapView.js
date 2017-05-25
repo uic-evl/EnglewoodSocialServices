@@ -103,7 +103,7 @@ let MapView = function(div) {
     });
   }
 
-  function jumpToUsersLocation(position) {
+  function jumpToLocation(position) {
     self.map.setView([position.lat, position.lng], 17);
   }
 
@@ -111,6 +111,6 @@ let MapView = function(div) {
     plotServices,
     updateServicesWithFilter,
 
-    jumpToUsersLocation
+    jumpToLocation
   };
 };

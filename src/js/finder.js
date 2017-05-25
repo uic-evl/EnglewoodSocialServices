@@ -23,6 +23,7 @@ var App = App || {};
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
 
     App.controllers.locationButton.attachLocationButton("#locationButton");
+    App.controllers.locationButton.attachAddressLookupButton("#findAddressButton");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");

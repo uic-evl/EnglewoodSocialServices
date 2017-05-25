@@ -58,9 +58,10 @@
             </ul>
 
             <button class="btn btn-success navbar-btn" id="allServicesButton">Show All Services</button>
-            <button class="btn btn-info navbar-btn" id="locationButton">
+
+            <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
               <span class="glyphicon glyphicon-map-marker"></span>
-              Jump to Location
+              Enter a Location
             </button>
         </div>
     </nav>
@@ -77,6 +78,40 @@
 
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="locationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Title</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+                        <input id="addressInput" class="form-control" placeholder="Address">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-left-buttons">
+                        <button type="button" class="btn btn-info" data-dismiss="modal" id="locationButton">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        Jump to Current Location
+                      </button>
+                    </div>
+                    <div class="modal-right-buttons">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="findAddressButton">
+                        <span class="glyphicon glyphicon glyphicon-check"></span>
+                          Find Address
+                      </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
