@@ -64,7 +64,6 @@ let FilterDropdownController = function() {
               });
 
 
-              console.log(self.filters);
           });
 
         let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1);
@@ -101,6 +100,10 @@ let FilterDropdownController = function() {
 
       });
 
+  }
+
+  function convertPropertyToID(propertyName) {
+    return propertyName.replace(/\W+/g, '_')
   }
 
   return {

@@ -33,11 +33,6 @@ var App = App || {};
         App.views.serviceList.populateList(App.models.socialServices.getData());
 
         App.controllers.serviceFilterDropdown.populateDropdown();
-
-
-        console.log(App.models.serviceTaxonomy.getTier1Categories());
-        console.log(App.models.serviceTaxonomy.getAllTier2Categories());
-        console.log(App.models.serviceTaxonomy.getTier2CategoriesOf("Basic Needs"));
       })
       .catch(function(err) {
         console.log(err);

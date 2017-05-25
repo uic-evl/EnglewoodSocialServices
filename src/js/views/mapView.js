@@ -90,6 +90,12 @@ let MapView = function(div) {
     }
   }
 
+  function updateServicesWithFilter(serviceFilters) {
+    self.serviceGroup.eachLayer(function(layer) {
+      console.log(layer);
+    });
+  }
+
   function getMap() {
     return self.map;
   }
