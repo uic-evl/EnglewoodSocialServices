@@ -3,13 +3,21 @@ let fs = require('fs');
 let bbox = require('geojson-bbox'); // calculate bounding box from geojson feature
 let area = require('geojson-area'); // calculate area from geojson feature (for statistic density)
 let rbush = require('rbush'); // calculate the intersecting objects to a grid space
-let intersect = require('turf-intersect'); // calculate the intersection between two geojson features
+let turf = require('@turf/turf'); // calculate the intersection between two geojson features
+let _ = require('lodash');
 
 // load data of Englewood community area and census blocks
-let blockLookup = rbush(),
+let tree = rbush(),
+  populations = {
+    "type":"FeatureCollection",
+    "features":[]
+  },
   englewoodBorders,
   blockBoundaries,
   censusData;
+
+const ARC_SECOND_GRID_SIZE = 2.5; // 5 arc-second seems to be the right level
+const GRID_SIZE = ARC_SECOND_GRID_SIZE / 3600; // arc-second to decimal
 
 // extents of englewood neighborhoods (west & regular)
 // [ -87.6796718667824, ***
@@ -24,9 +32,6 @@ let blockLookup = rbush(),
 // lat ~ y
 // lng ~ x
 
-const ARC_SECOND_GRID_SIZE = 2;
-const GRID_SIZE = ARC_SECOND_GRID_SIZE / 3600; // arc-second to decimal
-
 let extent = {
   lat: {
     min: 41.75607720666332,
@@ -38,15 +43,11 @@ let extent = {
   }
 }
 
-console.log((extent.lat.max - extent.lat.min) / GRID_SIZE);
-console.log((extent.lng.max - extent.lng.min) / GRID_SIZE);
-
 blockBoundaries = JSON.parse(fs.readFileSync('EnglewoodCensusBlockBoundaries.geojson').toString());
 censusData = JSON.parse(fs.readFileSync('EnglewoodCensusDataFull.json').toString());
 
-console.log(blockBoundaries.features[0]);
-
 let treeItems = blockBoundaries.features.map((block) => {
+  // first get bounding boxes of the census blocks
   let extents = bbox(block);
 
   return {
@@ -56,25 +57,80 @@ let treeItems = blockBoundaries.features.map((block) => {
     maxY: extents[3],
     data: {
       id: block.properties.geoid10,
-      area: area.geometry(block.geometry)
+      area: area.geometry(block.geometry),
+      feature: {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              block.geometry.coordinates[0][0]
+            ]
+          ]
+        },
+      }
     }
   };
 });
 
-// console.log(censusData[treeItems[0].data.id]);
-
-// first get bounding boxes of the census blocks
-
 // insert these into the rbush tree
-
-// get bounding box of englewood neighborhood
-
-// split this into a grid (maybe 7.5 arc-seconds) in lat-lng coordinates
+tree.load(treeItems);
 
 // for each grid location calculate the intersecting census block b-boxes
 
-// calculate the intersection between the grid and the actual census block area
+for (let lat = extent.lat.min; lat < extent.lat.max + GRID_SIZE; lat += GRID_SIZE) {
+  for (let lng = extent.lng.min; lng < extent.lng.max + GRID_SIZE; lng += GRID_SIZE) {
+    let treeSearchItem = {
+      minX: lng,
+      minY: lat,
+      maxX: lng + GRID_SIZE,
+      maxY: lat + GRID_SIZE,
+    };
 
-// compute a weighted average for that grid space based on the intersecting areas
+    let feature = convertGridSquareToPolygonFeature(lat, lng);
+    let poly1 = turf.polygon(feature.geometry.coordinates);
+    feature.properties.population = 0;
 
-// export this data :)
+    let intersectedBlocks = tree.search(treeSearchItem);
+
+    for (let block of intersectedBlocks) {
+      let poly2 = turf.polygon(block.data.feature.geometry.coordinates[0]);
+
+      let intersectedFeature = turf.intersect(poly1, poly2);
+
+      if (intersectedFeature) {
+        let areaIntersect = area.geometry(intersectedFeature.geometry);
+        // only get population right now
+
+        // add population to count
+        feature.properties.population +=
+          areaIntersect/block.data.area * +censusData[block.data.id].data["TOTAL_POPULATION"].Total;
+      }
+    }
+
+    populations.features.push(feature);
+  }
+}
+
+// output population data in grid
+fs.writeFileSync("populationGrid.geojson", JSON.stringify(populations));
+
+// take min lat and lng (the corner) and convert to a "feature"
+function convertGridSquareToPolygonFeature(lat, lng) {
+  return {
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [lng, lat],
+          [lng + GRID_SIZE, lat],
+          [lng + GRID_SIZE, lat + GRID_SIZE],
+          [lng, lat + GRID_SIZE],
+          [lng, lat]
+        ]
+      ]
+    }
+  };
+}

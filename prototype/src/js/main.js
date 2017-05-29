@@ -31,10 +31,11 @@ var App = App || {};
       // .defer(d3.json, "./data/CommunityAreaBoundaries.geojson")
       // .defer(d3.json, "./data/EnglewoodColumnHeaders.geojson")
       .defer(d3.csv, "./data/EnglewoodLocations.csv")
+      .defer(d3.json, "./data/populationGrid.geojson")
       .await(dataLoaded)
   };
 
-  function dataLoaded(err, blockBoundaries, tractBoundaries, censusPopulations, communityAreas, englewoodLocations) {
+  function dataLoaded(err, blockBoundaries, tractBoundaries, censusPopulations, communityAreas, englewoodLocations, populationGrid) {
     if (err) throw Error(err);
 
     // store data that will need to be accessed again
@@ -60,6 +61,7 @@ var App = App || {};
 
     // get the maximum population in any census block
     let maxPop = d3.max(censusPopulations, d => d["TOTAL POPULATION"]);
+    // let maxPop = d3.max(populationGrid.features, d => d.properties.population);
 
     // create a d3 color scale to convert a population number to a color value
     let colorScale = d3.scaleLinear()
@@ -118,6 +120,16 @@ var App = App || {};
             };
         }
     }).addTo(App.map);
+
+    // L.geoJSON(populationGrid, {
+    //     style: function (feature) {
+    //         return {
+    //           color: feature.properties.population > 0 ? colorScale(feature.properties.population) : "black",
+    //           fillOpacity: 0.8,
+    //           stroke: false
+    //         };
+    //     }
+    // }).addTo(App.map);
 
 
     // iterate through the social services location file
