@@ -1,0 +1,17 @@
+{
+  "name": "englewood-data-processing",
+  "version": "1.0.0",
+  "description": "Preprocessing for Englewood census data",
+  "main": "processCensusDataToGrid.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "geojson-area": "^0.2.1",
+    "geojson-bbox": "0.0.0",
+    "rbush": "^2.0.1",
+    "turf-intersect": "^3.0.12"
+  }
+}
