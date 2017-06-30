@@ -24,6 +24,10 @@ html {
   background-color: desaturate(#D9EDF7, 25%);
 }
 
+* {
+  box-sizing: border-box
+}
+
 .modal-right-buttons {
   float: right;
 }
@@ -56,6 +60,7 @@ html {
 }
 
 .appContent {
+  position: relative;
   height: 92.5%;
 }
 
@@ -123,19 +128,29 @@ html {
 ///// END multi-level dropdown styles
 
 // Social Service list on righthand side
+#serviceListWrapper {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  bottom: 10px;
+  width: 25%;
+
+  z-index: 100;
+
+  background-color: rgba(125, 125, 125, 0.8);
+
+  border: 3px solid rgba(69, 69, 69, 0.25);
+
+  padding: 10px;
+  .border-radius(10px);
+  .box-shadow(inset 1px 1px 10px #C8C8C8);
+}
+
 #serviceList {
   overflow-y: scroll;
-  height: 90%;
+  height: 100%;
   max-height: 100%;
-  padding: 5px;
-
-  
-  width: 350px;
-  z-index: 100;
-  position: fixed;
-  top: 65px;
-  left: 50px;
-  .box-shadow(inset 1px 1px 20px #C8C8C8);
+  width: 100%;
 }
 
 .serviceEntry {
@@ -147,4 +162,68 @@ html {
   .orgName {
     font-weight: bold;
   }
+
+  .panel-heading:hover {
+    cursor: pointer;
+  }
+
+  &.opened {
+    border-color: @open-panel;
+
+    .panel-heading {
+      color: darken(@open-panel, 35%);
+      border-color: @open-panel;
+      background-color: tint(@open-panel, 20%);
+    }
+
+    .panel-body {
+      .description::before {
+        content: 'Description:';
+        display: block;
+        font-weight: bold;
+      }
+      border-color: @open-panel;
+    }
+
+    .panel-footer {
+      border-color: @open-panel;
+      background-color: tint(@open-panel, 75%);
+    }
+
+
+    &:hover {
+      border-color: darken(@open-panel, 15%);
+
+      .panel-heading {
+        border-color: darken(@open-panel, 15%);
+      }
+
+      .panel-body {
+        border-color: darken(@open-panel, 15%);
+      }
+
+      .panel-footer {
+        border-color: darken(@open-panel, 15%);
+      }
+    }
+  }
+
+  &:hover {
+    border-color: @hover-panel;
+
+    .panel-heading {
+      border-color: @hover-panel;
+    }
+
+    .panel-body {
+      border-color: @hover-panel;
+    }
+
+    .panel-footer {
+      border-color: @hover-panel;
+    }
+  }
 }
+
+@open-panel: #FEB24C;
+@hover-panel: #337AB7;

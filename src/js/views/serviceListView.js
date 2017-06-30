@@ -12,7 +12,7 @@ let ServiceListView = function(listID) {
   init();
 
   function init() {
-    self.serviceList = d3.select(listID);
+    self.serviceList = d3.select(listID).select("#accordion");
   }
 
   function populateList(englewoodLocations) {
@@ -25,15 +25,27 @@ let ServiceListView = function(listID) {
     .data(englewoodLocations)
     .enter()
     .append("div").attr("class", "panel panel-info serviceEntry")
-    .each(function(d){
+    .each(function(d, i){
       let panel = d3.select(this);
 
       // create heading
       let panelHeading = panel.append("div")
-        .attr("class", "panel-heading");
+        .attr("class", "panel-heading")
+        .attr("data-parent", "#accordion")
+        .attr("data-toggle", "collapse")
+        .attr("href", `#service${i}collapse`)
+        .on("click", function() {
+          let expanded = !panel.selectAll(".collapse").classed("in");
+
+          self.serviceList.selectAll(".serviceEntry").classed("opened", false);
+          panel.classed("opened", expanded);
+        });
 
       // create body
       let panelBody = panel.append("div")
+        .attr("class", "panel-collapse collapse")
+        .attr("id", `service${i}collapse`)
+      .append("div")
         .attr("class", "panel-body");
 
       // create footer
@@ -53,7 +65,9 @@ let ServiceListView = function(listID) {
       }
 
       // add description to body
-      panelBody.append("p").text(function(d) { return d["Description of Services Provided in Englewood"]; });
+      panelBody.append("p")
+        .attr("class", "description")
+        .text(function(d) { return d["Description of Services Provided in Englewood"]; });
 
       // add link to address in footer
       panelFooter.append("a")
@@ -62,7 +76,10 @@ let ServiceListView = function(listID) {
         .html(function(d) {
           return "<span class='glyphicon glyphicon-share-alt'></span> " +
           d["Address"];
-        });
+        })
+
+      panelFooter.append("small")
+        .attr("class", "serviceDistance");
 
     });
 
@@ -73,7 +90,7 @@ let ServiceListView = function(listID) {
 
     if (!currentLocation) {
       self.serviceList.selectAll(".serviceEntry")
-        .selectAll(".panel-heading")
+        .selectAll(".panel-footer")
         .selectAll(".serviceDistance")
         .text("");
     } else {
@@ -87,19 +104,19 @@ let ServiceListView = function(listID) {
 
           return distA - distB;
         })
-        .selectAll(".panel-heading")
+        .selectAll(".panel-footer")
         .selectAll(".serviceDistance")
         .html(function(d) {
           let loc = {lat: d.Y, lng: d.X};
 
-          return "<br>" + calculateDistance(loc, currentLocation).toFixed(2) + " m";
+          return "<br>" + calculateDistance(loc, currentLocation).toFixed(2) + " mi.";
         });
     }
 
   }
 
   function calculateDistance(pos1, pos2) {
-    const R = 6371e3; // metres
+    const R = 3959; // meters
     let φ1 = toRadians(pos1.lat);
     let φ2 = toRadians(pos2.lat);
     let Δφ = toRadians(pos2.lat-pos1.lat);
