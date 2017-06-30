@@ -2,9 +2,20 @@
 
 var App = App || {};
 
-$(document).ready(function() {
-  App.init();
+let documentPromise = new Promise(function(resolve, reject) {
+  $(document).ready(function() {
+    resolve();
+  });
 });
+
+// make sure both the document and CSS are loaded
+Promise.all([documentPromise, less.pageLoadFinished])
+  .then(function() {
+    App.init();
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
 
 (function() {
   App.models = {};

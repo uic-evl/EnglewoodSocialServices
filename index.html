@@ -2,118 +2,188 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Englewood Social Service Finder</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Englewood Social Service Finder</title>
 
-    <!-- CSS Libs -->
-    <link rel="stylesheet" href="./lib/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./lib/css/leaflet.css">
+  <!-- CSS Libs -->
+  <link rel="stylesheet" href="./lib/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./lib/css/leaflet.css">
 
-    <!-- JS Libs -->
-    <script src="./lib/js/jquery.min.js"></script>
-    <script src="./lib/js/bootstrap.min.js"></script>
-    <script src="./lib/js/leaflet.js"></script>
-    <script src="./lib/js/d3.v4.min.js"></script>
-    <script src="./lib/js/lodash.js"></script>
+  <!-- JS Libs -->
+  <script src="./lib/js/jquery.min.js"></script>
+  <script src="./lib/js/bootstrap.min.js"></script>
+  <script src="./lib/js/leaflet.js"></script>
+  <script src="./lib/js/d3.v4.min.js"></script>
+  <script src="./lib/js/lodash.js"></script>
 
-    <!-- CSS Src -->
-    <link rel="stylesheet/less" href="./src/css/main.less">
+  <!-- CSS Src -->
+  <link rel="stylesheet/less" href="./src/css/main.less">
 
 
-    <!-- less.js to parse stylesheet/less -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
+  <!-- less.js to parse stylesheet/less -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
 
-    <!-- === JS Src === -->
-    <!-- Models -->
-    <script src="./src/js/models/socialServiceModel.js"></script>
-    <script src="./src/js/models/serviceTaxonomyModel.js"></script>
+  <!-- === JS Src === -->
+  <!-- Models -->
+  <script src="./src/js/models/socialServiceModel.js"></script>
+  <script src="./src/js/models/serviceTaxonomyModel.js"></script>
 
-    <!-- Views -->
-    <script src="./src/js/views/mapView.js"></script>
-    <script src="./src/js/views/serviceListView.js"></script>
+  <!-- Views -->
+  <script src="./src/js/views/mapView.js"></script>
+  <script src="./src/js/views/serviceListView.js"></script>
 
-    <!-- Controllers -->
-    <script src="./src/js/controllers/filterDropdownController.js"></script>
-    <script src="./src/js/controllers/locationButtonController.js"></script>
+  <!-- Controllers -->
+  <script src="./src/js/controllers/filterDropdownController.js"></script>
+  <script src="./src/js/controllers/locationButtonController.js"></script>
 
-    <!-- Main Script -->
-    <script src="./src/js/finder.js"></script>
+  <!-- Main Script -->
+  <script src="./src/js/finder.js"></script>
 </head>
 
 <body onload="">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand">Englewood Social Services</a>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand">Englewood Social Services</a>
+      </div>
+
+      <div class="navbar-left">
+
+        <div class="navbar-form navbar-left">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <i class="glyphicon glyphicon-search">
+
+                </i>
+              </button>
             </div>
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Filter Services<span class="caret"></span></a>
-                    <ul class="dropdown-menu" id="filterDropdownList">
-                        <!-- Programmatically added from taxonomy file -->
-                    </ul>
-                </li>
-            </ul>
+          </div>
+        </div>
 
-            <button class="btn btn-success navbar-btn" id="allServicesButton">Show All Services</button>
+        <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                Enter a Location
+              </button>
+      </div>
 
-            <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
-              <span class="glyphicon glyphicon-map-marker"></span>
-              Enter a Location
+      <div class="navbar-right">
+        <!-- <ul class="nav navbar-nav" id="filterDropdownNav">
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Filter Services<span class="caret"></span></a>
+            <ul class="dropdown-menu" id="filterDropdownList"> -->
+        <!-- Programmatically added from taxonomy file -->
+        <!-- </ul>
+          </li>
+        </ul> -->
+
+        <!-- <div class="dropdown" id="filterDropdownNav"> -->
+
+
+        <!-- <div class="btn-group">
+          <button type="button" class="btn btn-success" id="allServicesButton">
+            <span class="glyphicon glyphicon-refresh">
+
+            </span>
+          </button>
+          <div class="dropdown" id="filterDropdownNav">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+              Dropdown Example
+              <span class="caret">
+
+              </span>
             </button>
+            <ul class="dropdown-menu" role="menu" id="filterDropdownList">
+
+            </ul>
+          </div>
+        </div> -->
+
+        <div class="btn-group" id="filterButtonGroup">
+          <button type="button" class="btn btn-warning navbar-btn" id="allServicesButton">
+            <span class="glyphicon glyphicon-refresh">
+
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
+            Services
+            <span class="caret">
+
+            </span>
+          </button>
+          <ul class="dropdown-menu" role="menu" id="filterDropdownList">
+
+          </ul>
         </div>
-    </nav>
 
-    <div class="container-fluid appContent">
-        <div class="row h-100">
-            <div class="col-md-8 h-100 mapWrapper">
-                <div id="serviceMap">
 
-                </div>
-            </div>
-            <div class="col-md-4 h-100">
-                <div class="well well-lg" id="serviceList">
+        <!-- glyphicon glyphicon-refresh -->
 
-                </div>
-            </div>
-        </div>
+        <!-- <button class="btn btn-success navbar-btn" id="allServicesButton">Show All Services</button> -->
+
+      </div>
+
+
+
+
+
+
+
+
     </div>
+  </nav>
 
-    <div id="locationModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+  <div class="container-fluid appContent">
+    <div class="row h-100">
+      <div class="col-md-8 h-100 mapWrapper">
+        <div id="serviceMap">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Jump to a Location</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-                        <input id="addressInput" class="form-control" placeholder="Address">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="modal-left-buttons">
-                        <button type="button" class="btn btn-info" data-dismiss="modal" id="locationButton">
+        </div>
+      </div>
+      <div class="col-md-4 h-100">
+        <div class="well well-lg" id="serviceList">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="locationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Jump to a Location</h4>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+            <input id="addressInput" class="form-control" placeholder="Address">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="modal-left-buttons">
+            <button type="button" class="btn btn-info" data-dismiss="modal" id="locationButton">
                         <span class="glyphicon glyphicon-map-marker"></span>
                         Jump to Current Location
                       </button>
-                    </div>
-                    <div class="modal-right-buttons">
-                        <button type="button" class="btn btn-success" data-dismiss="modal" id="findAddressButton">
+          </div>
+          <div class="modal-right-buttons">
+            <button type="button" class="btn btn-success" data-dismiss="modal" id="findAddressButton">
                         <span class="glyphicon glyphicon glyphicon-check"></span>
                           Find Address
                       </button>
-                    </div>
-                </div>
-            </div>
-
+          </div>
         </div>
+      </div>
+
     </div>
+  </div>
 
 </body>
 
