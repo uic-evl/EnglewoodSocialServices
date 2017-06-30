@@ -34,11 +34,13 @@ let ServiceListView = function(listID) {
         .attr("data-parent", "#accordion")
         .attr("data-toggle", "collapse")
         .attr("href", `#service${i}collapse`)
-        .on("click", function() {
+        .on("click", function(d) {
           let expanded = !panel.selectAll(".collapse").classed("in");
 
           self.serviceList.selectAll(".serviceEntry").classed("opened", false);
           panel.classed("opened", expanded);
+
+          App.views.map.setSelectedService(expanded ? d : null);
         });
 
       // create body
@@ -57,8 +59,8 @@ let ServiceListView = function(listID) {
         .attr("class", "orgName")
         .text(function(d) { return d["Organization Name"]; })
       .append("small")
-        .attr("class", "serviceDistance");
-        // .html("<br>");
+        .attr("class", "serviceDistance")
+        .html(d => "<br>" + App.models.serviceTaxonomy.getAllTier2Categories().filter(c => d[c] == 1).join(", "));
 
       if (self.currentLocation) {
         sortLocations(self.currentLocation);

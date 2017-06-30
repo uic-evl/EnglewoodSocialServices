@@ -53,7 +53,7 @@ let MapView = function(div) {
 
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
     self.map.zoomControl.setPosition('topright');
-    
+
     // causes map to recalculate size... (I shouldn't need to do this)
     // setTimeout(function() {
     //   self.map.invalidateSize();
@@ -129,6 +129,20 @@ let MapView = function(div) {
     }
   }
 
+  function setSelectedService(service) {
+    self.serviceGroup.eachLayer(function(layer) {
+      if (service && service["Organization Name"] === layer.options.data["Organization Name"]) {
+        layer.setIcon(self.icons["orange"]);
+      } else {
+        layer.setIcon(self.icons["blue"]);
+      }
+    });
+
+    if (service) {
+      self.map.setView([service.Y, service.X], 17);
+    }
+  }
+
   function drawCircle(position){
 
     self.currentLocationMarker = L.marker(position, {
@@ -155,6 +169,7 @@ let MapView = function(div) {
     createMap,
     plotServices,
     updateServicesWithFilter,
+    setSelectedService,
 
     jumpToLocation
   };
