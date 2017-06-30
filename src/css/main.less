@@ -32,9 +32,10 @@ html {
   float: left;
 }
 
-#filterButtonGroup {
+#filterButtonGroup,
+#mapsButtonGroup {
   // float: right;
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 #filterDropdownList {
@@ -64,7 +65,7 @@ html {
 
 #serviceMap {
   height: 100%;
-  border: 1px solid #c1c1c1;
+  border: 1px solid #C1C1C1;
 
   .border-radius(10px);
   z-index: 0;
@@ -87,15 +88,12 @@ html {
 * {
   .dropdown-submenu {
     position: relative;
-    // left: 10px;
   }
 
   .dropdown-submenu > .dropdown-menu {
     // position: relative;
     top: 0;
-    left: 0;
-    transform: translateX(-100%);
-
+    right: 100%;
     margin-top: -6px;
     .border-radius(6px 0 6px 6px);
   }
@@ -131,7 +129,7 @@ html {
   max-height: 100%;
   padding: 5px;
 
-  .box-shadow(inset 1px 1px 20px #c8c8c8);
+  .box-shadow(inset 1px 1px 20px #C8C8C8);
 }
 
 .serviceEntry {
