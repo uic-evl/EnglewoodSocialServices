@@ -49,8 +49,6 @@ let CircleSelectorController = function(buttonID) {
   }
 
   function startCircleCreation() {
-    console.log("startCircleCreation", d3.event);
-
     self.drawingStart = {
       x: d3.event.layerX,
       y: d3.event.layerY
@@ -74,8 +72,6 @@ let CircleSelectorController = function(buttonID) {
   }
 
   function finalizeCircle() {
-    console.log("finalizeCircle", d3.event);
-
     // send final values to map to create map circle, etc.
 
     self.drawable = false;
