@@ -37,6 +37,7 @@
     <script src="./src/js/controllers/analyticsFilterController.js"></script>
     <script src="./src/js/controllers/locationButtonController.js"></script>
     <script src="./src/js/controllers/searchController.js"></script>
+    <script src="./src/js/controllers/circleSelectorController.js"></script>
 
     <!-- Main Script -->
     <script src="./src/js/analytics.js"></script>
@@ -65,13 +66,14 @@
         </div>
 
         <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
-                <span class="glyphicon glyphicon-map-marker"></span>
-                Enter a Location
-              </button>
+          <span class="glyphicon glyphicon-arrow-right"></span>
+          <span class="glyphicon glyphicon-map-marker"></span>
+          <!-- Enter a Location -->
+        </button>
 
         <button type="button" class="btn btn-success navbar-btn" id="newCircleSelector">
-          <span class="glyphicon glyphicon-record"></span>
           <span class="glyphicon glyphicon-plus"></span>
+          <span class="glyphicon glyphicon-record"></span>
         </button>
       </div>
 

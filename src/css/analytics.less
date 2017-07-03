@@ -69,11 +69,49 @@ html {
 }
 
 #serviceMap {
+  position: absolute;
+  width: 100%;
   height: 100%;
   border: 1px solid #C1C1C1;
 
   .border-radius(10px);
   z-index: 0;
+}
+
+#dragLayer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #C1C1C1;
+
+  .border-radius(10px);
+  z-index: 1;
+
+  background-color: rgba(100,100,100,0.5);
+  cursor: crosshair;
+
+  &:focus {
+    outline-width: 0;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    background-color: transparent;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+
+    circle {
+      fill: none;
+      stroke: black;
+    }
+  }
+
+  .drawingCircle {
+    border-radius: 10000px;
+  }
 }
 
 

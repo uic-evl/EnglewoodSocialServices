@@ -47,6 +47,9 @@ Promise.all([documentPromise, less.pageLoadFinished])
 
     App.controllers.search.attachDOMElements("#searchInput", "#searchButton");
 
+    App.controllers.circleSelector = new CircleSelectorController("#newCircleSelector");
+    App.controllers.circleSelector.attachDragLayer("#serviceMap");
+
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
 
@@ -57,7 +60,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
         // App.views.map.createMap();
 
         App.views.map.plotServices(App.models.socialServices.getData());
-        
+
         // App.views.chartList...
 
         App.controllers.serviceFilterDropdown.populateDropdown();
