@@ -32,6 +32,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
   // controllers
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
   App.controllers.locationButton = new LocationButtonController();
+  App.controllers.search = new SearchController();
 
   App.init = function() {
     console.log("Loading Finder");
@@ -43,6 +44,8 @@ Promise.all([documentPromise, less.pageLoadFinished])
 
     App.controllers.locationButton.attachLocationButton("#locationButton");
     App.controllers.locationButton.attachAddressLookupButton("#findAddressButton");
+
+    App.controllers.search.attachDOMElements("#searchInput", "#searchButton");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");

@@ -123,6 +123,7 @@ let MapView = function(div) {
           layer.setOpacity(1);
         } else {
           layer.setOpacity(0.2);
+          // layer.setOpacity(0);
         }
 
       });
@@ -139,7 +140,7 @@ let MapView = function(div) {
     });
 
     if (service) {
-      self.map.setView([service.Y, service.X], 17);
+      self.map.setView([service.Y, service.X], 16);
     }
   }
 
@@ -159,7 +160,7 @@ let MapView = function(div) {
       self.map.removeLayer(self.currentLocationMarker);
 
     //move map to new poisition
-    self.map.setView([position.lat, position.lng], 17);
+    self.map.setView([position.lat, position.lng], 16);
 
     //draw a circle marker at new position
     drawCircle(position);
