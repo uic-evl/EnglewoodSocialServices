@@ -19,13 +19,158 @@
     <script src="./lib/js/lodash.js"></script>
 
     <!-- CSS Src -->
-    <link rel="stylesheet" href="./src/css/main.css">
+    <link rel="stylesheet/less" href="./src/css/analytics.less">
 
-    <!-- JS Src -->
+    <!-- less.js to parse stylesheet/less -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
+
+    <!-- === JS Src === -->
+    <!-- Models -->
+    <script src="./src/js/models/socialServiceModel.js"></script>
+    <script src="./src/js/models/serviceTaxonomyModel.js"></script>
+
+    <!-- Views -->
+    <script src="./src/js/views/mapView.js"></script>
+    <script src="./src/js/views/chartListView.js"></script>
+
+    <!-- Controllers -->
+    <script src="./src/js/controllers/analyticsFilterController.js"></script>
+    <script src="./src/js/controllers/locationButtonController.js"></script>
+    <script src="./src/js/controllers/searchController.js"></script>
+
+    <!-- Main Script -->
     <script src="./src/js/analytics.js"></script>
 </head>
 
-<body onload="App.init()">
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand">Englewood Social Service Analytics</a>
+      </div>
+
+      <div class="navbar-left">
+
+        <div class="navbar-form navbar-left">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" id="searchInput">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit" id="searchButton">
+                <i class="glyphicon glyphicon-search">
+
+                </i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                Enter a Location
+              </button>
+
+        <button type="button" class="btn btn-success navbar-btn" id="newCircleSelector">
+          <span class="glyphicon glyphicon-record"></span>
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </div>
+
+      <div class="navbar-right">
+        <div class="btn-group" id="mapsButtonGroup">
+          <button type="button" class="btn btn-primary navbar-btn" id="resetMaps">
+            <span class="glyphicon glyphicon-refresh">
+
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
+            Maps
+            <span class="caret">
+
+            </span>
+          </button>
+          <ul class="dropdown-menu" role="menu" id="mapDropdownList">
+
+          </ul>
+        </div>
+
+        <div class="btn-group" id="filterButtonGroup">
+          <button type="button" class="btn btn-primary navbar-btn" id="allServicesButton">
+            <span class="glyphicon glyphicon-refresh">
+
+            </span>
+          </button>
+          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
+            Services
+            <span class="caret">
+
+            </span>
+          </button>
+          <ul class="dropdown-menu" role="menu" id="filterDropdownList">
+
+          </ul>
+        </div>
+
+
+        <!-- glyphicon glyphicon-refresh -->
+
+        <!-- <button class="btn btn-success navbar-btn" id="allServicesButton">Show All Services</button> -->
+
+      </div>
+
+    </div>
+  </nav>
+
+  <div class="container-fluid appContent">
+    <div class="row h-100">
+
+      <div id="chartListWrapper">
+        <div class="" id="chartList">
+          <div class="panel-group" id="accordion">
+
+          </div>
+        </div>
+      </div>
+
+      <div id="serviceMap">
+
+      </div>
+
+    </div>
+  </div>
+
+  <div id="locationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Jump to a Location</h4>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+            <input id="addressInput" class="form-control" placeholder="Address">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="modal-left-buttons">
+            <button type="button" class="btn btn-info" data-dismiss="modal" id="locationButton">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        Jump to Current Location
+                      </button>
+          </div>
+          <div class="modal-right-buttons">
+            <button type="button" class="btn btn-success" data-dismiss="modal" id="findAddressButton">
+                        <span class="glyphicon glyphicon glyphicon-check"></span>
+                          Find Address
+                      </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 

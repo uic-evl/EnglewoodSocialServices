@@ -76,23 +76,23 @@ html {
   z-index: 0;
 }
 
-.glyphicon-ok {
-  color: #5CB85C;
-}
-
-.glyphicon-plus {
-  color: #5BC0DE;
-}
-
-.glyphicon-unchecked {
-  color: transparent;
-}
-
 
 ///// START multi-level dropdown styles
 * {
   .dropdown-submenu {
     position: relative;
+
+    .glyphicon-ok {
+      color: #5CB85C;
+    }
+
+    .glyphicon-plus {
+      color: #5BC0DE;
+    }
+
+    .glyphicon-unchecked {
+      color: transparent;
+    }
   }
 
   .dropdown-submenu > .dropdown-menu {
@@ -127,8 +127,8 @@ html {
 }
 ///// END multi-level dropdown styles
 
-// Social Service list on righthand side
-#serviceListWrapper {
+// chart list on lefthand side
+#chartListWrapper {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -147,14 +147,14 @@ html {
   .box-shadow(inset 1px 1px 10px #C8C8C8);
 }
 
-#serviceList {
+#chartList {
   overflow-y: scroll;
   height: 100%;
   max-height: 100%;
   width: 100%;
 }
 
-.serviceEntry {
+.chartEntry {
   margin: 10px;
   z-index: -2;
 
