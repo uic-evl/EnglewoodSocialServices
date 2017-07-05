@@ -11,7 +11,9 @@ let CircleSelectorController = function(buttonID) {
     drawable: false,
     drawing: false,
     drawingCircle: false,
-    drawingStart: null
+    drawingStart: null,
+
+    circleList: []
   };
 
   init();
@@ -73,12 +75,24 @@ let CircleSelectorController = function(buttonID) {
 
   function finalizeCircle() {
     // send final values to map to create map circle, etc.
+    let center = L.point(self.drawingStart.x, self.drawingStart.y);
+    let radial = L.point(d3.event.layerX, d3.event.layerY);
+
+    let circle = App.views.map.drawCircle(center, radial);
+    self.circleList.push(circle);
 
     self.drawable = false;
     self.button.attr("class", "btn btn-success navbar-btn");
     self.dragLayer.classed("disabled", true);
+    self.drawingCircle.attr("r", 0);
+
+    if (self.circleList.length == 10) {
+      self.button.attr("class", "btn btn-success navbar-btn disabled")
+        .attr("disabled", true);
+    }
 
     self.drawingStart = null;
+
   }
 
   return {

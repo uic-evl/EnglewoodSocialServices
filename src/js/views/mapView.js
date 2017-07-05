@@ -19,7 +19,10 @@ let MapView = function(div) {
       "violet": "#9c2bcb",
       "grey": "#7b7b7b",
       "black": "#3e3e3e"
-    }
+    },
+
+    circles: {},
+    totalCircles: 0
   };
 
   init();
@@ -144,14 +147,40 @@ let MapView = function(div) {
     }
   }
 
-  function drawCircle(position){
-
+  function drawLocationMarker(position){
     self.currentLocationMarker = L.marker(position, {
       icon: self.icons[self.iconColorNames[1]],
       zIndexOffset: 200
     });
 
     self.map.addLayer(self.currentLocationMarker);
+  }
+
+  function drawCircle(center, radialPoint) {
+    let llCenter = self.map.containerPointToLatLng(center);
+    let llRadial = self.map.containerPointToLatLng(radialPoint);
+
+    let radius = llCenter.distanceTo(llRadial);
+
+    let circle = L.circle(llCenter, {
+      radius,
+      color: d3.schemeCategory10[self.totalCircles],
+      data: self.totalCircles
+    })
+    .bindPopup(function(layer) { // allow for the popup on click with the name of the location
+      return `<button class='btn btn-xs btn-danger' onclick='App.views.map.removeCircle(${layer.options.data})'>
+      <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
+    })
+    .addTo(self.map);
+
+    self.circles[self.totalCircles++] = circle;
+
+    return {center: llCenter, radius};
+  }
+
+  function removeCircle(circle) {
+    console.log("removing", circle);
+    self.map.removeLayer(self.circles[circle]);
   }
 
   function jumpToLocation(position) {
@@ -163,7 +192,7 @@ let MapView = function(div) {
     self.map.setView([position.lat, position.lng], 16);
 
     //draw a circle marker at new position
-    drawCircle(position);
+    drawLocationMarker(position);
   }
 
   return {
@@ -171,6 +200,9 @@ let MapView = function(div) {
     plotServices,
     updateServicesWithFilter,
     setSelectedService,
+
+    drawCircle,
+    removeCircle,
 
     jumpToLocation
   };
