@@ -46,6 +46,13 @@ let extent = {
 blockBoundaries = JSON.parse(fs.readFileSync('EnglewoodCensusBlockBoundaries.geojson').toString());
 censusData = JSON.parse(fs.readFileSync('EnglewoodCensusDataFull.json').toString());
 
+let propertyNames = {};
+let dataExample = censusData[Object.keys(censusData)[0]];
+
+_.forEach(Object.keys(dataExample.data), (key) => {
+  propertyNames[key] = Object.keys(dataExample.data[key]);
+});
+
 let treeItems = blockBoundaries.features.map((block) => {
   // first get bounding boxes of the census blocks
   let extents = bbox(block);
@@ -89,7 +96,10 @@ for (let lat = extent.lat.min; lat < extent.lat.max + GRID_SIZE; lat += GRID_SIZ
 
     let feature = convertGridSquareToPolygonFeature(lat, lng);
     let poly1 = turf.polygon(feature.geometry.coordinates);
-    feature.properties.population = 0;
+    // feature.properties.population = 0;
+
+    initializeFeatureProperties(feature.properties);
+
 
     let intersectedBlocks = tree.search(treeSearchItem);
 
@@ -102,18 +112,40 @@ for (let lat = extent.lat.min; lat < extent.lat.max + GRID_SIZE; lat += GRID_SIZ
         let areaIntersect = area.geometry(intersectedFeature.geometry);
         // only get population right now
 
+        // add all data
+        addFeatureData(feature.properties, censusData[block.data.id].data, areaIntersect/block.data.area)
+
         // add population to count
-        feature.properties.population +=
-          areaIntersect/block.data.area * +censusData[block.data.id].data["TOTAL_POPULATION"].Total;
+        // feature.properties.population +=
+        //   areaIntersect/block.data.area * +censusData[block.data.id].data["TOTAL_POPULATION"].Total;
       }
     }
 
     populations.features.push(feature);
   }
+
+  function initializeFeatureProperties(properties) {
+    for (let propertyType of Object.keys(propertyNames)) {
+      properties[propertyType] = {};
+
+      for (let propertySubtype of propertyNames[propertyType]) {
+        properties[propertyType][propertySubtype] = 0;
+      }
+    }
+  }
+
+  function addFeatureData(properties, data, areaPercentage) {
+    for (let propertyType of Object.keys(propertyNames)) {
+      for (let propertySubtype of propertyNames[propertyType]) {
+        properties[propertyType][propertySubtype] +=
+          areaPercentage * parseInt(data[propertyType][propertySubtype]);
+      }
+    }
+  }
 }
 
 // output population data in grid
-fs.writeFileSync("populationGrid.geojson", JSON.stringify(populations));
+fs.writeFileSync("allDataGrid.geojson", JSON.stringify(populations));
 
 // take min lat and lng (the corner) and convert to a "feature"
 function convertGridSquareToPolygonFeature(lat, lng) {
