@@ -53,6 +53,8 @@ _.forEach(Object.keys(dataExample.data), (key) => {
   propertyNames[key] = Object.keys(dataExample.data[key]);
 });
 
+fs.writeFile("mapTypeNames.json", JSON.stringify(propertyNames));
+
 let treeItems = blockBoundaries.features.map((block) => {
   // first get bounding boxes of the census blocks
   let extents = bbox(block);

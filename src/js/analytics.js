@@ -25,12 +25,14 @@ Promise.all([documentPromise, less.pageLoadFinished])
   // models
   App.models.socialServices = new SocialServiceModel();
   App.models.serviceTaxonomy = new ServiceTaxonomyModel();
+  App.models.censusData = new CensusDataModel();
 
   // views
 
 
   // controllers
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
+  App.controllers.mapData = new MapDataController();
   App.controllers.locationButton = new LocationButtonController();
   App.controllers.search = new SearchController();
 
@@ -41,6 +43,9 @@ Promise.all([documentPromise, less.pageLoadFinished])
 
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
+
+    App.controllers.mapData.setDataDropdown("#mapDropdownList");
+    App.controllers.mapData.attachResetOverlayButton("#resetMaps");
 
     App.controllers.locationButton.attachLocationButton("#locationButton");
     App.controllers.locationButton.attachAddressLookupButton("#findAddressButton");
@@ -69,6 +74,13 @@ Promise.all([documentPromise, less.pageLoadFinished])
         console.log(err);
       });
 
+    App.models.censusData.loadData()
+      .then(function(data) {
+        let overlayData = data[0];
+        let overlayCategories = data[1];
+
+        App.controllers.mapData.populateDropdown(overlayCategories);
+      });
 
   };
 
