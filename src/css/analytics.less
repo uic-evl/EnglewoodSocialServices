@@ -89,7 +89,7 @@ html {
   height: 100%;
   border: 1px solid #C1C1C1;
   .border-radius(10px);
-  z-index: 1;
+  z-index: 200;
   background-color: rgba(100,100,100,0.5);
   cursor: crosshair;
 
@@ -106,16 +106,21 @@ html {
     width: 100%;
     height: 100%;
 
-    circle {
-      fill: none;
-      stroke: black;
+    rect {
+      fill: white;
+      fill-opacity: 0.25;
+      stroke: white;
+      stroke-width: 3px;
     }
   }
-
-  .drawingCircle {
-    border-radius: 10000px;
-  }
 }
+
+#newRectSelector .glyphicon-stop {
+  border: 2px solid white;
+  color: transparent;
+  background-color: rgba(255,255,255,0.25);
+}
+
 ///// START multi-level dropdown styles
 * {
   .dropdown-submenu {
@@ -176,11 +181,11 @@ html {
   width: 25%;
   min-width: 450px;
   z-index: 100;
-  background-color: rgba(125, 125, 125, 0.8);
-  border: 3px solid rgba(69, 69, 69, 0.25);
+  background-color: rgba(125, 125, 125, 0.5);
+  border: 3px solid rgba(69, 69, 69, 0.5);
   padding: 10px;
   .border-radius(10px);
-  .box-shadow(inset 1px 1px 10px #C8C8C8);
+  .box-shadow(1px 1px 10px #C8C8C8);
 }
 
 #chartList {

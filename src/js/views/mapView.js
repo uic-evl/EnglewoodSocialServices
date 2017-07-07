@@ -21,8 +21,8 @@ let MapView = function(div) {
       "black": "#3e3e3e"
     },
 
-    circles: {},
-    totalCircles: 0
+    rects: {},
+    totalRects: 0
   };
 
   init();
@@ -156,31 +156,28 @@ let MapView = function(div) {
     self.map.addLayer(self.currentLocationMarker);
   }
 
-  function drawCircle(center, radialPoint) {
-    let llCenter = self.map.containerPointToLatLng(center);
-    let llRadial = self.map.containerPointToLatLng(radialPoint);
+  function drawRect(bound1, bound2) {
+    let llBound1 = self.map.containerPointToLatLng(bound1);
+    let llBound2 = self.map.containerPointToLatLng(bound2);
 
-    let radius = llCenter.distanceTo(llRadial);
-
-    let circle = L.circle(llCenter, {
-      radius,
-      color: d3.schemeCategory10[self.totalCircles],
-      data: self.totalCircles
+    let rect = L.rectangle([llBound1, llBound2], {
+      color: d3.schemeCategory10[self.totalRects],
+      data: self.totalRects
     })
     .bindPopup(function(layer) { // allow for the popup on click with the name of the location
-      return `<button class='btn btn-xs btn-danger' onclick='App.views.map.removeCircle(${layer.options.data})'>
+      return `<button class='btn btn-xs btn-danger' onclick='App.views.map.removeRect(${layer.options.data})'>
       <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
     })
     .addTo(self.map);
 
-    self.circles[self.totalCircles++] = circle;
+    self.rects[self.totalRects++] = rect;
 
-    return {center: llCenter, radius};
+    return [llBound1, llBound2];
   }
 
-  function removeCircle(circle) {
-    console.log("removing", circle);
-    self.map.removeLayer(self.circles[circle]);
+  function removeRect(rect) {
+    console.log("removing", rect);
+    self.map.removeLayer(self.rects[rect]);
   }
 
   function jumpToLocation(position) {
@@ -201,8 +198,8 @@ let MapView = function(div) {
     updateServicesWithFilter,
     setSelectedService,
 
-    drawCircle,
-    removeCircle,
+    drawRect,
+    removeRect,
 
     jumpToLocation
   };

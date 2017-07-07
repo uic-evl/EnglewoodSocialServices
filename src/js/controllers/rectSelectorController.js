@@ -2,7 +2,7 @@
 
 var App = App || {};
 
-let CircleSelectorController = function(buttonID) {
+let RectSelectorController = function(buttonID) {
   let self = {
     button: null,
     dragLayer: null,
@@ -10,10 +10,10 @@ let CircleSelectorController = function(buttonID) {
 
     drawable: false,
     drawing: false,
-    drawingCircle: false,
+    drawingRect: false,
     drawingStart: null,
 
-    circleList: []
+    rectList: []
   };
 
   init();
@@ -31,11 +31,11 @@ let CircleSelectorController = function(buttonID) {
       .attr("class", "disabled")
 
     self.svg = self.dragLayer.append("svg")
-      .on("mousedown", startCircleCreation)
-      .on("mousemove", resizeCircle)
-      .on("mouseup", finalizeCircle);
+      .on("mousedown", startRectCreation)
+      .on("mousemove", resizeRect)
+      .on("mouseup", finalizeRect);
 
-    self.drawingCircle = self.svg.append("circle");
+    self.drawingRect = self.svg.append("rect");
   }
 
   function handleButtonClick() {
@@ -50,43 +50,53 @@ let CircleSelectorController = function(buttonID) {
     }
   }
 
-  function startCircleCreation() {
+  function startRectCreation() {
     self.drawingStart = {
       x: d3.event.layerX,
       y: d3.event.layerY
     };
 
-    self.drawingCircle
-      .attr("cx", d3.event.layerX)
-      .attr("cy", d3.event.layerY)
-      .attr("r", 0);
+    self.drawingRect
+      .attr("x", d3.event.layerX)
+      .attr("y", d3.event.layerY)
+      .attr("width", 0)
+      .attr("height", 0);
   }
 
-  function resizeCircle() {
+  function resizeRect() {
     if (self.drawingStart) {
-      let radius = Math.sqrt(
-        Math.pow(d3.event.layerX - self.drawingStart.x, 2) +
-        Math.pow(d3.event.layerY - self.drawingStart.y, 2)
-      );
 
-      self.drawingCircle.attr("r", radius);
+      self.drawingRect.attr("width", Math.abs(d3.event.layerX - self.drawingStart.x));
+      self.drawingRect.attr("height", Math.abs(d3.event.layerY - self.drawingStart.y));
+
+      if (self.drawingStart.x > d3.event.layerX) {
+        self.drawingRect.attr("x", d3.event.layerX);
+      }
+
+      if (self.drawingStart.y > d3.event.layerY) {
+        self.drawingRect.attr("y", d3.event.layerY);
+      }
     }
   }
 
-  function finalizeCircle() {
-    // send final values to map to create map circle, etc.
-    let center = L.point(self.drawingStart.x, self.drawingStart.y);
-    let radial = L.point(d3.event.layerX, d3.event.layerY);
+  function finalizeRect() {
+    // send final values to map to create map rect, etc.
+    let b1 = L.point(self.drawingStart.x, self.drawingStart.y);
+    let b2 = L.point(d3.event.layerX, d3.event.layerY);
 
-    let circle = App.views.map.drawCircle(center, radial);
-    self.circleList.push(circle);
+    let rect = App.views.map.drawRect(b1, b2);
+    self.rectList.push(rect);
+
+    console.log(App.models.censusData.getDataWithinBounds(rect));
 
     self.drawable = false;
     self.button.attr("class", "btn btn-success navbar-btn");
     self.dragLayer.classed("disabled", true);
-    self.drawingCircle.attr("r", 0);
+    self.drawingRect
+      .attr("width", 0)
+      .attr("height", 0);
 
-    if (self.circleList.length == 10) {
+    if (self.rectList.length == 10) {
       self.button.attr("class", "btn btn-success navbar-btn disabled")
         .attr("disabled", true);
     }

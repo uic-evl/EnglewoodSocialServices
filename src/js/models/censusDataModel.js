@@ -37,8 +37,27 @@ let CensusDataModel = function() {
 
   }
 
+  function getDataWithinBounds(bounds) {
+    let boundData = {};
+
+    for (let property of Object.keys(self.mapTypeNames)) {
+      boundData[property] = {};
+
+      for (let subproperty of self.mapTypeNames[property]) {
+        boundData[property][subproperty] = 0;
+      }
+    }
+
+    for (let feature of self.gridData.features) {
+
+    }
+
+    return boundData;
+  }
+
   return {
     loadData,
-    getSubsetGeoJSON
+    getSubsetGeoJSON,
+    getDataWithinBounds
   };
 };

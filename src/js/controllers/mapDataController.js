@@ -20,9 +20,7 @@ let MapDataController = function() {
   }
 
   function populateDropdown(categories) {
-    console.log(categories);
-
-
+    // populate census data dropdown
     self.dataDropdownList.selectAll(".censusType")
       .data(Object.keys(categories))
     .enter().append("li")

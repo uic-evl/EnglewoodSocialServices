@@ -33,7 +33,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
   // controllers
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
   App.controllers.mapData = new MapDataController();
-  App.controllers.locationButton = new LocationButtonController();
+  // App.controllers.locationButton = new LocationButtonController();
   App.controllers.search = new SearchController();
 
   App.init = function() {
@@ -47,13 +47,13 @@ Promise.all([documentPromise, less.pageLoadFinished])
     App.controllers.mapData.setDataDropdown("#mapDropdownList");
     App.controllers.mapData.attachResetOverlayButton("#resetMaps");
 
-    App.controllers.locationButton.attachLocationButton("#locationButton");
-    App.controllers.locationButton.attachAddressLookupButton("#findAddressButton");
+    // App.controllers.locationButton.attachLocationButton("#locationButton");
+    // App.controllers.locationButton.attachAddressLookupButton("#findAddressButton");
 
     App.controllers.search.attachDOMElements("#searchInput", "#searchButton");
 
-    App.controllers.circleSelector = new CircleSelectorController("#newCircleSelector");
-    App.controllers.circleSelector.attachDragLayer("#serviceMap");
+    App.controllers.rectSelector = new RectSelectorController("#newRectSelector");
+    App.controllers.rectSelector.attachDragLayer("#serviceMap");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
