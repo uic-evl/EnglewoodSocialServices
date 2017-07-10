@@ -22,6 +22,7 @@ let MapView = function(div) {
     },
 
     rects: {},
+    rectColors: d3.schemeCategory10.slice(0),
     totalRects: 0
   };
 
@@ -160,24 +161,33 @@ let MapView = function(div) {
     let llBound1 = self.map.containerPointToLatLng(bound1);
     let llBound2 = self.map.containerPointToLatLng(bound2);
 
+    let color = self.rectColors.shift();
+
     let rect = L.rectangle([llBound1, llBound2], {
-      color: d3.schemeCategory10[self.totalRects],
+      color,
       data: self.totalRects
     })
     .bindPopup(function(layer) { // allow for the popup on click with the name of the location
-      return `<button class='btn btn-xs btn-danger' onclick='App.views.map.removeRect(${layer.options.data})'>
+      return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
       <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
     })
     .addTo(self.map);
 
-    self.rects[self.totalRects++] = rect;
+    self.rects[self.totalRects] = rect;
 
-    return [llBound1, llBound2];
+    return {
+      id: self.totalRects++,
+      color,
+      bounds: [llBound1, llBound2]
+    };
   }
 
   function removeRect(rect) {
-    console.log("removing", rect);
     self.map.removeLayer(self.rects[rect]);
+
+    self.rectColors.push(self.rects[rect].options.color);
+
+    delete self.rects[rect];
   }
 
   function jumpToLocation(position) {

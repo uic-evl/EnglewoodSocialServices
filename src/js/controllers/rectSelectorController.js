@@ -13,7 +13,7 @@ let RectSelectorController = function(buttonID) {
     drawingRect: false,
     drawingStart: null,
 
-    rectList: []
+    rects: {}
   };
 
   init();
@@ -85,9 +85,19 @@ let RectSelectorController = function(buttonID) {
     let b2 = L.point(d3.event.layerX, d3.event.layerY);
 
     let rect = App.views.map.drawRect(b1, b2);
-    self.rectList.push(rect);
+    let censusData = App.models.censusData.getDataWithinBounds(rect.bounds);
 
-    console.log(App.models.censusData.getDataWithinBounds(rect));
+    self.rects[rect.id] =  {
+      bounds: rect.bounds,
+      area: censusData.area,
+      data: {
+        census: censusData.data
+      },
+      color: rect.color,
+      id: rect.id
+    };
+
+    App.views.chartList.createChart(self.rects[rect.id]);
 
     self.drawable = false;
     self.button.attr("class", "btn btn-success navbar-btn");
@@ -96,7 +106,7 @@ let RectSelectorController = function(buttonID) {
       .attr("width", 0)
       .attr("height", 0);
 
-    if (self.rectList.length == 10) {
+    if (Object.keys(self.rects).length >= 10) {
       self.button.attr("class", "btn btn-success navbar-btn disabled")
         .attr("disabled", true);
     }
@@ -105,7 +115,31 @@ let RectSelectorController = function(buttonID) {
 
   }
 
+  function removeRect(id) {
+    console.log("Controller removing rect:", id);
+
+    if (self.rects[id]) {
+      App.views.map.removeRect(id);
+      App.views.chartList.removeChart(id);
+
+      delete self.rects[id];
+
+      console.log(Object.keys(self.rects));
+
+      if (Object.keys(self.rects).length >= 10) {
+        self.button.attr("class", "btn btn-success navbar-btn disabled")
+          .attr("disabled", true);
+      } else {
+        self.button.attr("class", "btn btn-success navbar-btn")
+          .attr("disabled", null);
+      }
+    }
+
+  }
+
   return {
-    attachDragLayer
+    attachDragLayer,
+
+    removeRect
   };
 }
