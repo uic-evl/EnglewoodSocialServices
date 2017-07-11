@@ -87,11 +87,13 @@ let RectSelectorController = function(buttonID) {
     let rect = App.views.map.drawRect(b1, b2);
     let censusData = App.models.censusData.getDataWithinBounds(rect.bounds);
 
+    console.log(censusData);
+
     self.rects[rect.id] =  {
       bounds: rect.bounds,
-      area: censusData.area,
+      area: censusData.area * 3.86102e-7, // meters to miles
       data: {
-        census: censusData.data
+        census: censusData.dataTotals
       },
       color: rect.color,
       id: rect.id
@@ -123,8 +125,6 @@ let RectSelectorController = function(buttonID) {
       App.views.chartList.removeChart(id);
 
       delete self.rects[id];
-
-      console.log(Object.keys(self.rects));
 
       if (Object.keys(self.rects).length >= 10) {
         self.button.attr("class", "btn btn-success navbar-btn disabled")
