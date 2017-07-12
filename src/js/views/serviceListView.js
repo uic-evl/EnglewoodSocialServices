@@ -27,6 +27,7 @@ let ServiceListView = function(listID) {
     .append("div").attr("class", "panel panel-info serviceEntry")
     .each(function(d, i){
       let panel = d3.select(this);
+      let theseSubCategories = App.models.serviceTaxonomy.getAllTier2Categories().filter(c => d[c] == 1);
 
       // create heading
       let panelHeading = panel.append("div")
@@ -61,7 +62,6 @@ let ServiceListView = function(listID) {
       .append("small")
         .attr("class", "serviceDistance")
         .html(function(d) {
-          let theseSubCategories = App.models.serviceTaxonomy.getAllTier2Categories().filter(c => d[c] == 1);
           let theseMainCategories = App.models.serviceTaxonomy.getTier1CategoriesOf(theseSubCategories);
 
           return "<br>" + theseMainCategories.join(", ");
@@ -75,6 +75,12 @@ let ServiceListView = function(listID) {
       panelBody.append("p")
         .attr("class", "description")
         .text(function(d) { return d["Description of Services Provided in Englewood"]; });
+
+      panelBody.append("p")
+        .attr("class", "categories")
+        .text(function(d) {
+          return theseSubCategories.join(", ");
+        });
 
       // add link to address in footer
       panelFooter.append("a")
