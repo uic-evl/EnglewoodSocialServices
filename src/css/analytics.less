@@ -196,71 +196,47 @@ html {
 }
 
 .chartEntry {
-  margin: 10px;
+  margin: 10px 10px 10px 0;
   z-index: -2;
   .border-radius(6px);
 
-  .orgName {
+  .rectArea {
+    color: white;
     font-weight: bold;
   }
 
-  .panel-heading:hover {
-    cursor: pointer;
-  }
+  // .panel-heading:hover {
+  //   cursor: pointer;
+  // }
 
-  &.opened {
-    border-color: @open-panel;
+  .panel-body {
+    svg {
+      width: 100%;
+      height: 250px;
+      background-color: white;
 
-    .panel-heading {
-      color: darken(@open-panel, 35%);
-      border-color: @open-panel;
-      background-color: tint(@open-panel, 20%);
-    }
+      transition: height 0.5s;
+      transition-timing-function: ease;
 
-    .panel-body {
-      .description::before {
-        content: 'Description:';
-        display: block;
-        font-weight: bold;
-      }
-      border-color: @open-panel;
-    }
-
-    .panel-footer {
-      border-color: @open-panel;
-      background-color: tint(@open-panel, 75%);
-    }
-
-    &:hover {
-      border-color: darken(@open-panel, 15%);
-
-      .panel-heading {
-        border-color: darken(@open-panel, 15%);
-      }
-
-      .panel-body {
-        border-color: darken(@open-panel, 15%);
-      }
-
-      .panel-footer {
-        border-color: darken(@open-panel, 15%);
+      rect {
+        fill: black;
       }
     }
   }
 
   &:hover {
-    border-color: @hover-panel;
 
     .panel-heading {
-      border-color: @hover-panel;
+
     }
 
-    .panel-body {
-      border-color: @hover-panel;
-    }
+    // .panel-body {
+    //   svg {
+    //     height: 400px;
+    //   }
+    // }
 
     .panel-footer {
-      border-color: @hover-panel;
     }
   }
 }
