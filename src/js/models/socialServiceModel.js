@@ -44,9 +44,22 @@ let SocialServiceModel = function() {
     });
   }
 
+  // just searching by name for now
+  function getSearchedData(term) {
+
+    if (term.length === 0) {
+      return self.data;
+    }
+
+    let termToLower = _.lowerCase(term);
+
+    return _.filter(self.data, el => _.includes(_.lowerCase(el["Organization Name"]), termToLower));
+  }
+
   return {
     loadData,
     getData,
-    getFilteredData
+    getFilteredData,
+    getSearchedData
   };
 };

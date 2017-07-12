@@ -45,7 +45,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
     App.controllers.locationButton.attachLocationButton("#locationButton");
     App.controllers.locationButton.attachAddressLookupButton("#findAddressButton");
 
-    App.controllers.search.attachDOMElements("#searchInput", "#searchButton");
+    App.controllers.search.attachDOMElements("#searchInput", "#searchCount", "#searchButton");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
@@ -56,6 +56,8 @@ Promise.all([documentPromise, less.pageLoadFinished])
 
         App.views.map.plotServices(App.models.socialServices.getData());
         App.views.serviceList.populateList(App.models.socialServices.getData());
+
+        App.controllers.search.initializeCount(App.models.socialServices.getData().length);
 
         App.controllers.serviceFilterDropdown.populateDropdown();
       })

@@ -60,7 +60,12 @@ let ServiceListView = function(listID) {
         .text(function(d) { return d["Organization Name"]; })
       .append("small")
         .attr("class", "serviceDistance")
-        .html(d => "<br>" + App.models.serviceTaxonomy.getAllTier2Categories().filter(c => d[c] == 1).join(", "));
+        .html(function(d) {
+          let theseSubCategories = App.models.serviceTaxonomy.getAllTier2Categories().filter(c => d[c] == 1);
+          let theseMainCategories = App.models.serviceTaxonomy.getTier1CategoriesOf(theseSubCategories);
+
+          return "<br>" + theseMainCategories.join(", ");
+        });
 
       if (self.currentLocation) {
         sortLocations(self.currentLocation);
