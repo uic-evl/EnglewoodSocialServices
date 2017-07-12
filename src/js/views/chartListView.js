@@ -4,7 +4,7 @@ var App = App || {};
 
 let ChartListView = function(listID) {
   let self = {
-    chartHeight: 250,
+    chartHeight: 200,
     chartMargins: {
       top: 10,
       right: 10,
@@ -63,7 +63,6 @@ let ChartListView = function(listID) {
       .style("background-color", d.color);
 
     let area = heading.append("h4").attr("class", "rectArea").html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
-      // .html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
 
     let body = panel.append("div").attr("class", "panel-body");
 
@@ -74,6 +73,16 @@ let ChartListView = function(listID) {
       .attr("y", self.chartMargins.top)
       .attr("width", chart.node().clientWidth - self.chartMargins.left - self.chartMargins.right)
       .attr("height", chart.node().clientHeight - self.chartMargins.top - self.chartMargins.bottom);
+
+    chart.append("text")
+      .attr("x", self.chartMargins.left + 5)
+      .attr("y", self.chartMargins.top + 15)
+      .text(`Population Density (/mi^2): ${(d.data.census["TOTAL_POPULATION"].Total / d.area).toFixed(2)}`);
+
+    chart.append("text")
+      .attr("x", self.chartMargins.left + 5)
+      .attr("y", self.chartMargins.top + 35)
+      .text(`Family Density (/mi^2): ${(d.data.census["FAMILIES"].Total / d.area).toFixed(2)}`);
   }
 
   function updateChart(d) {
