@@ -19,7 +19,7 @@ let SearchController = function() {
       .on("click", onButtonClick);
   }
 
-  function initializeCount(count) {
+  function setCount(count) {
     self.counter.html(count);
   }
 
@@ -28,8 +28,18 @@ let SearchController = function() {
 
     let searchTerm = self.input.node().value;
 
+    let searchData = App.models.socialServices.getSearchedData(searchTerm);
+    App.views.map.updateServicesWithFilter(searchData);
+
     // get number of elements in search
-    self.counter.html(App.models.socialServices.getSearchedData(searchTerm).length);
+    self.counter.html(searchData.length);
+    App.views.serviceList.populateList(searchData);
+
+    if (searchData.length === 0) {
+      self.counter.classed("searchCountEmpty", true);
+    } else {
+      self.counter.classed("searchCountEmpty", false);
+    }
   }
 
   function onButtonClick(d) {
@@ -48,6 +58,6 @@ let SearchController = function() {
   return {
     attachDOMElements,
 
-    initializeCount
+    setCount
   };
 };

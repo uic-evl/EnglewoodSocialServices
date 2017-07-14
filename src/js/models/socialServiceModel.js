@@ -4,7 +4,10 @@ var App = App || {};
 
 let SocialServiceModel = function() {
   let self = {
-    data: null
+    data: null,
+
+    filters: {},
+    searchTerm: ""
   };
 
   init();
@@ -29,31 +32,49 @@ let SocialServiceModel = function() {
   }
 
   function getFilteredData(serviceFilters) {
-    if (Object.keys(serviceFilters).length == 0) {
-      return self.data;
-    }
+    self.filters = serviceFilters;
+    // if (Object.keys(serviceFilters).length == 0) {
+    //   return self.data;
+    // }
+    //
+    // return _.filter(self.data, function(el) {
+    //   for (let property of Object.keys(serviceFilters)) {
+    //     if (el[property] == 1) {
+    //       return true;
+    //     }
+    //   }
+    //
+    //   return false;
+    // });
 
-    return _.filter(self.data, function(el) {
-      for (let property of Object.keys(serviceFilters)) {
-        if (el[property] == 1) {
-          return true;
-        }
-      }
-
-      return false;
-    });
+    return getSearchAndFilterSubset();
   }
 
   // just searching by name for now
   function getSearchedData(term) {
+    self.searchTerm = _.lowerCase(term);
 
-    if (term.length === 0) {
-      return self.data;
-    }
+    return getSearchAndFilterSubset();
+  }
 
-    let termToLower = _.lowerCase(term);
+  function getSearchAndFilterSubset() {
 
-    return _.filter(self.data, el => _.includes(_.lowerCase(el["Organization Name"]), termToLower));
+    let filteredData = Object.keys(self.filters).length == 0 ? self.data :
+      _.filter(self.data, function(el) {
+        for (let property of Object.keys(self.filters)) {
+          if (el[property] == 1) {
+            return true;
+          }
+        }
+
+        return false;
+      });
+
+    let searchData = self.searchTerm.length === 0 ? self.data :
+      _.filter(self.data, el => _.includes(_.lowerCase(el["Organization Name"]), self.searchTerm));
+
+    return _.intersection(filteredData, searchData);
+
   }
 
   return {

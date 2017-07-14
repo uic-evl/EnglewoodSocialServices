@@ -25,7 +25,7 @@ html {
 }
 
 * {
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 .modal-right-buttons {
@@ -36,14 +36,19 @@ html {
   float: left;
 }
 
-#searchCount {
-  background-color: #eee;
-  border: 1px solid #ccc;
+.searchCount {
+  background-color: #EEEEEE;
+  border: 1px solid #CCCCCC;
   width: 50px;
   color: black;
   border-radius: 4px 0 0 4px;
-
   cursor: default;
+}
+
+.searchCountEmpty {
+  color: #FFFFFF;
+  background-color: #D9534F;
+  border-color: #D43F3A;
 }
 
 #filterButtonGroup,
@@ -148,19 +153,63 @@ html {
   z-index: 100;
   background-color: rgba(125, 125, 125, 0.5);
   border: 3px solid rgba(69, 69, 69, 0.5);
-  padding: 10px;
+  padding: 10px 10px 10px 15px;
   .border-radius(10px);
   .box-shadow(1px 1px 10px #C8C8C8);
+  transition: bottom 0.5s;
+  text-align: center;
+
+  .title {
+    font-weight: bold;
+    color: white;
+    background-color: rgba(69,69,69,0.69);
+    border-radius: 5px;
+    display: inline-block;
+    padding: 0 10px;
+    margin: -5px;
+  }
+
+  &.expanding {
+    bottom: 75%;
+
+    &:after {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      font-family: 'Glyphicons Halflings';
+      content: '\e114';
+
+      background: gray;
+      border-radius: 10px;
+      padding: 0 3px;
+    }
+
+    &:hover {
+      &:after {
+        color: white;
+      }
+    }
+  }
+
+  &.opened {
+    bottom: 10px;
+    &:after {
+      content: '\e113';
+    }
+  }
 }
 
 #serviceList {
   overflow-y: scroll;
-  height: 100%;
-  max-height: 100%;
+  height: 95%;
+  max-height: 95%;
+  top: 10px;
+  bottom: 20px;
   width: 100%;
 }
 
 .serviceEntry {
+  text-align: left;
   margin: 10px;
   z-index: -2;
 

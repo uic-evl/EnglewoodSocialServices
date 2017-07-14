@@ -87,6 +87,8 @@ let MapView = function(div) {
       let lat = loc.Y,
         lng = loc.X;
 
+      loc.visible = true;
+
       // create a marker for each social services location
       L.marker(
         L.latLng(lat, lng), {
@@ -104,34 +106,41 @@ let MapView = function(div) {
     }
   }
 
-  function updateServicesWithFilter(serviceFilters) {
-    if (Object.keys(serviceFilters).length === 0) {
-      // if there are no filters, show all locations
-      self.serviceGroup.eachLayer(function(layer) {
-        layer.setOpacity(1);
-      });
-    } else {
+  function updateServicesWithFilter(filteredData, serviceFilters) {
+    // if (Object.keys(serviceFilters).length === 0) {
+    //   // if there are no filters, show all locations
+    //   self.serviceGroup.eachLayer(function(layer) {
+    //     layer.setOpacity(1);
+    //   });
+    // } else {
       // otherwise only show locations that match at least one of the selected properties
       self.serviceGroup.eachLayer(function(layer) {
         let loc = layer.options.data;
-        let show = false;
+        // let show = false;
+        //
+        // for (let property of Object.keys(serviceFilters)) {
+        //   if (loc[property] == 1) {
+        //     show = true;
+        //     break;
+        //   }
+        // }
 
-        for (let property of Object.keys(serviceFilters)) {
-          if (loc[property] == 1) {
-            show = true;
-            break;
-          }
-        }
+        let show = _.includes(filteredData, loc);
+        layer.options.data.visible = show;
 
         if (show) {
           layer.setOpacity(1);
+          layer.setZIndexOffset(100);
+          layer.setIcon(self.icons["blue"]);
         } else {
           layer.setOpacity(0.2);
+          layer.setZIndexOffset(0);
+          layer.setIcon(self.icons["grey"]);
           // layer.setOpacity(0);
         }
 
       });
-    }
+    // }
   }
 
   function setSelectedService(service) {
@@ -139,7 +148,8 @@ let MapView = function(div) {
       if (service && service["Organization Name"] === layer.options.data["Organization Name"]) {
         layer.setIcon(self.icons["orange"]);
       } else {
-        layer.setIcon(self.icons["blue"]);
+        layer.options.data.visible ? layer.setIcon(self.icons["blue"]) : layer.setIcon(self.icons["grey"]);
+        // layer.setIcon(self.icons["blue"]);
       }
     });
 

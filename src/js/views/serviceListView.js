@@ -15,6 +15,19 @@ let ServiceListView = function(listID) {
     self.serviceList = d3.select(listID).select("#accordion");
   }
 
+  function makeExpanding(listWrapperID) {
+    d3.select(listWrapperID)
+    .classed("expanding", true)
+    .on("click", function() {
+      if(d3.event.target !== this) return;
+      
+      d3.select(this).classed("opened", !d3.select(this).classed("opened"));
+
+    });
+
+    // serviceListWrapper
+  }
+
   function populateList(englewoodLocations) {
 
     //remove previous entries
@@ -152,6 +165,7 @@ let ServiceListView = function(listID) {
   return {
     populateList,
 
-    sortLocations
+    sortLocations,
+    makeExpanding
   };
 };

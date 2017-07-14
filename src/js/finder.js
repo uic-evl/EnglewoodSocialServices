@@ -38,6 +38,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
     console.log("Loading Finder");
     App.views.map = new MapView("serviceMap");
     App.views.serviceList = new ServiceListView("#serviceList");
+    App.views.serviceList.makeExpanding("#serviceListWrapper");
 
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
@@ -57,7 +58,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
         App.views.map.plotServices(App.models.socialServices.getData());
         App.views.serviceList.populateList(App.models.socialServices.getData());
 
-        App.controllers.search.initializeCount(App.models.socialServices.getData().length);
+        App.controllers.search.setCount(App.models.socialServices.getData().length);
 
         App.controllers.serviceFilterDropdown.populateDropdown();
       })
