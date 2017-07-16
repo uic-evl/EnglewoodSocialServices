@@ -18,12 +18,13 @@ let ServiceListView = function(listID) {
   function makeExpanding(listWrapperID) {
     d3.select(listWrapperID)
     .classed("expanding", true)
-    .on("click", function() {
-      if(d3.event.target !== this) return;
-      
-      d3.select(this).classed("opened", !d3.select(this).classed("opened"));
+    .classed("opened", true)
+      .on("click", function() {
+        if(d3.event.target !== this) return;
 
-    });
+        d3.select(this).classed("opened", !d3.select(this).classed("opened"));
+
+      });
 
     // serviceListWrapper
   }

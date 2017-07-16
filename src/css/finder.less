@@ -159,14 +159,20 @@ html {
   transition: bottom 0.5s;
   text-align: center;
 
+  cursor: pointer;
+
   .title {
     font-weight: bold;
     color: white;
-    background-color: rgba(69,69,69,0.69);
+    background-color: rgba(69,69,69,1);
+    border: 1.25px solid rgba(255, 255, 255, 0.75);
+    // background-color: #5bc0de;
     border-radius: 5px;
     display: inline-block;
     padding: 0 10px;
     margin: -5px;
+
+    pointer-events: none;
   }
 
   &.expanding {
@@ -178,16 +184,20 @@ html {
       right: 8px;
       font-family: 'Glyphicons Halflings';
       content: '\e114';
-
       background: gray;
       border-radius: 10px;
-      padding: 0 3px;
+      padding: 0 3px 0 4px;
     }
 
     &:hover {
       &:after {
         color: white;
+
+        // color: @open-panel;
       }
+
+      border-color: white;
+      // border-color: @open-panel;
     }
   }
 
