@@ -10,6 +10,8 @@ let ListToMapLinkingController = function() {
 
     let innerListItem = $(dPanel.nodes());
 
+    console.log(innerListItem);
+
     parentDiv.animate({
         scrollTop: parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top) - parentDiv.height()/2 + innerListItem.height()/2
     }, 500);
@@ -19,8 +21,9 @@ let ListToMapLinkingController = function() {
     d3.selectAll("#serviceList").selectAll(".serviceEntry").classed("opened", false);
     dPanel.classed("opened", expanded);
 
-    $(".collapse", innerListItem).collapse("toggle");
-
+    // $(".serviceEntry.collapse").collapse("hide");
+    // $(".collapse", innerListItem).collapse(expanded ? "show" : "hide");
+    $(".panel-heading", innerListItem).trigger("click");
 
     App.views.map.setSelectedService(expanded ? data : null);
   }

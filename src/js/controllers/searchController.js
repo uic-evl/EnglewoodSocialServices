@@ -13,7 +13,13 @@ let SearchController = function() {
 
   function attachDOMElements(inputID, counterID, buttonID) {
     self.input = d3.select(inputID)
-      .on("input", onInput);
+      .on("input", onInput)
+      .on("keyup", function() {
+        if (d3.event.keyCode == 13) {
+          // hitting enter in the input is equivalent to pressing search button
+          onButtonClick();
+        }
+      });
 
     self.counter = d3.select(counterID);
 
@@ -55,21 +61,25 @@ let SearchController = function() {
   }
 
   function onButtonClick(d) {
-    console.log("Search:", self.input.node().value);
 
     let searchTerm = _.lowerCase(self.input.node().value);
     // has to do with state of list
-    self.lastSearchedTerm = searchTerm;
 
-    // update service list with search string
+    if (searchTerm !== self.lastSearchedTerm) {
 
-    let searchData = App.models.socialServices.getSearchedData(searchTerm);
+      console.log("Search:", searchTerm);
+      self.lastSearchedTerm = searchTerm;
 
-    App.views.map.updateServicesWithFilter(searchData);
-    App.views.serviceList.populateList(searchData);
+      // update service list with search string
 
-    self.button.attr("class", "btn btn-default")
-      .attr("disabled", true);
+      let searchData = App.models.socialServices.getSearchedData(searchTerm);
+
+      App.views.map.updateServicesWithFilter(searchData);
+      App.views.serviceList.populateList(searchData);
+
+      self.button.attr("class", "btn btn-default")
+        .attr("disabled", true);
+    }
   }
 
   return {
