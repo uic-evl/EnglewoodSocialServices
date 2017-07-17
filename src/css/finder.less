@@ -51,6 +51,12 @@ html {
   border-color: #D43F3A;
 }
 
+.searchButtonChange {
+  color: #FFFFFF;
+  background-color: #5CB85C;
+  border-color: #4CAE4C;
+}
+
 #filterButtonGroup,
 #mapsButtonGroup {
   // float: right;
@@ -86,7 +92,6 @@ html {
 #serviceMap {
   height: 100%;
   border: 1px solid #C1C1C1;
-
   .border-radius(10px);
   z-index: 0;
 }
@@ -102,8 +107,6 @@ html {
 .glyphicon-unchecked {
   color: transparent;
 }
-
-
 ///// START multi-level dropdown styles
 * {
   .dropdown-submenu {
@@ -141,7 +144,6 @@ html {
   }
 }
 ///// END multi-level dropdown styles
-
 // Social Service list on lefthand side
 #serviceListWrapper {
   position: absolute;
@@ -158,7 +160,6 @@ html {
   .box-shadow(1px 1px 10px #C8C8C8);
   transition: bottom 0.5s;
   text-align: center;
-
   cursor: pointer;
 
   .title {
@@ -171,7 +172,6 @@ html {
     display: inline-block;
     padding: 0 10px;
     margin: -5px;
-
     pointer-events: none;
   }
 
@@ -192,10 +192,8 @@ html {
     &:hover {
       &:after {
         color: white;
-
         // color: @open-panel;
       }
-
       border-color: white;
       // border-color: @open-panel;
     }
@@ -203,6 +201,7 @@ html {
 
   &.opened {
     bottom: 10px;
+
     &:after {
       content: '\e113';
     }
@@ -222,7 +221,6 @@ html {
   text-align: left;
   margin: 10px;
   z-index: -2;
-
   .border-radius(6px);
 
   .orgName {
@@ -248,6 +246,7 @@ html {
         display: block;
         font-weight: bold;
       }
+
       .categories:before {
         content: 'All Categories:';
         display: block;
@@ -260,7 +259,6 @@ html {
       border-color: @open-panel;
       background-color: tint(@open-panel, 75%);
     }
-
 
     &:hover {
       border-color: darken(@open-panel, 15%);
@@ -295,6 +293,5 @@ html {
     }
   }
 }
-
 @open-panel: #FEB24C;
 @hover-panel: #337AB7;
