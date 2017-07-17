@@ -65,6 +65,7 @@ let SearchController = function() {
 
     let searchData = App.models.socialServices.getSearchedData(searchTerm);
 
+    App.views.map.updateServicesWithFilter(searchData);
     App.views.serviceList.populateList(searchData);
 
     self.button.attr("class", "btn btn-default")
