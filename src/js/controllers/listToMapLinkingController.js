@@ -10,8 +10,6 @@ let ListToMapLinkingController = function() {
 
     let innerListItem = $(dPanel.nodes());
 
-    console.log(innerListItem);
-
     parentDiv.animate({
         scrollTop: parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top) - parentDiv.height()/2 + innerListItem.height()/2
     }, 500);

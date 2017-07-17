@@ -49,6 +49,8 @@ let MapView = function(div) {
     var osm = new L.TileLayer(osmUrl, {
       minZoom: 11,
       maxZoom: 18,
+      zoomSnap: 0.25,
+      zoomDelta: 0.25,
       attribution: osmAttrib
     });
 
@@ -162,6 +164,13 @@ let MapView = function(div) {
     self.serviceGroup.eachLayer(function(layer) {
       if (service && service["Organization Name"] === layer.options.data["Organization Name"]) {
         layer.setIcon(self.icons["orange"]);
+
+        // open popup forcefully
+        if (!layer._popup._latlng) {
+          layer._popup.setLatLng(new L.latLng(layer.options.data.Y, layer.options.data.X));
+        }
+
+        layer._popup.openOn(self.map);
       } else {
         layer.options.data.visible ? layer.setIcon(self.icons["blue"]) : layer.setIcon(self.icons["grey"]);
         // layer.setIcon(self.icons["blue"]);

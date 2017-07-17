@@ -32,8 +32,6 @@ let SearchController = function() {
   }
 
   function onInput(d) {
-    console.log("Input:", self.input.node().value);
-
     let searchTerm = self.input.node().value;
 
     let searchData = App.models.socialServices.getSearchedData(searchTerm);
@@ -67,7 +65,6 @@ let SearchController = function() {
 
     if (searchTerm !== self.lastSearchedTerm) {
 
-      console.log("Search:", searchTerm);
       self.lastSearchedTerm = searchTerm;
 
       // update service list with search string
