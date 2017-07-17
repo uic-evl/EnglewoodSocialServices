@@ -31,6 +31,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
 
   // controllers
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
+  App.controllers.listToMapLink = new ListToMapLinkingController();
   App.controllers.locationButton = new LocationButtonController();
   App.controllers.search = new SearchController();
 

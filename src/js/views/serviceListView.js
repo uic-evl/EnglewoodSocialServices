@@ -55,7 +55,7 @@ let ServiceListView = function(listID) {
           self.serviceList.selectAll(".serviceEntry").classed("opened", false);
           panel.classed("opened", expanded);
 
-          App.views.map.setSelectedService(expanded ? d : null);
+          App.controllers.listToMapLink.listServiceSelected(expanded ? d : null);
         });
 
       // create body

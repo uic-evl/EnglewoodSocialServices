@@ -102,7 +102,22 @@ let MapView = function(div) {
           loc["Description of Services Provided in Englewood"] + "<br><br>" +
           "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
           "<span class='glyphicon glyphicon-share-alt'></span> Google Maps</a></strong>";
-      }).addTo(self.serviceGroup);
+      }).addTo(self.serviceGroup)
+      .on("click", function(e) {
+        if (this.options.data.visible) {
+          // let parentDiv = $("#serviceList");
+          // let innerListItem = $(d3.selectAll(".serviceEntry")
+          //   .filter((d) => d["Organization Name"] === this.options.data["Organization Name"]).nodes())
+          //
+          // parentDiv.scrollTop(parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top));
+          //
+          // $(".panel-heading", innerListItem).trigger("click");
+
+          setSelectedService
+
+          App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
+        }
+      });
     }
   }
 
