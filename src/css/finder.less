@@ -67,11 +67,22 @@ html {
   margin-right: 10px;
 }
 
+#filterButtonGroup,
+#locationButton {
+  float: left;
+}
+
+#locationButton {
+  margin-right: 20px;
+}
+
 #filterDropdownList {
   a {
+    padding-left: 10px;
+    // padding-right: 30px;
     .glyphicon {
       margin-right: 6px;
-      margin-left: 4px;
+      margin-left: -4px;
     }
   }
 }
@@ -120,7 +131,7 @@ html {
   .dropdown-submenu > .dropdown-menu {
     // position: relative;
     top: 0;
-    right: 100%;
+    left: 100%;
     margin-top: -6px;
     .border-radius(6px 0 6px 6px);
   }
@@ -129,21 +140,21 @@ html {
     display: block;
   }
 
-  .dropdown-submenu > a:before {
+  .dropdown-submenu > a:after {
     display: block;
     content: ' ';
-    float: left;
+    float: right;
     width: 0;
     height: 0;
     border-color: transparent;
     border-style: solid;
-    border-width: 5px 5px 5px 0;
-    border-right-color: #CCCCCC;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #CCCCCC;
     margin-top: 5px;
-    margin-left: -6px;
+    margin-right: -10px;
   }
 
-  .dropdown-submenu:hover > a:before {
+  .dropdown-submenu:hover > a:after {
     border-right-color: #FFFFFF;
   }
 }

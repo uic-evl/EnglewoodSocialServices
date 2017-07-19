@@ -51,6 +51,30 @@
       </div>
 
       <div class="navbar-left">
+        <div class="nav btn-group" id="filterButtonGroup">
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
+              Select Services
+              <span class="caret">
+
+              </span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="filterDropdownList">
+
+            </ul>
+          </div>
+          <button type="button" class="btn btn-warning navbar-btn" id="allServicesButton">
+            <span class="glyphicon glyphicon-refresh">
+
+            </span>
+            Clear Selection
+          </button>
+        </div>
+
+        <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal" id="locationButton">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                Search From Specific Location
+              </button>
 
         <div class="navbar-form navbar-left">
           <div class="input-group">
@@ -59,7 +83,7 @@
                 5
               </button>
             </div>
-            <input type="text" class="form-control" placeholder="Search" id="searchInput">
+            <input type="text" class="form-control" placeholder="Search by Org. Name" id="searchInput">
             <div class="input-group-btn">
               <button class="btn btn-default" type="submit" id="searchButton">
                 <i class="glyphicon glyphicon-search">
@@ -70,10 +94,7 @@
           </div>
         </div>
 
-        <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
-                <span class="glyphicon glyphicon-map-marker"></span>
-                Enter a Location
-              </button>
+
       </div>
 
       <div class="navbar-right">
@@ -94,22 +115,7 @@
           </ul>
         </div> -->
 
-        <div class="btn-group" id="filterButtonGroup">
-          <button type="button" class="btn btn-primary navbar-btn" id="allServicesButton">
-            <span class="glyphicon glyphicon-refresh">
 
-            </span>
-          </button>
-          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
-            Services
-            <span class="caret">
-
-            </span>
-          </button>
-          <ul class="dropdown-menu" role="menu" id="filterDropdownList">
-
-          </ul>
-        </div>
 
 
         <!-- glyphicon glyphicon-refresh -->
