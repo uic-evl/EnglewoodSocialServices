@@ -1,109 +1,84 @@
 {
-  "B": {
-    "description": "Basic Needs",
+  "EC": {
+    "description": "Economic",
     "children": [
-      "Safe Place to Live",
-      "Provision of Food/clothing",
-      "Residency"
+      "Job Training",
+      "youth employment (internships)",
+      "Job placement (long-term)"
     ]
   },
-  "D": {
-    "description": "Consumer Services",
-    "children": [
-      "Economic"
-    ]
-  },
-  "F": {
-    "description": "Criminal Justice and Legal Services",
-    "children": [
-
-    ]
-  },
-  "H": {
+  "ED": {
     "description": "Education",
     "children": [
-      "Education",
       "High School/GED Completion",
       "Tutoring/homework help",
+      "Parenting classes/workshops",
+      "Leadership/ character development programs (through mentoring)",
+      "Service learning",
       "College/career prep",
       "Academic counseling",
       "Enrichment field trips",
-      "Student clubs",
-      "Curriculum enhancement",
-      "Arts/language programs",
-      "Field Trips",
-      "In School Performance",
-      "After School Programs"
+      "Early childhood",
+      "Home visiting",
+      "Behavioral/self-management programs/workshops",
+      "Student clubs or curriculum enhancement (not tutoring)",
+      "Arts/language programs"
     ]
   },
-  "J": {
-    "description": "Environment and Public Health/Safety",
+  "F": {
+    "description": "Family Stability",
     "children": [
-      "Public Safety"
+      "Foster care",
+      "Adoption services",
+      "Family support",
+      "Safe Place to Live",
+      "Provision of Food/clothing"
     ]
   },
-  "L": {
-    "description": "Health Care",
+  "H": {
+    "description": "Health",
     "children": [
-      "Health",
-      "Preventive health visits",
+      "Preventive health visits (includes prenatal, dental/vision)",
       "Vaccinations",
       "Cessation programs",
       "Nutrition & Wellness programs/counseling",
       "Management of chronic conditions",
-      "HIV/AIDS programs"
-    ]
-  },
-  "N": {
-    "description": "Income Support and Employment",
-    "children": [
-      "Service learning",
-      "Job training",
-      "youth employment (internships)",
-      "Job placement (long-term)",
-      "Professional development"
+      "Mental health counseling (general)",
+      "Family & child counseling",
+      "Sexual assault counseling",
+      "Domestice violence support/counseling",
+      "Anger management counseling",
+      "Physical activity/sports",
+      "Family planning",
+      "HIV/AIDS programs",
+      "Substance abuse/addiction treatment"
     ]
   },
   "P": {
-    "description": "Individual and Family Life",
-    "children": [
-      "Family Stability",
-      "Foster care",
-      "Adoption services",
-      "Family support",
-      "Parenting classes/workshops",
-      "Early childhood",
-      "Family planning",
-      "Leadership/character development programs (through mentoring)",
-      "Home visiting",
-      "Family & child counseling",
-      "Sexual assault counseling",
-      "Domestic violence support/counseling",
-      "Physical activity/sports",
-      "Dance",
-      "Media Arts",
-      "Music",
-      "Theater",
-      "Visual Arts",
-      "DIscNA",
-      "Writing/poetry",
-      "Arts & crafts"
-    ]
-  },
-  "R": {
-    "description": "Mental Health and Substance Use Disorder Services",
-    "children": [
-      "Behavioral/self-management programs/workshops",
-      "Mental health counseling (general)",
-      "Substance abuse/addiction treatment",
-      "Anger management counseling"
-    ]
-  },
-  "T": {
-    "description": "Organizational/Community/International Services",
+    "description": "Public Safety",
     "children": [
       "Engage youth to prevent gang participation",
       "Workshops focused on violence prevention"
+    ]
+  },
+  "S": {
+    "description": "Program Subject",
+    "children": [
+      "Dance",
+      "Media Arts",
+      "Music",
+      "OtherDiscipline",
+      "Theater",
+      "Visual Arts",
+      "Field Trips",
+      "In School Performance",
+      "Other Services",
+      "After School Programs",
+      "Professional development",
+      "Residency",
+      "Resources",
+      "Writing/poetry",
+      "Arts & crafts"
     ]
   }
 }
