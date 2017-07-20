@@ -75,6 +75,11 @@ let ServiceListView = function(listID) {
           .text(function(d) {
             return d["Organization Name"];
           })
+        .append("small")
+          .attr("class", "type")
+          .text(function(d) {
+            return _.startCase(d["Type of Organization"]);
+          });
         // .append("small")
         //   .attr("class", "serviceDistance")
         //   .html(function(d) {
@@ -100,6 +105,12 @@ let ServiceListView = function(listID) {
             return theseSubCategories.join(", ");
           });
 
+        // panelBody.append("p")
+        //   .attr("class", "proximity")
+        //   .text(function(d) {
+        //     return d["Proximity to Englewood"];
+        //   });
+
         // add link to address in footer
         panelFooter.append("a")
           .attr("href", "http://maps.google.com/?q=" + d["Address"])
@@ -110,16 +121,16 @@ let ServiceListView = function(listID) {
           });
 
         // phone number
-        // if (d["PhoneNumber"]) {
+        if (d["PhoneNumber"]) {
           panelFooter.append("a")
           .html(function(d) {
             return "<span class='glyphicon glyphicon-earphone'></span> " +
             d["PhoneNumber"];
           });
-        // }
+        }
 
         // website
-        // if (d["Website"]) {
+        if (d["Website"]) {
           panelFooter.append("a")
           .attr("href", d["Website"])
           .attr("target", "_blank")
@@ -127,7 +138,7 @@ let ServiceListView = function(listID) {
             return "<span class='glyphicon glyphicon-home'></span> " +
             d["Website"];
           });
-        // }
+        }
 
         panelFooter.append("small")
           .attr("class", "serviceDistance");
