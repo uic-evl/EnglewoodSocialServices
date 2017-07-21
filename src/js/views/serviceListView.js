@@ -121,12 +121,24 @@ let ServiceListView = function(listID) {
           });
 
         // phone number
-        if (d["PhoneNumber"]) {
-          panelFooter.append("a")
-          .html(function(d) {
-            return "<span class='glyphicon glyphicon-earphone'></span> " +
-            d["PhoneNumber"];
-          });
+        if (d["Contact Phone Number"]) {
+          let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
+          let match = phoneRegex.exec(d["Contact Phone Number"]);
+          let matches = [];
+
+          while (match != null) {
+              matches.push(match.slice(1, 5));
+              match = phoneRegex.exec(d["Contact Phone Number"]);
+          }
+
+          if (matches.length) {
+            let numbers = matches.map(connectPhoneNumber);
+            panelFooter.append("p")
+            .html(function(d) {
+              return "<span class='glyphicon glyphicon-earphone'></span> " +
+              numbers.join(" or ");
+            });
+          }
         }
 
         // website
@@ -143,6 +155,15 @@ let ServiceListView = function(listID) {
         panelFooter.append("small")
           .attr("class", "serviceDistance");
       });
+  }
+
+  function connectPhoneNumber(arr) {
+    let phone = arr.slice(0, 3).join("-");
+    if (arr[3]) {
+      return [phone, arr[3]].join(" x");
+    }
+
+    return phone;
   }
 
   function sortLocations(currentLocation) {
