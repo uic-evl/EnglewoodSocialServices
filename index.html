@@ -48,12 +48,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Englewood Social Service Finder</h4>
+                  <h4 class="modal-title">Englewood Social Service Finder</h4>
                 </div>
-                <div class="modal-body"><center>
-                    Choose a social service or select a location to see services nearby.
-                    <div class="nav btn-group" id="filterButtonGroup">
+                <div class="modal-body">
+                    Choose a general social service and location<br>
+                    <div class="nav btn-group btn-block">
                       <div class="btn-group">
                         <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
                           Select Services
@@ -70,14 +69,44 @@
 
                         </span>
                         Clear Selection
-                      </button>
+                      </button> <!-- Service selection text goes here once selected -->
                     </div>
-                     <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal" id="locationButton">
+                    <br><br><br> 
+                    <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#locationModal" id="locationButton">
                       <span class="glyphicon glyphicon-map-marker"></span>
                       Search From Specific Location
-                    </button>
-                    <br><br><br><br><br><br><br><br><br><br></center>
+                    </button> <!-- Location text goes here once selected -->
+                    <br><br><br>Or search for a specific social service
+
+                    <div class="input-group">
+                      <div class="input-group-btn">
+                        <button class="btn searchCount" disabled id="searchCount">
+                          0
+                        </button>
+                      </div>
+                      <input type="text" class="form-control" placeholder="Search by Org. Name" id="searchInput">
+                      <div class="input-group-btn">
+                        <button class="btn btn-default btn-block" type="submit" id="searchButton">
+                          <i class="glyphicon glyphicon-search">
+
+                          </i>
+                        </button>
+                      </div>
+                    </div>
+
+                    
+
+
+                    <br><br>
                 </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-log-out"></span>
+                  </button>
+
+                </div>
+
             </div>
         </div> 
     </div>
