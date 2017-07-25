@@ -42,7 +42,7 @@ let FilterDropdownController = function() {
   }
 
   function setFilterDropdown(id) {
-    self.filterDropdownList = d3.select(id);
+    self.filterDropdownList = d3.selectAll(id);
   }
 
   function populateDropdown() {
@@ -156,7 +156,7 @@ let FilterDropdownController = function() {
   function updateMainCategoryIcon(category) {
     let id = "#main_" + convertPropertyToID(category);
 
-    let item = self.filterDropdownList.select(id);
+    let item = self.filterDropdownList.selectAll(id);
     let state = self.mainCategoryStates[category];
 
     item.select(".glyphicon")
@@ -166,7 +166,7 @@ let FilterDropdownController = function() {
   function updateSubCategoryIcon(category) {
     let id = "#sub_" + convertPropertyToID(category);
 
-    let item = self.filterDropdownList.select(id);
+    let item = self.filterDropdownList.selectAll(id);
     let state = self.filters[category];
 
     item.select(".glyphicon")
