@@ -160,7 +160,7 @@ let ServiceListView = function(listID) {
   function connectPhoneNumber(arr) {
     let phone = arr.slice(0, 3).join("-");
     if (arr[3]) {
-      return [phone, arr[3]].join(" x");
+      return [phone, arr[3]].join(" ");
     }
 
     return phone;
