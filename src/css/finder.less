@@ -12,6 +12,12 @@
           box-shadow: @arguments;
 }
 
+.transform(@arguments) {
+  -webkit-transform: @arguments;
+     -moz-transform: @arguments;
+          transform: @arguments;
+}
+
 .container-fluid,
 body,
 html {
@@ -65,14 +71,47 @@ html {
 #mapsButtonGroup {
   // float: right;
   margin-right: 10px;
+
 }
 
 #filterButtonGroup,
-#locationButton {
+#locationModalButton {
   float: left;
+
+  width: 100%;
+
+  .btn-group {
+    width: 50%;
+    .btn {
+      width: 100%;
+    }
+  }
+
+  #allServicesButton {
+    width: 50%;
+  }
+
+  @media (min-width: 768px) {
+    width: auto;
+
+    .btn-group, #allServicesButton {
+      width: auto;
+    }
+
+  }
 }
 
-#locationButton {
+#toggleHideServicesButton {
+  margin-right: 0;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: auto;
+    margin-right: 25px;
+  }
+}
+
+#locationModalButton {
   margin-right: 20px;
 }
 
@@ -123,6 +162,7 @@ html {
   color: transparent;
 }
 ///// START multi-level dropdown styles
+
 * {
   .dropdown-submenu {
     position: relative;
@@ -159,21 +199,35 @@ html {
   }
 }
 ///// END multi-level dropdown styles
+#toggleHideServicesButton {
+  .glyphicon {
+    transition: transform 0.5s, -moz-transform 0.5s, -webkit-transform 0.5s;
+    .transform(rotate(0deg));
+  }
+
+  &:focus {
+    .glyphicon {
+      .transform(rotate(-180deg));
+    }
+  }
+}
 // Social Service list on lefthand side
 #serviceListWrapper {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  bottom: 10px;
-  width: 25%;
-  min-width: 450px;
+  // position: absolute;
+  // top: 10px;
+  // left: 10px;
+  // bottom: 10px;
+  // width: 25%;
+  // min-width: 450px;
+  width: 100%;
+  height: 600px;
   z-index: 100;
   background-color: rgba(125, 125, 125, 0.5);
   border: 3px solid rgba(69, 69, 69, 0.5);
   padding: 10px 10px 10px 15px;
   .border-radius(10px);
   .box-shadow(1px 1px 10px #C8C8C8);
-  transition: bottom 0.5s;
+  transition: height 0.5s;
   text-align: center;
   cursor: pointer;
 
@@ -189,47 +243,52 @@ html {
     margin: -5px;
     pointer-events: none;
   }
-
-  &.expanding {
-    bottom: 75%;
-
-    &:after {
-      position: absolute;
-      top: 5px;
-      right: 8px;
-      font-family: 'Glyphicons Halflings';
-      content: '\e114';
-      background: gray;
-      border-radius: 10px;
-      padding: 0 3px 0 4px;
-    }
-
-    &:hover {
-      &:after {
-        color: white;
-        // color: @open-panel;
-      }
-      border-color: white;
-      // border-color: @open-panel;
-    }
+  @media (min-width: 768px) {
+    // & {
+    width: 600px;
+    // }
   }
-
-  &.opened {
-    bottom: 10px;
-
-    &:after {
-      content: '\e113';
-    }
-  }
+  // &.expanding {
+  //   height: 25%;
+  //
+  //   &:after {
+  //     position: absolute;
+  //     top: 5px;
+  //     right: 8px;
+  //     font-family: 'Glyphicons Halflings';
+  //     content: '\e114';
+  //     background: gray;
+  //     border-radius: 10px;
+  //     padding: 0 3px 0 4px;
+  //   }
+  //
+  //   &:hover {
+  //     &:after {
+  //       color: white;
+  //       // color: @open-panel;
+  //     }
+  //     border-color: white;
+  //     // border-color: @open-panel;
+  //   }
+  // }
+  //
+  // &.opened {
+  //   // bottom: 10px;
+  //   height: 600px;
+  //
+  //   &:after {
+  //     content: '\e113';
+  //   }
+  // }
 }
 
 #serviceList {
   overflow-y: scroll;
-  height: 95%;
+  auto: 95%;
   max-height: 95%;
   top: 10px;
   bottom: 20px;
-  width: 100%;
+  // width: 100%;
 }
 
 .serviceEntry {
@@ -252,7 +311,8 @@ html {
   }
 
   .panel-footer {
-    a, p {
+    a,
+    p {
       display: block;
     }
 

@@ -39,7 +39,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
     console.log("Loading Finder");
     App.views.map = new MapView("serviceMap");
     App.views.serviceList = new ServiceListView("#serviceList");
-    App.views.serviceList.makeExpanding("#serviceListWrapper");
+    // App.views.serviceList.makeExpanding("#serviceListWrapper");
 
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");

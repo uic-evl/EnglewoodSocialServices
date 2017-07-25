@@ -71,7 +71,7 @@
                         Clear Selection
                       </button> <!-- Service selection text goes here once selected -->
                     </div>
-                    <br><br><br> 
+                    <br><br><br>
                     <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#locationModal" id="locationButton">
                       <span class="glyphicon glyphicon-map-marker"></span>
                       Search From Specific Location
@@ -94,7 +94,7 @@
                       </div>
                     </div>
 
-                    
+
 
 
                     <br><br>
@@ -108,15 +108,20 @@
                 </div>
 
             </div>
-        </div> 
+        </div>
     </div>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand">Englewood Social Service Finder</a>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingMenu">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
       </div>
 
-      <div class="navbar-left">
+      <div class="navbar-left navbar-collapse collapse" id="collapsingMenu">
         <div class="nav btn-group" id="filterButtonGroup">
           <div class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
@@ -137,7 +142,7 @@
           </button>
         </div>
 
-        <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal" id="locationButton">
+        <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal" id="locationModalButton">
                 <span class="glyphicon glyphicon-map-marker"></span>
                 Search From Specific Location
               </button>
@@ -164,29 +169,23 @@
       </div>
 
       <div class="navbar-right">
-        <!-- <div class="btn-group" id="mapsButtonGroup">
-          <button type="button" class="btn btn-primary navbar-btn" id="resetMaps">
-            <span class="glyphicon glyphicon-refresh">
+        <button class="btn btn-success navbar-btn dropdown-toggle" data-toggle="dropdown" id="toggleHideServicesButton">
+          Service List
+          <span class="glyphicon glyphicon-arrow-down">
 
-            </span>
-          </button>
-          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
-            Maps
-            <span class="caret">
+         </span>
+        </button>
 
-            </span>
-          </button>
-          <ul class="dropdown-menu" role="menu" id="mapDropdownList">
+        <div class="dropdown-menu" role="menu" id="serviceListWrapper">
+          <p class="title label-info">
+            List of Services
+          </p>
+          <div class="" id="serviceList">
+            <div class="panel-group" id="accordion">
 
-          </ul>
-        </div> -->
-
-
-
-
-        <!-- glyphicon glyphicon-refresh -->
-
-        <!-- <button class="btn btn-success navbar-btn" id="allServicesButton">Show All Services</button> -->
+            </div>
+          </div>
+        </div>
 
       </div>
 
@@ -196,18 +195,7 @@
   <div class="container-fluid appContent">
     <div class="row h-100">
 
-      <div id="serviceListWrapper">
-        <p class="title label-info">
-          List of Services
-        </p>
-        <div class="" id="serviceList">
-          <div class="panel-group" id="accordion">
-
-          </div>
-        </div>
-      </div>
-
-      <div id="serviceMap">
+      <div class="col-md-12" id="serviceMap">
       </div>
 
     </div>
@@ -220,25 +208,26 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Jump to a Location</h4>
+          <h4 class="modal-title">Search From a Specific Location</h4>
         </div>
         <div class="modal-body">
+          <p>Enter a location (such as an address, intersection or landmark) to start your search for services from there:</p>
           <div class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-            <input id="addressInput" class="form-control" placeholder="Address">
+            <input id="addressInput" class="form-control" placeholder="Enter a location...">
           </div>
         </div>
         <div class="modal-footer">
-          <div class="modal-left-buttons">
+          <!-- <div class="modal-left-buttons">
             <button type="button" class="btn btn-info" data-dismiss="modal" id="locationButton">
                         <span class="glyphicon glyphicon-map-marker"></span>
                         Jump to Current Location
                       </button>
-          </div>
+          </div> -->
           <div class="modal-right-buttons">
             <button type="button" class="btn btn-success" data-dismiss="modal" id="findAddressButton">
                         <span class="glyphicon glyphicon glyphicon-check"></span>
-                          Find Address
+                          Find
                       </button>
           </div>
         </div>
