@@ -12,7 +12,7 @@ let SearchController = function() {
   };
 
   function attachDOMElements(inputID, counterID, buttonID) {
-    self.input = d3.select(inputID)
+    self.input = d3.selectAll(inputID)
       .on("input", onInput)
       .on("keyup", function() {
         if (d3.event.keyCode == 13) {
@@ -23,7 +23,7 @@ let SearchController = function() {
 
     self.counter = d3.selectAll(counterID);
 
-    self.button = d3.select(buttonID)
+    self.button = d3.selectAll(buttonID)
       .on("click", onButtonClick);
   }
 

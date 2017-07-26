@@ -30,7 +30,7 @@ let ServiceListView = function(listID) {
         let open = !d3.select(this).classed("open");
         d3.select(this).classed("open", open);
 
-        d3.select(this).select("span").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
+        d3.select(this).select(".glyphicon").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
 
         self.wrapper
           .style("pointer-events", open ? "all" : "none")
