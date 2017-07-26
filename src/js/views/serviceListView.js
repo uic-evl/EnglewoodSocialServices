@@ -149,6 +149,7 @@ let ServiceListView = function(listID) {
               return "<span class='glyphicon glyphicon-earphone'></span> " +
               numbers.join(" or ");
             });
+            d["Contact Phone Number"] = numbers;
           }
         }
 

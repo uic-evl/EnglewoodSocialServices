@@ -91,6 +91,7 @@ let MapView = function(div) {
 
       loc.visible = true;
 
+
       // create a marker for each social services location
       L.marker(
         L.latLng(lat, lng), {
@@ -103,7 +104,11 @@ let MapView = function(div) {
         return "<strong>" + loc["Organization Name"] + "</strong><br>" +
           loc["Description of Services Provided in Englewood"] + "<br><br>" +
           "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
-          "<span class='glyphicon glyphicon-share-alt'></span> Google Maps</a></strong>";
+          "<span class='glyphicon glyphicon-share-alt'></span> " + loc["Address"] + "</a></strong><br>" +
+          "<span class='glyphicon glyphicon-earphone'></span> " + loc["Contact Phone Number"] + "</a></strong><br>" +
+          "<span class='glyphicon glyphicon-home'></span> " + 
+          "<strong><a href='" + loc["Website"] + "'target='_blank'>" + loc["Website"] + "</a></strong><br>" 
+          ;
       }).addTo(self.serviceGroup)
       .on("click", function(e) {
         if (this.options.data.visible) {
