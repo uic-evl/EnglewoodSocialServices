@@ -5,6 +5,8 @@ var App = App || {};
 let ServiceListView = function(listID) {
   let self = {
     serviceList: null,
+    toggleButton: null,
+    wrapper: null,
 
     currentLocation: null
   };
@@ -15,18 +17,27 @@ let ServiceListView = function(listID) {
     self.serviceList = d3.select(listID).select("#accordion");
   }
 
-  function makeExpanding(listWrapperID) {
-    d3.select(listWrapperID)
-      .classed("expanding", true)
-      .classed("opened", true)
-      .on("click", function() {
-        if (d3.event.target !== this) return;
+  function makeCollapsing(buttonID, listWrapperID) {
+    self.wrapper = d3.select(listWrapperID)
+      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
 
-        d3.select(this).classed("opened", !d3.select(this).classed("opened"));
+    self.toggleButton = d3.select(buttonID).on("click", function(d) {
+      let open = !d3.select(this).classed("open");
+      d3.select(this).classed("open", open);
 
-      });
+      d3.select(this).select("span").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
 
-    // serviceListWrapper
+      self.wrapper.classed("hidden", !open);
+
+    });
+  }
+
+  function resize() {
+    let mobile = window.innerWidth < 769;
+
+    self.wrapper
+      // .style("")
+      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
   }
 
   function populateList(englewoodLocations) {
@@ -230,6 +241,8 @@ let ServiceListView = function(listID) {
     populateList,
 
     sortLocations,
-    makeExpanding
+    makeCollapsing,
+
+    resize
   };
 };

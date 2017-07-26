@@ -18,6 +18,14 @@
           transform: @arguments;
 }
 
+.transition(@arguments...) {
+  -webkit-transition: @arguments;
+     -moz-transition: @arguments;
+      -ms-transition: @arguments; /* IE10 is actually unprefixed */
+       -o-transition: @arguments;
+          transition: @arguments;
+}
+
 .container-fluid,
 body,
 html {
@@ -75,13 +83,11 @@ html {
 #mapsButtonGroup {
   // float: right;
   margin-right: 10px;
-
 }
 
 #filterButtonGroup,
 #locationModalButton {
   float: left;
-
   width: 100%;
 
   .btn-group {
@@ -98,10 +104,10 @@ html {
   @media (min-width: 768px) {
     width: auto;
 
-    .btn-group, #allServicesButton {
+    .btn-group,
+    #allServicesButton {
       width: auto;
     }
-
   }
 }
 
@@ -149,7 +155,6 @@ html {
 
 #serviceMap {
   position: fixed;
-
   width: 100%;
   height: 100%;
   border: 1px solid #C1C1C1;
@@ -208,11 +213,11 @@ html {
 ///// END multi-level dropdown styles
 #toggleHideServicesButton {
   .glyphicon {
-    transition: transform 0.5s, -moz-transform 0.5s, -webkit-transform 0.5s;
+    .transition(transform 0.5s, -moz-transform 0.5s, -webkit-transform 0.5s);
     .transform(rotate(0deg));
   }
 
-  &:focus {
+  &.open {
     .glyphicon {
       .transform(rotate(-180deg));
     }
@@ -226,6 +231,8 @@ html {
   // bottom: 10px;
   // width: 25%;
   // min-width: 450px;
+  display: block;
+  opacity: 1;
   width: 100%;
   height: 600px;
   z-index: 100;
@@ -234,9 +241,15 @@ html {
   padding: 10px 10px 10px 15px;
   .border-radius(10px);
   .box-shadow(1px 1px 10px #C8C8C8);
-  transition: height 0.5s;
+  transition: opacity 0.5s;
   text-align: center;
   cursor: pointer;
+  overflow: hidden;
+
+  &.hidden {
+    opacity: 1;
+    pointer-events: none;
+  }
 
   .title {
     font-weight: bold;
@@ -251,9 +264,7 @@ html {
     pointer-events: none;
   }
   @media (min-width: 768px) {
-    // & {
     width: 500px;
-    // }
   }
   // &.expanding {
   //   height: 25%;

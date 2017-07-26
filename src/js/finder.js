@@ -17,6 +17,14 @@ Promise.all([documentPromise, less.pageLoadFinished])
     console.log(err);
   });
 
+window.onresize = function() {
+  for (let view of Object.values(App.views)) {
+    if (view.resize) {
+      view.resize();
+    }
+  }
+};
+
 (function() {
   App.models = {};
   App.views = {};
@@ -39,7 +47,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
     console.log("Loading Finder");
     App.views.map = new MapView("serviceMap");
     App.views.serviceList = new ServiceListView("#serviceList");
-    // App.views.serviceList.makeExpanding("#serviceListWrapper");
+    App.views.serviceList.makeCollapsing("#toggleHideServicesButton", "#serviceListWrapper");
 
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");

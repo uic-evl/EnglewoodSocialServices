@@ -10,9 +10,9 @@ let ListToMapLinkingController = function() {
 
     let innerListItem = $(dPanel.nodes());
 
-    parentDiv.animate({
-        scrollTop: parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top) - parentDiv.height()/2 + innerListItem.height()/2
-    }, 500);
+    // parentDiv.animate({
+    //     scrollTop: parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top) - parentDiv.height()/2 + innerListItem.height()/2
+    // }, 500);
 
     let expanded = !dPanel.selectAll(".collapse").classed("in");
 
@@ -22,6 +22,12 @@ let ListToMapLinkingController = function() {
     // $(".serviceEntry.collapse").collapse("hide");
     // $(".collapse", innerListItem).collapse(expanded ? "show" : "hide");
     $(".panel-heading", innerListItem).trigger("click");
+
+    console.log(innerListItem);
+
+    document.getElementById('serviceList').scrollTop = document.getElementById('serviceList').scrollTop + (innerListItem.position().top - parentDiv.position().top) - parentDiv.height()/2 + innerListItem.height()/2;
+    console.log(document.getElementById('serviceList').scrollTop);
+
 
     App.views.map.setSelectedService(expanded ? data : null);
   }
