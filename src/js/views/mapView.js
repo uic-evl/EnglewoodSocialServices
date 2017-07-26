@@ -58,7 +58,7 @@ let MapView = function(div) {
     self.map.setView([41.779786, -87.644778], 15);
 
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
-    self.map.zoomControl.setPosition('topleft');
+    self.map.zoomControl.setPosition('bottomleft');
 
     // causes map to recalculate size... (I shouldn't need to do this)
     // setTimeout(function() {
