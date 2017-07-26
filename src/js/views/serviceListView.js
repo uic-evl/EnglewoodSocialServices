@@ -18,25 +18,30 @@ let ServiceListView = function(listID) {
   }
 
   function makeCollapsing(buttonID, listWrapperID) {
+    let mobile = window.innerWidth < 769;
+
     self.wrapper = d3.select(listWrapperID)
+      .style("pointer-events", mobile ? "none" : "all")
+      .style("opacity", mobile ? 0 : 1)
       .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
 
-    self.toggleButton = d3.select(buttonID).on("click", function(d) {
-      let open = !d3.select(this).classed("open");
-      d3.select(this).classed("open", open);
+    self.toggleButton = d3.select(buttonID).classed("open", !mobile)
+      .on("click", function(d) {
+        let open = !d3.select(this).classed("open");
+        d3.select(this).classed("open", open);
 
-      d3.select(this).select("span").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
+        d3.select(this).select("span").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
 
-      self.wrapper.classed("hidden", !open);
-
-    });
+        self.wrapper
+          .style("pointer-events", open ? "all" : "none")
+          .style("opacity", open ? 1 : 0);
+      });
   }
 
   function resize() {
     let mobile = window.innerWidth < 769;
 
     self.wrapper
-      // .style("")
       .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
   }
 
