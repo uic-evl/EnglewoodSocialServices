@@ -21,7 +21,7 @@ let SearchController = function() {
         }
       });
 
-    self.counter = d3.select(counterID);
+    self.counter = d3.selectAll(counterID);
 
     self.button = d3.select(buttonID)
       .on("click", onButtonClick);
