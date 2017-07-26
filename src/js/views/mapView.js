@@ -105,10 +105,11 @@ let MapView = function(div) {
           loc["Description of Services Provided in Englewood"] + "<br><br>" +
           "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
           "<span class='glyphicon glyphicon-share-alt'></span> " + loc["Address"] + "</a></strong><br>" +
-          "<span class='glyphicon glyphicon-earphone'></span> " + loc["Contact Phone Number"] + "</a></strong><br>" +
-          "<span class='glyphicon glyphicon-home'></span> " + 
-          "<strong><a href='" + loc["Website"] + "'target='_blank'>" + loc["Website"] + "</a></strong><br>" 
-          ;
+          (loc["Contact Phone Number"] ?
+          ("<span class='glyphicon glyphicon-earphone'></span> " + loc["Contact Phone Number"] + "</a></strong><br>") : "") +
+          (loc["Website"] ?
+          ("<strong><a href='" + loc["Website"] + "'target='_blank'>" +
+          "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
       }).addTo(self.serviceGroup)
       .on("click", function(e) {
         if (this.options.data.visible) {

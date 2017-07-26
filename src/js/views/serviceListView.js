@@ -161,6 +161,7 @@ let ServiceListView = function(listID) {
           .html(function(d) {
             return "<span class='glyphicon glyphicon-home'></span> " +
             d["Website"];
+            // _.truncate(d["Website"], 20);
           });
         }
 

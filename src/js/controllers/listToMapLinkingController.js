@@ -23,11 +23,7 @@ let ListToMapLinkingController = function() {
     // $(".collapse", innerListItem).collapse(expanded ? "show" : "hide");
     $(".panel-heading", innerListItem).trigger("click");
 
-    console.log(innerListItem);
-
     document.getElementById('serviceList').scrollTop = document.getElementById('serviceList').scrollTop + (innerListItem.position().top - parentDiv.position().top) - parentDiv.height()/2 + innerListItem.height()/2;
-    console.log(document.getElementById('serviceList').scrollTop);
-
 
     App.views.map.setSelectedService(expanded ? data : null);
   }
