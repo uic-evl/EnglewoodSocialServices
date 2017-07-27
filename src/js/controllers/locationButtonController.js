@@ -22,8 +22,12 @@ let LocationButtonController = function() {
   }
 
   function attachAddressLookupButton(id) {
+    
     self.addressLookupButton = d3.select(id)
-      .on('click', getLatLngFromAddress);
+      .on('click', function(){
+        var address = d3.select('#addressInput').node().value;
+        getLatLngFromAddress(address);
+      });
 
     console.log('adding event handler to ', id);
   }
@@ -75,14 +79,14 @@ let LocationButtonController = function() {
     }
   }
 
-  function getLatLngFromAddress() {
+  function getLatLngFromAddress(address) {
     // Google Maps Geocoding API:
     //    https://developers.google.com/maps/documentation/geocoding/start#get-a-key
     // API Key: AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI
 
-    console.log(d3.select('#addressInput').node().value);
+    // console.log(d3.select('#addressInput').node().value);
 
-    var address = d3.select('#addressInput').node().value;
+    // var address = d3.select('#addressInput').node().value;
 
     var replaced = address.split(' ').join('+');
     console.log(replaced);
@@ -105,6 +109,7 @@ let LocationButtonController = function() {
 
   return {
     attachLocationButton,
-    attachAddressLookupButton
+    attachAddressLookupButton,
+    getLatLngFromAddress
   };
 };
