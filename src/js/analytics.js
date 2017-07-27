@@ -11,7 +11,9 @@ let documentPromise = new Promise(function(resolve, reject) {
 // make sure both the document and CSS are loaded
 Promise.all([documentPromise, less.pageLoadFinished])
   .then(function() {
-    App.init();
+    setTimeout(function() {
+      App.init();
+    }, 0);
   })
   .catch(function(err) {
     console.log(err);
