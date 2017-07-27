@@ -12,8 +12,8 @@ let ChartListView = function(listID) {
       left: 25
     },
     chartList: null,
-
-    propertyScales: null
+    selections: {},
+    propertyScales: null,
   };
 
   init();
@@ -30,37 +30,38 @@ let ChartListView = function(listID) {
     }
   }
 
-  function createChart(properties) {
-    let rgb = d3.rgb(properties.color);
+  function createChart(property_data) {
+    // let rgb = d3.rgb(property_data.color);
 
-    console.log(properties);
+    console.log("createChart",property_data);
 
     self.chartList.append("div")
-      .datum(properties)
+      .datum(property_data)
       .attr("class", "panel panel-default chartEntry")
-      .attr("id", `rect${properties.id}`)
+      .attr("id", createPropertyID(property_data))
       // .style("height", "200px")
       // .style("border", `5px solid rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.75)`)
-      .style("background-color", `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.25)`)
+      // .style("background-color", `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.25)`)
       // .style("background-color", "rgba(255,255,255,0.75)")
       .each(setupChart);
 
-      updatePropertyExtents();
-
-    self.chartList.selectAll(".chartEntry")
-      .each(updateChart);
+    //already done in setupChart
+    // self.chartList.selectAll(".chartEntry")
+    //   .each(updateChart);
   }
 
-  function setupChart(d) {
-    let rgb = d3.rgb(d.color);
+  function setupChart(property_data) {
+    // let rgb = d3.rgb(d.color);
 
-    // console.log("Setup:", d.id);
     let panel = d3.select(this);
 
-    let heading = panel.append("div").attr("class", "panel-heading")
-      .style("background-color", d.color);
+    let heading = panel.append("div").attr("class", "panel-heading");
+      // .style("background-color", d.color);
 
-    let area = heading.append("h4").attr("class", "rectArea").html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
+    let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
+    let propertyTitle = heading.append('h4').attr('class','propertyTitle').html(`<b>${mainTypeTitle}:</b> ${property_data.subType}`);
+    
+    // let area = heading.append("h4").attr("class", "rectArea").html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
 
     let body = panel.append("div").attr("class", "panel-body");
 
@@ -72,55 +73,125 @@ let ChartListView = function(listID) {
       .attr("x", self.chartMargins.left)
       .attr("y", self.chartMargins.top)
       .attr("width", chart.node().clientWidth - self.chartMargins.left - self.chartMargins.right)
-      .attr("height", chart.node().clientHeight - self.chartMargins.top - self.chartMargins.bottom);
+      .attr("height", chart.node().clientHeight - self.chartMargins.top - self.chartMargins.bottom)
+      .classed('graph-background',true).attr('property-data', JSON.stringify(property_data));
+    graph.content = graph.append('g').classed('graph-content',true);
 
-    //graph statistics on race
-    if(d.data.census.RACE){
-      let raceData = d.data.census.RACE;
-      let categories = Object.keys(raceData).filter((c) => {return c !== 'Total:'; })
-        .sort((a,b) => { //alphabetical order
-            if(a < b){
-              return -1;
-            }else{
-              return 1;
-            }
-        });
-      let boundsX = [0, +graph.background.attr('width')];
-      let boundsY = [+graph.background.attr('height'), 0];
-      let xScale = d3.scaleLinear().domain([0,categories.length]).range(boundsX);
-      let yScale = d3.scaleLinear().domain([0, raceData['Total:']]).range(boundsY);
-      let percentScale = d3.scaleLinear().domain(yScale.domain()).range([0,100]);
-      let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
-      let barWidth = xScale.range()[1] / categories.length;
-      graph.selectAll('.bar').data(categories)
-        .enter().append('rect')
-        .each(function(race,index){ 
-           d3.select(this).classed('bar',true)
-             .attr('x', xOffset + xScale(index)).attr('y', yOffset + yScale(raceData[race]))
-             .attr('width', barWidth).attr('height', yScale(raceData['Total:'] - raceData[race]))
-             .style('fill','gray').attr('title',race).attr('value',percentScale(raceData[race]) + "%")
-        })
-      // console.log(raceData['Total:']);
-    }else{ //fall back in case field doesn't exist     
-      chart.append("text")
-      .attr("x", self.chartMargins.left + 5)
-      .attr("y", self.chartMargins.top + 15)
-      .text(`Population Density (/mi^2): ${(d.data.census["TOTAL_POPULATION"].Total / d.area).toFixed(2)}`);
+    updateChart(createPropertyID(property_data));
+  }
+
+  //redraw selection bars
+  function updateChart(chartID) {
+    if(typeof chartID === "object"){ //given a property object
+      chartID = createPropertyID(chartID);
+    }
+    console.log("updating chart",chartID);
+    let chart = self.chartList.select(`#${chartID}`);
+    let graph = chart.select('.graph-group');
+    try{
+      graph.selectAll('.error-text').remove();
+      graph.selectAll('g.graph-content').remove();
+      graph.background = graph.select('.graph-background');
+      graph.content = graph.append('g').classed('graph-content',true);
+      let property_data = JSON.parse(graph.background.attr('property-data'));
+      console.log("property_data",property_data);
       
-      chart.append("text")
-      .attr("x", self.chartMargins.left + 5)
-      .attr("y", self.chartMargins.top + 35)
-      .text(`Family Density (/mi^2): ${(d.data.census["FAMILIES"].Total / d.area).toFixed(2)}`);
+      let selectionKeys = Object.keys(self.selections);
+      let boundsX = [0, +graph.background.attr('width')];
+      let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
+      let barWidth = xScale.range()[1] / selectionKeys.length;
+      let data = [];
+      for(let s of selectionKeys){
+        let curSelection = self.selections[s];
+        console.log("adding selections[s]",curSelection);
+        let area = curSelection.area;
+        let propertyValue = curSelection.data.census[property_data.mainType][property_data.subType];
+        console.log(area,propertyValue)
+        data.push({
+          value: propertyValue / area,
+          color: curSelection.color
+        });
+      }
+      let boundsY = [+graph.background.attr('height'), 0];
+      let yScale = d3.scaleLinear().domain([0, d3.max(data,(d) => {return d.value;})]).range(boundsY);
+      let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
+      let yMax = yScale.domain()[1];
+      graph.content.selectAll('.bar').data(data)
+        .enter().append('rect').each(function (data_entry, index) {
+          console.log(data_entry);
+          d3.select(this).classed('bar', true)
+            .attr('x', xOffset + xScale(index)).attr('y', yOffset + yScale(data_entry.value))
+            .attr('width', barWidth).attr('height', yScale(yMax - data_entry.value))
+            .style('fill', data_entry.color)//.attr('title', race);
+        });
+
+        //draw stuff
+        //graph statistics on race
+        // let data = 
+        // let categories = Object.keys(raceData).filter((c) => { return c !== 'Total:'; })
+        //   .sort((a, b) => { //alphabetical order
+        //     if (a < b) {
+        //       return -1;
+        //     } else {
+        //       return 1;
+        //     }
+        //   });
+        // let percentScale = d3.scaleLinear().domain(yScale.domain()).range([0, 100]);
+    }catch(err){
+      //fall back for error
+      console.log("chart draw error", err);
+      graph.select('.graph-content').remove();
+
+      graph.append("text").classed('error-text', true)
+        .attr("x", self.chartMargins.left + 5)
+        .attr("y", self.chartMargins.top + 15)
+        .text(`Error occurred while drawing selections`);
+    }
+  }
+  
+  function createPropertyID(property_data){
+    let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join("_");
+    let subTypeTitle = property_data.subType.split(" ").join("_");
+    return `${mainTypeTitle}__${subTypeTitle}`.replace(/[^a-zA-Z0-9_]/g,""); //remove any non-alpha numberic characters except underscores
+  }
+
+  function addPropertyChart(property_data){
+    console.log("addProperty",property_data);
+    if(self.chartList.selectAll(`#${createPropertyID(property_data)}`).empty()){
+      createChart(property_data);
+    }else{
+      console.log("Already exists");
     }
   }
 
-  function updateChart(d) {
-    // console.log("Update:", d.id);
+  function removePropertyChart(property_data){
+    removeChart(createPropertyID(property_data));
+  }
 
+  function addSelection(properties){
+    console.log("addSelection",properties);
+    self.selections[properties.id.toString()] = properties;
+
+    updatePropertyExtents();
+
+    self.chartList.selectAll('.chartEntry')
+      .each(updateChart);
+  }
+
+  function removeSelection(id){
+    if(typeof id === "object"){ //id is a properties object
+      delete self.selections[id.id.toString()];
+    }else{
+      delete self.selections[id.toString()];
+    }
+
+    updatePropertyExtents();
+    self.chartList.selectAll(".chartEntry")
+      .each(updateChart);
   }
 
   function removeChart(id) {
-    self.chartList.select(`#rect${id}`).remove();
+    self.chartList.select(`#${id}`).remove();
 
     updatePropertyExtents();
 
@@ -129,24 +200,29 @@ let ChartListView = function(listID) {
   }
 
   function updatePropertyExtents() {
-    for (let dataSource of Object.keys(self.propertyScales)) {
-      for (let property of Object.keys(self.propertyScales[dataSource])) {
-        for (let subproperty of Object.keys(self.propertyScales[dataSource][property])) {
-          self.propertyScales[dataSource][property][subproperty].domain(
-            d3.extent(d3.selectAll(".chartEntry").nodes(), (node) => {
-              // get that data value from node
-              let rect = d3.select(node).datum();
-              return rect.data[dataSource][property][subproperty] / rect.area;
-            }));
+    console.log("Temporarily disabled updatePropertyExtents");
+    // for (let dataSource of Object.keys(self.propertyScales)) {
+    //   for (let property of Object.keys(self.propertyScales[dataSource])) {
+    //     for (let subproperty of Object.keys(self.propertyScales[dataSource][property])) {
+    //       self.propertyScales[dataSource][property][subproperty].domain(
+    //         d3.extent(d3.selectAll(".chartEntry").nodes(), (node) => {
+    //           // get that data value from node
+    //           let rect = d3.select(node).datum();
+    //           return rect.data[dataSource][property][subproperty] / rect.area;
+    //         }));
 
-          console.log(dataSource, property, subproperty, self.propertyScales[dataSource][property][subproperty].domain());
-        }
-      }
-    }
+    //       console.log(dataSource, property, subproperty, self.propertyScales[dataSource][property][subproperty].domain());
+    //     }
+    //   }
+    // }
   }
 
   return {
     createChart,
-    removeChart
+    removeChart,
+    addPropertyChart,
+    removePropertyChart,
+    addSelection,
+    removeSelection
   };
 };

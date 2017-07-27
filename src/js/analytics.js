@@ -82,6 +82,8 @@ Promise.all([documentPromise, less.pageLoadFinished])
         let overlayCategories = data[1];
 
         App.controllers.mapData.populateDropdown(overlayCategories);
+      }).then(function(){
+        console.log("Running test code for chartListView");
       });
 
   };

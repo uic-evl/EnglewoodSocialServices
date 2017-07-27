@@ -112,6 +112,7 @@ let MapDataController = function() {
 
   function chartButtonClick(d) {
     console.log("Create chart for", d);
+    App.views.chartList.addPropertyChart(d);
   }
 
   return {

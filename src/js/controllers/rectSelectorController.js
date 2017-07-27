@@ -99,7 +99,8 @@ let RectSelectorController = function(buttonID) {
       id: rect.id
     };
 
-    App.views.chartList.createChart(self.rects[rect.id]);
+    // App.views.chartList.createChart(self.rects[rect.id]);
+    App.views.chartList.addSelection(self.rects[rect.id]);
 
     self.drawable = false;
     self.button.attr("class", "btn btn-success navbar-btn");
@@ -122,7 +123,7 @@ let RectSelectorController = function(buttonID) {
 
     if (self.rects[id]) {
       App.views.map.removeRect(id);
-      App.views.chartList.removeChart(id);
+      App.views.chartList.removeSelection(id);
 
       delete self.rects[id];
 
