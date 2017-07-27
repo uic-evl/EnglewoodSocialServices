@@ -69,8 +69,19 @@ let FilterDropdownController = function() {
           .on("click", function(c1) {
             d3.event.stopPropagation(); // prevent menu close on link click
 
-            let selected;
+            //reset other filters to allow for only one main category selection at a time
+            for (let mainCategory of Object.keys(self.mainCategoryStates)) {
+              if(mainCategory !== c1){
+                self.mainCategoryStates[mainCategory] = "none";
+              }
+            }
+            self.filterDropdownList.selectAll(".glyphicon")
+              .attr("class", "glyphicon glyphicon-unchecked");
+            self.filters = {};
 
+
+            //update UI for main category selection
+            let selected;
             if (self.mainCategoryStates[c1] === "all") {
               self.mainCategoryStates[c1] = "none";
               selected = false;
@@ -113,8 +124,33 @@ let FilterDropdownController = function() {
           .on("click", function(d) {
             d3.event.stopPropagation(); // prevent menu close on link click
 
-            // toggle whether or not it is selected
-            self.filters[d.subType] = !self.filters[d.subType];
+            //reset other filters to allow for only one sub category selection at a time
+            let isMainCategorySelection = Object.keys(self.filters).length > 1;
+            for (let mainCategory of Object.keys(self.mainCategoryStates)) {
+              if (mainCategory !== d.mainType) {
+                self.mainCategoryStates[mainCategory] = "none";
+              }
+            }
+            self.filterDropdownList.selectAll(".glyphicon")
+              .attr("class", "glyphicon glyphicon-unchecked");
+            listItem.select("ul").selectAll(".serviceSubtype")
+              .each(function (subType) {
+                if(subType !== d.subType){
+                  self.filters[subType] = false;
+                  
+                  updateSubCategoryIcon(subType);
+                }
+              });
+            let curSelection = self.filters[d.subType];
+            self.filters = {};
+
+            //select current subcategory if previous filters indicate a main category selection
+            if(isMainCategorySelection){
+              self.filters[d.subType] = true;
+            }else{
+              // toggle whether or not it is selected 
+              self.filters[d.subType] = !curSelection;
+            }
 
             updateSubCategoryIcon(d.subType);
             updateMainCategoryOnSubUpdate(d.mainType);
