@@ -38,7 +38,6 @@
   <script src="./src/js/controllers/locationButtonController.js"></script>
   <script src="./src/js/controllers/listToMapLinkingController.js"></script>
   <script src="./src/js/controllers/searchController.js"></script>
-  <script src="./src/js/controllers/modalController.js"></script>
 
   <!-- Main Script -->
   <script src="./src/js/finder.js"></script>
@@ -52,13 +51,7 @@
                   <h4 class="modal-title">Englewood Social Service Finder</h4>
                 </div>
                 <div class="modal-body">
-                    Choose a nearby location (such as an address, intersection or landmark) and a social service.<br><br>
-
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-                      <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
-                    </div>
-
+                    Choose a general social service and location<br><br>
                     <div class="nav btn-group btn-block">
                       <div class="btn-group btn-block ">
                         <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-block" data-toggle="dropdown">
@@ -73,8 +66,13 @@
                       </div>
                        <!-- Service selection text goes here once selected -->
                     </div>
+                    <br>
+                    <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#locationModal">
+                      <span class="glyphicon glyphicon-map-marker"></span>
+                      Search From Specific Location
+                    </button>
 
-                    <br><br><br>
+                    <br>
 
                     <div class="input-group">
                       <div class="input-group-btn">
@@ -95,11 +93,11 @@
 
 
 
-                    <br>
+                    <br><br>
                 </div>
 
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
+                  <button type="button" class="btn btn-success" data-dismiss="modal">
                     <span class="glyphicon glyphicon-log-out"></span>
                   </button>
 
@@ -122,8 +120,8 @@
 
       <div class="navbar-left navbar-collapse collapse" id="collapsingMenu">
         <div class="nav btn-group" id="filterButtonGroup">
-          <div class="btn-group btn-block">
-            <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-block" data-toggle="dropdown">
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
               Select Services
               <span class="caret">
 

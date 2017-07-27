@@ -60,8 +60,6 @@ window.onresize = function() {
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
 
-    App.controllers.modal = new modalController();
-
     Promise.all([socialServiceP, serviceTaxonomyP])
       .then(function(values) {
         // App.views.map.createMap();
