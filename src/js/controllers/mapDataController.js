@@ -89,7 +89,8 @@ let MapDataController = function() {
 
             btnGroup.append("button")
               .attr("class", "btn btn-success")
-              .text("Chart");
+              .text("Chart")
+              .on("click", chartButtonClick);
 
             btnGroup.append("button")
               .attr("class", "btn btn-success")
@@ -110,7 +111,7 @@ let MapDataController = function() {
   }
 
   function chartButtonClick(d) {
-
+    console.log("Create chart for", d);
   }
 
   return {
