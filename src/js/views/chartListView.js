@@ -27,8 +27,6 @@ let ChartListView = function(listID) {
           "Total": d3.scaleLinear()
         }
       }
-
-
     }
   }
 

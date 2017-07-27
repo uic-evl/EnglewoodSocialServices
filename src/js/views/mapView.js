@@ -23,7 +23,9 @@ let MapView = function(div) {
 
     rects: {},
     rectColors: d3.schemeCategory10.slice(0),
-    totalRects: 0
+    totalRects: 0,
+
+    choropleth: null
   };
 
   init();
@@ -230,6 +232,28 @@ let MapView = function(div) {
     delete self.rects[rect];
   }
 
+  function drawChoropleth(data) {
+    let colorScale = d3.scaleLinear()
+      .domain(d3.extent(data.features, f => f.properties.data))
+      .range(['#9ebcda','#6e016b']);
+
+    console.log(colorScale.domain(), colorScale.range());
+
+    if (self.choropleth) {
+      self.map.removeLayer(self.choropleth);
+    }
+
+    self.choropleth = L.geoJSON(data, {
+      style: function(feature) {
+        return {
+          color: feature.properties.data === 0 ? "#444" : colorScale(feature.properties.data),
+          opacity: 0,
+          fillOpacity: 0.75
+        }
+      }
+    }).addTo(self.map);
+  }
+
   function jumpToLocation(position) {
     //remove previous circle marker
     if(self.currentLocationMarker != undefined)
@@ -250,6 +274,7 @@ let MapView = function(div) {
 
     drawRect,
     removeRect,
+    drawChoropleth,
 
     jumpToLocation
   };

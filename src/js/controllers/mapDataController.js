@@ -60,6 +60,8 @@ let MapDataController = function() {
             // toggle whether or not it is selected
             console.log(d);
 
+            let reducedData = App.models.censusData.getSubsetGeoJSON(d);
+            App.views.map.drawChoropleth(reducedData);
 
           });
 

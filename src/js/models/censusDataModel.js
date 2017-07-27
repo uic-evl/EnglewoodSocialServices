@@ -52,8 +52,21 @@ let CensusDataModel = function() {
     return Promise.all([allDataGridP, mapTypeNamesP]);
   }
 
-  function getSubsetGeoJSON(property, subproperty) {
+  function getSubsetGeoJSON(propertyTypes) {
+    // return (self.gridData);
 
+    return {
+      type: "FeatureCollection",
+      features: _.map(self.gridData.features, feature => {
+        return {
+          type: "Feature",
+          geometry: feature.geometry,
+          properties: {
+            data: feature.properties[propertyTypes.mainType][propertyTypes.subType]
+          }
+        };
+      })
+    };
   }
 
   function getDataWithinBounds(bounds) {
