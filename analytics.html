@@ -2,49 +2,49 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Englewood Social Service Analytics</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Englewood Social Service Analytics</title>
 
-    <!-- CSS Libs -->
-    <link rel="stylesheet" href="./lib/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./lib/css/leaflet.css">
+  <!-- CSS Libs -->
+  <link rel="stylesheet" href="./lib/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./lib/css/leaflet.css">
 
-    <!-- JS Libs -->
-    <script src="./lib/js/jquery.min.js"></script>
-    <script src="./lib/js/bootstrap.min.js"></script>
-    <script src="./lib/js/leaflet.js"></script>
-    <script src="./lib/js/d3.v4.min.js"></script>
-    <script src="./lib/js/lodash.js"></script>
-    <script src="./lib/js/turf.min.js"></script>
-    <script src="./lib/js/rbush.min.js"></script>
+  <!-- JS Libs -->
+  <script src="./lib/js/jquery.min.js"></script>
+  <script src="./lib/js/bootstrap.min.js"></script>
+  <script src="./lib/js/leaflet.js"></script>
+  <script src="./lib/js/d3.v4.min.js"></script>
+  <script src="./lib/js/lodash.js"></script>
+  <script src="./lib/js/turf.min.js"></script>
+  <script src="./lib/js/rbush.min.js"></script>
 
-    <!-- CSS Src -->
-    <link rel="stylesheet/less" href="./src/css/analytics.less">
+  <!-- CSS Src -->
+  <link rel="stylesheet/less" href="./src/css/analytics.less">
 
-    <!-- less.js to parse stylesheet/less -->
-    <script src="./lib/js/less.min.js"></script>
+  <!-- less.js to parse stylesheet/less -->
+  <script src="./lib/js/less.min.js"></script>
 
-    <!-- === JS Src === -->
-    <!-- Models -->
-    <script src="./src/js/models/socialServiceModel.js"></script>
-    <script src="./src/js/models/serviceTaxonomyModel.js"></script>
-    <script src="./src/js/models/censusDataModel.js"></script>
+  <!-- === JS Src === -->
+  <!-- Models -->
+  <script src="./src/js/models/socialServiceModel.js"></script>
+  <script src="./src/js/models/serviceTaxonomyModel.js"></script>
+  <script src="./src/js/models/censusDataModel.js"></script>
 
-    <!-- Views -->
-    <script src="./src/js/views/mapView.js"></script>
-    <script src="./src/js/views/chartListView.js"></script>
+  <!-- Views -->
+  <script src="./src/js/views/mapView.js"></script>
+  <script src="./src/js/views/chartListView.js"></script>
 
-    <!-- Controllers -->
-    <script src="./src/js/controllers/analyticsFilterController.js"></script>
-    <script src="./src/js/controllers/mapDataController.js"></script>
-    <!-- <script src="./src/js/controllers/locationButtonController.js"></script> -->
-    <script src="./src/js/controllers/searchController.js"></script>
-    <script src="./src/js/controllers/rectSelectorController.js"></script>
+  <!-- Controllers -->
+  <script src="./src/js/controllers/analyticsFilterController.js"></script>
+  <script src="./src/js/controllers/mapDataController.js"></script>
+  <!-- <script src="./src/js/controllers/locationButtonController.js"></script> -->
+  <script src="./src/js/controllers/searchController.js"></script>
+  <script src="./src/js/controllers/rectSelectorController.js"></script>
 
-    <!-- Main Script -->
-    <script src="./src/js/analytics.js"></script>
+  <!-- Main Script -->
+  <script src="./src/js/analytics.js"></script>
 </head>
 
 <body>
@@ -83,22 +83,33 @@
       </div>
 
       <div class="navbar-right">
-        <div class="btn-group" id="mapsButtonGroup">
-          <button type="button" class="btn btn-primary navbar-btn" id="resetMaps">
-            <span class="glyphicon glyphicon-refresh">
+        <button type="button" class="btn btn-primary navbar-btn" id="mapPanelToggle">
+            <span id="mapText">Census Maps</span>
+            <span class="glyphicon glyphicon-arrow-down"></span>
+        </button>
+        <div class="dropdown-menu" id="mapSettingsPanel" style="opacity: 0;">
+          <div class="row titleRow">
+            <div class="col-md-6" style="text-align:left;">
+              <span class="title">
+                Census Map Settings
+              </span>
+            </div>
+            <div class="col-md-6" style="text-align:right;">
+              <button type="button" class="btn btn-sm btn-danger" id="resetMaps">
+                Reset Maps
+                <span class="glyphicon glyphicon-refresh">
 
-            </span>
-          </button>
-          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
-            Maps
-            <span class="caret">
+                </span>
+              </button>
+            </div>
+          </div>
+          <div id="mapSettings">
 
-            </span>
-          </button>
-          <ul class="dropdown-menu" role="menu" id="mapDropdownList">
-
-          </ul>
+          </div>
         </div>
+        <!-- <ul class="dropdown-menu" role="menu" id="mapDropdownList">
+
+        </ul> -->
 
         <div class="btn-group" id="filterButtonGroup">
           <button type="button" class="btn btn-primary navbar-btn" id="allServicesButton">

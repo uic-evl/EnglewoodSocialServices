@@ -44,7 +44,9 @@ Promise.all([documentPromise, less.pageLoadFinished])
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
 
-    App.controllers.mapData.setDataDropdown("#mapDropdownList");
+    // App.controllers.mapData.setDataDropdown("#mapSettingsPanel");
+    App.controllers.mapData.setupDataPanel("#mapPanelToggle", "#mapSettingsPanel");
+    // App.controllers.mapData.setPanelToggle("#mapPanelToggle");
     App.controllers.mapData.attachResetOverlayButton("#resetMaps");
 
     // App.controllers.locationButton.attachLocationButton("#locationButton");
