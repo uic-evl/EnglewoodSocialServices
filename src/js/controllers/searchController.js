@@ -59,7 +59,6 @@ let SearchController = function() {
   }
 
   function onButtonClick(d) {
-
     let searchTerm = _.lowerCase(self.input.node().value);
     // has to do with state of list
 
@@ -82,6 +81,7 @@ let SearchController = function() {
   return {
     attachDOMElements,
 
-    setCount
+    setCount,
+    onInput
   };
 };
