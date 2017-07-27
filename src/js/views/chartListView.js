@@ -25,7 +25,7 @@ let ChartListView = function(listID) {
       census: {
         "TOTAL_POPULATION": {
           "Total": d3.scaleLinear()
-        }
+        },
       }
     }
   }
@@ -66,21 +66,52 @@ let ChartListView = function(listID) {
 
     let chart = body.append("svg");
 
-    chart.append("rect")
+    let graph = chart.append('g').classed('graph-group',true);
+
+    graph.background = graph.append("rect")
       .attr("x", self.chartMargins.left)
       .attr("y", self.chartMargins.top)
       .attr("width", chart.node().clientWidth - self.chartMargins.left - self.chartMargins.right)
       .attr("height", chart.node().clientHeight - self.chartMargins.top - self.chartMargins.bottom);
 
-    chart.append("text")
+    //graph statistics on race
+    if(d.data.census.RACE){
+      let raceData = d.data.census.RACE;
+      let categories = Object.keys(raceData).filter((c) => {return c !== 'Total:'; })
+        .sort((a,b) => { //alphabetical order
+            if(a < b){
+              return -1;
+            }else{
+              return 1;
+            }
+        });
+      let boundsX = [0, +graph.background.attr('width')];
+      let boundsY = [+graph.background.attr('height'), 0];
+      let xScale = d3.scaleLinear().domain([0,categories.length]).range(boundsX);
+      let yScale = d3.scaleLinear().domain([0, raceData['Total:']]).range(boundsY);
+      let percentScale = d3.scaleLinear().domain(yScale.domain()).range([0,100]);
+      let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
+      let barWidth = xScale.range()[1] / categories.length;
+      graph.selectAll('.bar').data(categories)
+        .enter().append('rect')
+        .each(function(race,index){ 
+           d3.select(this).classed('bar',true)
+             .attr('x', xOffset + xScale(index)).attr('y', yOffset + yScale(raceData[race]))
+             .attr('width', barWidth).attr('height', yScale(raceData['Total:'] - raceData[race]))
+             .style('fill','gray').attr('title',race).attr('value',percentScale(raceData[race]) + "%")
+        })
+      // console.log(raceData['Total:']);
+    }else{ //fall back in case field doesn't exist     
+      chart.append("text")
       .attr("x", self.chartMargins.left + 5)
       .attr("y", self.chartMargins.top + 15)
       .text(`Population Density (/mi^2): ${(d.data.census["TOTAL_POPULATION"].Total / d.area).toFixed(2)}`);
-
-    chart.append("text")
+      
+      chart.append("text")
       .attr("x", self.chartMargins.left + 5)
       .attr("y", self.chartMargins.top + 35)
       .text(`Family Density (/mi^2): ${(d.data.census["FAMILIES"].Total / d.area).toFixed(2)}`);
+    }
   }
 
   function updateChart(d) {
