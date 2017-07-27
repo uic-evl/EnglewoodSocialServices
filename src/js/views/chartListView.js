@@ -115,31 +115,30 @@ let ChartListView = function(listID) {
           color: curSelection.color
         });
       }
-      let boundsY = [+graph.background.attr('height'), 0];
-      let yScale = d3.scaleLinear().domain([0, d3.max(data,(d) => {return d.value;})]).range(boundsY);
-      let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
-      let yMax = yScale.domain()[1];
-      graph.content.selectAll('.bar').data(data)
+      if(data.length > 1){
+
+        let boundsY = [+graph.background.attr('height'), 0];
+        let yScale = d3.scaleLinear().domain([0, d3.max(data,(d) => {return d.value;})]).range(boundsY);
+        let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
+        let yMax = yScale.domain()[1];
+        graph.content.selectAll('.bar').data(data)
         .enter().append('rect').each(function (data_entry, index) {
           console.log(data_entry);
           d3.select(this).classed('bar', true)
-            .attr('x', xOffset + xScale(index)).attr('y', yOffset + yScale(data_entry.value))
-            .attr('width', barWidth).attr('height', yScale(yMax - data_entry.value))
-            .style('fill', data_entry.color)//.attr('title', race);
+          .attr('x', xOffset + xScale(index)).attr('y', yOffset + yScale(data_entry.value))
+          .attr('width', barWidth).attr('height', yScale(yMax - data_entry.value))
+          .style('fill', data_entry.color)//.attr('title', race);
         });
-
-        //draw stuff
-        //graph statistics on race
-        // let data = 
-        // let categories = Object.keys(raceData).filter((c) => { return c !== 'Total:'; })
-        //   .sort((a, b) => { //alphabetical order
-        //     if (a < b) {
-        //       return -1;
-        //     } else {
-        //       return 1;
-        //     }
-        //   });
-        // let percentScale = d3.scaleLinear().domain(yScale.domain()).range([0, 100]);
+        
+        let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0],(yScale.domain()[1]-yScale.domain()[0])/2,yScale.domain()[1]]);
+        graph.content.append('g').classed('axis',true)
+        .attr('transform',`translate(${xOffset},${yOffset})`).call(yAxis);
+      }else{
+        graph.content.append('text')
+          .attr("x", self.chartMargins.left + 5)
+          .attr("y", self.chartMargins.top + 15)
+          .text(`Please make ${2 - data.length} more ${2-data.length === 1 ? "selection":"selections"}`);
+      }
     }catch(err){
       //fall back for error
       console.log("chart draw error", err);
