@@ -54,6 +54,7 @@ window.onresize = function() {
 
     App.controllers.locationButton.attachLocationButton("#locationButton");
     App.controllers.locationButton.attachAddressLookupButton("#findAddressButton");
+    App.controllers.locationButton.attachSearchInput();
 
     App.controllers.search.attachDOMElements("#searchInput", "#searchCount", "#searchButton");
 
