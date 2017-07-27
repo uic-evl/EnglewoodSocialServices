@@ -6,13 +6,28 @@ let LocationButtonController = function() {
   let self = {
     locationButton: null,
     addressLookupButton: null,
-
+    locationInput: null,
     currentlyEnteredLocation: null
   };
 
   init();
 
-  function init() {}
+  function init() {
+  }
+
+  function attachSearchInput(){
+    self.locationButton = d3.select('#addressInput')
+      .on("keyup", function() {
+        if (d3.event.keyCode == 13) {
+          console.log("enter!");
+          // hitting enter in the input is equivalent to pressing accept button
+          var address = d3.select('#addressInput').node().value;
+          getLatLngFromAddress(address);
+          $('#locationModal').modal('hide');
+
+        }
+      });
+  }
 
   function attachLocationButton(id) {
     self.locationButton = d3.select(id)
@@ -110,6 +125,7 @@ let LocationButtonController = function() {
   return {
     attachLocationButton,
     attachAddressLookupButton,
-    getLatLngFromAddress
+    getLatLngFromAddress,
+    attachSearchInput
   };
 };
