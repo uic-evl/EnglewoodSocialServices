@@ -3,11 +3,33 @@
 let MapDataController = function() {
   let self = {
     dataDropdownList: null,
-    resetButton: null,
+
+    toggleButton: null,
+    mapDataPanel: null,
+    resetButton: null
   };
 
   function setDataDropdown(id) {
     self.dataDropdownList = d3.select(id);
+  }
+
+  function setupDataPanel(buttonID, listWrapperID) {
+    self.mapDataPanel = d3.select(listWrapperID)
+      .style("pointer-events", "none")
+      .style("opacity", 0)
+      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+
+    self.toggleButton = d3.select(buttonID).classed("open", false)
+      .on("click", function(d) {
+        let open = !d3.select(this).classed("open");
+        d3.select(this).classed("open", open);
+
+        d3.select(this).select(".glyphicon").attr("class", open ? "glyphicon glyphicon-arrow-up" : "glyphicon glyphicon-arrow-down");
+
+        self.mapDataPanel
+          .style("pointer-events", open ? "all" : "none")
+          .style("opacity", open ? 1 : 0);
+      });
   }
 
   function attachResetOverlayButton(id) {
@@ -16,34 +38,37 @@ let MapDataController = function() {
   }
 
   function resetOverlay() {
+    App.views.map.drawChoropleth();
     console.log("Reset Overlay");
   }
 
   function populateDropdown(categories) {
     // populate census data dropdown
-    self.dataDropdownList.selectAll(".censusType")
+    self.mapDataPanel.select("#mapSettings").selectAll(".censusType")
       .data(Object.keys(categories))
-    .enter().append("li")
-      .attr("class", "dropdown-submenu censusType")
+      .enter().append("div")
+      .attr("class", "panel panel-default censusType")
       .each(function(c1) {
-        let listItem = d3.select(this);
+        let panel = d3.select(this);
 
         // create link within tab
-        listItem.append("a")
-          .attr("tabindex", -1)
-          .attr("href", "#")
-          .attr("id", _.kebabCase("main_" + c1))
+        panel.append("div")
+          .attr("class", "panel-heading")
+          .attr("data-toggle", "collapse")
+          .attr("href", "#" + _.kebabCase("main_" + c1))
           .html(_.capitalize(_.startCase(c1)));
 
         // create tab content div for this t1 category
-        let secondaryDropdown = listItem.append("ul")
-          .attr("class", "dropdown-menu")
+        let panelBody = panel.append("div")
+          .attr("class", "panel-collapse collapse")
+          .attr("id", _.kebabCase("main_" + c1))
+          .append("div")
+          .attr("class", "panel-body");
 
-        secondaryDropdown.selectAll(".censusSubtype")
+        panelBody.selectAll(".censusSubtype")
           .data(categories[c1])
-        .enter().append("li")
-          .attr("class", "censusSubtype")
-        .append("a")
+          .enter().append("div")
+          .attr("class", "row censusSubtype")
           .datum(function(c2) {
             return {
               mainType: c1,
@@ -51,25 +76,46 @@ let MapDataController = function() {
             };
           })
           .attr("id", d => _.kebabCase("sub_" + d.subType))
-          .html(function(d) {
-            return "<span class='glyphicon glyphicon-unchecked'></span>" + d.subType;
-          })
-          .on("click", function(d) {
-            d3.event.stopPropagation(); // prevent menu close on link click
+          .each(function(d) {
+            let row = d3.select(this);
 
-            // toggle whether or not it is selected
-            console.log(d);
+            row.append("span")
+              .html(function(d) {
+                return d.subType;
+              });
 
-            let reducedData = App.models.censusData.getSubsetGeoJSON(d);
-            App.views.map.drawChoropleth(reducedData);
+            let btnGroup = row.append("div")
+              .attr("class", "btn-group");
 
+            btnGroup.append("button")
+              .attr("class", "btn btn-success")
+              .text("Chart")
+              .on("click", chartButtonClick);
+
+            btnGroup.append("button")
+              .attr("class", "btn btn-success")
+              .text("Map")
+              .on("click", mapButtonClick);
           });
-
       });
   }
 
+  function mapButtonClick(d) {
+    // d3.event.stopPropagation(); // prevent menu close on link click
+
+    // toggle whether or not it is selected
+    console.log(d);
+
+    let reducedData = App.models.censusData.getSubsetGeoJSON(d);
+    App.views.map.drawChoropleth(reducedData);
+  }
+
+  function chartButtonClick(d) {
+    console.log("Create chart for", d);
+  }
+
   return {
-    setDataDropdown,
+    setupDataPanel,
     attachResetOverlayButton,
 
     populateDropdown

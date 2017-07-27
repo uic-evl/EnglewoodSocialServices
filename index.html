@@ -46,7 +46,7 @@
 
 <body onLoad="$('#landing-page').modal('show');">
     <div id="landing-page" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                   <h4 class="modal-title">Englewood Social Service Finder</h4>
@@ -54,27 +54,22 @@
                 <div class="modal-body">
                     Choose a nearby location (such as an address, intersection or landmark) and a social service.<br><br>
 
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-                      <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
-                    </div>
-
-                    <div class="nav btn-group btn-block">
-                      <div class="btn-group btn-block ">
-                        <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-block" data-toggle="dropdown">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <button type="button" class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown">
                           Select Services
-                          <span class="caret">
-
-                          </span>
+                          <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" role="menu" id="filterDropdownList">
-
-                        </ul>
+                        <ul class="dropdown-menu" role="menu" id="filterDropdownList"></ul>
                       </div>
-                       <!-- Service selection text goes here once selected -->
+                      <div class="col-md-6">
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+                          <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
+                        </div>
+                      </div>
                     </div>
-
-                    <br><br><br>
+                    <br>
 
                     <div class="input-group">
                       <div class="input-group-btn">
@@ -85,24 +80,38 @@
                       <input type="text" class="form-control" placeholder="Search by Org. Name" id="searchInput">
                       <div class="input-group-btn">
                         <button class="btn btn-default btn-block" type="submit" id="searchButton">
-                          <i class="glyphicon glyphicon-search">
-
-                          </i>
+                          <i class="glyphicon glyphicon-search"></i>
                         </button>
                       </div>
                     </div>
-
-
-
-
                     <br>
+
+                    <div id="acceptModal">
+                      <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                      </button>
+                    </div>
+                    
+                    <br><br>
+
                 </div>
 
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
-                    <span class="glyphicon glyphicon-log-out"></span>
-                  </button>
-
+                  <div class = "row">
+                    <div class = "col-md-6">
+                      <center><a href="">About us</a></center>
+                      <div class = "text-left">
+                        Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                      </div>
+                      
+                    </div>
+                    <div class = "col-md-6">
+                      <center><a href="">Contact</a></center>
+                      Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br>
+                      <span class="glyphicon glyphicon-earphone"></span> 800-808-0000 
+                    </div> 
+                  </div>
+                  
                 </div>
 
             </div>

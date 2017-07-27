@@ -233,25 +233,29 @@ let MapView = function(div) {
   }
 
   function drawChoropleth(data) {
-    let colorScale = d3.scaleLinear()
-      .domain(d3.extent(data.features, f => f.properties.data))
-      .range(['#9ebcda','#6e016b']);
-
-    console.log(colorScale.domain(), colorScale.range());
-
+    // remove old choropleth
     if (self.choropleth) {
       self.map.removeLayer(self.choropleth);
     }
 
-    self.choropleth = L.geoJSON(data, {
-      style: function(feature) {
-        return {
-          color: feature.properties.data === 0 ? "#444" : colorScale(feature.properties.data),
-          opacity: 0,
-          fillOpacity: 0.75
+    // if data specified, add new choropleth
+    if (data) {
+      let colorScale = d3.scaleLinear()
+      .domain(d3.extent(data.features, f => f.properties.data))
+      .range(['#9ebcda','#6e016b']);
+
+      console.log(colorScale.domain(), colorScale.range());
+
+      self.choropleth = L.geoJSON(data, {
+        style: function(feature) {
+          return {
+            color: feature.properties.data === 0 ? "#444" : colorScale(feature.properties.data),
+            opacity: 0,
+            fillOpacity: 0.75
+          }
         }
-      }
-    }).addTo(self.map);
+      }).addTo(self.map);
+    }
   }
 
   function jumpToLocation(position) {
