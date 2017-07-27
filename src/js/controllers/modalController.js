@@ -7,9 +7,9 @@ let modalController = function() {
     modal: null,
     body: null,
     acceptButton: null,
-    categorySelection: null,
     orgSearchInput: null,
-    counter: null
+    counter: null,
+    addressInput: null
   };
 
   function initalize(){
@@ -21,7 +21,27 @@ let modalController = function() {
       .on('click', acceptButtonClicked);
 
     self.orgSearchInput = d3.selectAll("#modalSearchInput")
-      .on("input", onInput);
+      .on("input", onInput)
+      .on("keyup", function() {
+        if (d3.event.keyCode == 13) {
+          console.log("enter!");
+          // hitting enter in the input is equivalent to pressing accept button
+          acceptButtonClicked();
+          $('#landing-page').modal('hide');
+
+        }
+      });
+
+    self.addressInput = d3.select('#modalAddressInput')
+      .on("keyup", function() {
+        if (d3.event.keyCode == 13) {
+          console.log("enter!");
+          // hitting enter in the input is equivalent to pressing accept button
+          acceptButtonClicked();
+          $('#landing-page').modal('hide');
+
+        }
+      });
 
     self.counter = d3.selectAll("#modalSearchCount");
   }
@@ -31,7 +51,7 @@ let modalController = function() {
   }
 
   function onInput(d) {
-    let searchTerm = _.lowerCase(d3.select("#modalSearchInput").node().value);
+    let searchTerm = _.lowerCase(self.orgSearchInput.node().value);
 
     let searchData = App.models.socialServices.getSearchedData(searchTerm);
 
@@ -49,7 +69,7 @@ let modalController = function() {
 
   function acceptButtonClicked(){
 
-    var address = d3.select('#modalAddressInput').node().value;
+    var address = self.addressInput.node().value;
     if(address.length != 0){
       App.controllers.locationButton.getLatLngFromAddress(address);
     }
