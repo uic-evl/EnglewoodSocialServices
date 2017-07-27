@@ -88,12 +88,12 @@ let MapDataController = function() {
               .attr("class", "btn-group");
 
             btnGroup.append("button")
-              .attr("class", "btn btn-success")
+              .attr("class", "btn btn-success chartButton")
               .text("Chart")
               .on("click", chartButtonClick);
 
             btnGroup.append("button")
-              .attr("class", "btn btn-success")
+              .attr("class", "btn btn-success mapButton")
               .text("Map")
               .on("click", mapButtonClick);
           });
@@ -112,13 +112,35 @@ let MapDataController = function() {
 
   function chartButtonClick(d) {
     console.log("Create chart for", d);
-    App.views.chartList.addPropertyChart(d);
+    // chart exists already
+    if (d3.select(this).classed("btn-danger")) {
+      removeChart.call(this, d);
+      App.views.chartList.removePropertyChart(d);
+    } else {
+      addChart.call(this, d);
+      App.views.chartList.addPropertyChart(d);
+    }
+  }
+
+  function addChart(d) {
+    d3.select(this).attr("class", "btn btn-danger chartButton");
+  }
+
+  function removeChart(d) {
+    d3.select(this).attr("class", "btn btn-success chartButton");
+  }
+
+  function removeChartFromList(propertyTypes) {
+    d3.selectAll("#" + _.kebabCase("main_" + propertyTypes.mainType)).selectAll("#" + _.kebabCase("sub_" + propertyTypes.subType))
+    .select(".chartButton")
+      .each(removeChart);
   }
 
   return {
     setupDataPanel,
     attachResetOverlayButton,
 
-    populateDropdown
-  }
+    populateDropdown,
+    removeChartFromList
+  };
 }
