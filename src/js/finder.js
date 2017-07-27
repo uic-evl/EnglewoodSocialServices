@@ -70,6 +70,7 @@ window.onresize = function() {
         App.views.serviceList.populateList(App.models.socialServices.getData());
 
         App.controllers.search.setCount(App.models.socialServices.getData().length);
+        App.controllers.modal.setCount(App.models.socialServices.getData().length);
 
         App.controllers.serviceFilterDropdown.populateDropdown();
       })
