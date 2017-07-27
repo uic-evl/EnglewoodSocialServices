@@ -55,11 +55,16 @@ let ChartListView = function(listID) {
 
     let panel = d3.select(this);
 
-    let heading = panel.append("div").attr("class", "panel-heading");
+    let heading = panel.append("div").attr("class", "panel-heading").append('div').classed('row',true);
       // .style("background-color", d.color);
 
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
-    let propertyTitle = heading.append('h4').attr('class','propertyTitle').html(`<b>${mainTypeTitle}:</b> ${property_data.subType}`);
+    let propertyTitle = heading.append('h4').attr('class','col-md-10 propertyTitle').html(`<b>${mainTypeTitle}:</b> ${property_data.subType}`);
+    let closeButton = heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove')
+      .on('click',function(){
+        removePropertyChart(property_data);
+        App.controllers.mapData.removeChartFromList(property_data);
+      });
     
     // let area = heading.append("h4").attr("class", "rectArea").html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
 
@@ -94,7 +99,6 @@ let ChartListView = function(listID) {
       graph.background = graph.select('.graph-background');
       graph.content = graph.append('g').classed('graph-content',true);
       let property_data = JSON.parse(graph.background.attr('property-data'));
-      console.log("property_data",property_data);
       
       let selectionKeys = Object.keys(self.selections);
       let boundsX = [0, +graph.background.attr('width')];
@@ -103,10 +107,9 @@ let ChartListView = function(listID) {
       let data = [];
       for(let s of selectionKeys){
         let curSelection = self.selections[s];
-        console.log("adding selections[s]",curSelection);
         let area = curSelection.area;
         let propertyValue = curSelection.data.census[property_data.mainType][property_data.subType];
-        console.log(area,propertyValue)
+        //show data relative to area (i.e. density)
         data.push({
           value: propertyValue / area,
           color: curSelection.color
