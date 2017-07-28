@@ -42,6 +42,7 @@ Promise.all([documentPromise, less.pageLoadFinished])
     console.log("Loading Analytics");
     App.views.map = new MapView("serviceMap");
     App.views.chartList = new ChartListView("#chartList");
+    App.views.chartList.makeCollapsing("#toggleHideChartsButton", "#chartListWrapper");
 
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");

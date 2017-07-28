@@ -30,6 +30,34 @@ let ChartListView = function(listID) {
     }
   }
 
+  function makeCollapsing(buttonID, listWrapperID) {
+    let mobile = window.innerWidth < 769;
+
+    self.wrapper = d3.select(listWrapperID)
+      .style("pointer-events", mobile ? "none" : "all")
+      .style("opacity", mobile ? 0 : 1)
+      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+
+    self.toggleButton = d3.select(buttonID).classed("open", !mobile)
+      .on("click", function(d) {
+        let open = !d3.select(this).classed("open");
+        d3.select(this).classed("open", open);
+
+        d3.select(this).select(".glyphicon").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
+
+        self.wrapper
+          .style("pointer-events", open ? "all" : "none")
+          .style("opacity", open ? 1 : 0);
+      });
+  }
+
+  function resize() {
+    let mobile = window.innerWidth < 769;
+
+    self.wrapper
+      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+  }
+
   function createChart(property_data) {
     // let rgb = d3.rgb(property_data.color);
 
@@ -65,7 +93,7 @@ let ChartListView = function(listID) {
         removePropertyChart(property_data);
         App.controllers.mapData.removeChartFromList(property_data);
       });
-    
+
     // let area = heading.append("h4").attr("class", "rectArea").html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
 
     let body = panel.append("div").attr("class", "panel-body");
@@ -100,7 +128,7 @@ let ChartListView = function(listID) {
       graph.background = graph.select('.graph-background');
       graph.content = graph.append('g').classed('graph-content',true);
       let property_data = JSON.parse(graph.background.attr('property-data'));
-      
+
       let selectionKeys = Object.keys(self.selections);
       let boundsX = [0, +graph.background.attr('width')];
       let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
@@ -148,7 +176,7 @@ let ChartListView = function(listID) {
             .attr('x', x + barWidth / 2).attr('y', y + height + yOffset * 1.5 + buttonSize/4)
             .attr('text-anchor', 'middle').text('X').classed('delete-button-symbol',true);
         });
-        
+
         let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0],(yScale.domain()[1]-yScale.domain()[0])/2,yScale.domain()[1]]);
         graph.content.append('g').classed('axis',true)
           .attr('transform',`translate(${xOffset},${yOffset})`).call(yAxis);
@@ -173,7 +201,7 @@ let ChartListView = function(listID) {
         .text(`Error occurred while drawing selections`);
     }
   }
-  
+
   function createPropertyID(property_data){
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join("_");
     let subTypeTitle = property_data.subType.split(" ").join("_");
@@ -248,6 +276,9 @@ let ChartListView = function(listID) {
     addPropertyChart,
     removePropertyChart,
     addSelection,
-    removeSelection
+    removeSelection,
+
+    makeCollapsing,
+    resize
   };
 };

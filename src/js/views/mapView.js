@@ -231,7 +231,6 @@ let MapView = function(div) {
 
   function removeRect(rect) {
     self.map.removeLayer(self.rects[rect]);
-
     self.rectColors.push(self.rects[rect].options.color);
 
     delete self.rects[rect];

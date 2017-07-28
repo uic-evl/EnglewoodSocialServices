@@ -55,34 +55,25 @@
       </div>
 
       <div class="navbar-left">
+        <div class="nav btn-group" id="filterButtonGroup">
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
+              Select Services
+              <span class="caret">
 
-        <div class="navbar-form navbar-left">
-          <!-- <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" id="searchInput">
-            <div class="input-group-btn">
-              <button class="btn btn-default" type="submit" id="searchButton">
-                <i class="glyphicon glyphicon-search">
+              </span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="filterDropdownList">
 
-                </i>
-              </button>
-            </div>
-          </div> -->
+            </ul>
+          </div>
+          <button type="button" class="btn btn-warning navbar-btn" id="allServicesButton">
+            <span class="glyphicon glyphicon-refresh">
+
+            </span>
+            Clear Selection
+          </button>
         </div>
-
-        <!-- <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
-          <span class="glyphicon glyphicon-arrow-right"></span>
-          <span class="glyphicon glyphicon-map-marker"></span>
-          Enter a Location
-        </button> -->
-
-        <button type="button" class="btn btn-success navbar-btn" id="newRectSelector">
-          <span class="glyphicon glyphicon-plus"></span>
-          <span class="glyphicon glyphicon-stop"></span>
-           Selection
-        </button>
-      </div>
-
-      <div class="navbar-right">
         <button type="button" class="btn btn-primary navbar-btn" id="mapPanelToggle">
             <span id="mapText">Census Maps</span>
             <span class="glyphicon glyphicon-arrow-down"></span>
@@ -111,22 +102,56 @@
 
         </ul> -->
 
-        <div class="btn-group" id="filterButtonGroup">
-          <button type="button" class="btn btn-primary navbar-btn" id="allServicesButton">
-            <span class="glyphicon glyphicon-refresh">
 
-            </span>
-          </button>
-          <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
-            Services
-            <span class="caret">
 
-            </span>
-          </button>
-          <ul class="dropdown-menu" role="menu" id="filterDropdownList">
+        <!-- <div class="navbar-form navbar-left">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" id="searchInput">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit" id="searchButton">
+                <i class="glyphicon glyphicon-search">
 
-          </ul>
+                </i>
+              </button>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
+          <span class="glyphicon glyphicon-arrow-right"></span>
+          <span class="glyphicon glyphicon-map-marker"></span>
+          Enter a Location
+        </button> -->
+
+
+      </div>
+
+      <div class="navbar-right">
+
+        <button type="button" class="btn btn-success navbar-btn" id="newRectSelector">
+          <span class="glyphicon glyphicon-plus"></span>
+          <span class="glyphicon glyphicon-stop"></span>
+           Selection
+        </button>
+
+        <button class="btn btn-success navbar-btn" id="toggleHideChartsButton">
+          <span class="glyphicon glyphicon-eye-open">
+          </span>
+          Chart List
+          <span class="badge" id="chartCount">10</span>
+
+        </button>
+
+        <div class="dropdown-menu" role="menu" id="chartListWrapper">
+          <p class="title label-info">
+            Chart List
+          </p>
+          <div class="" id="chartList">
+
+          </div>
         </div>
+
+      </div>
 
 
         <!-- glyphicon glyphicon-refresh -->
@@ -141,11 +166,11 @@
   <div class="container-fluid appContent">
     <div class="row h-100">
 
-      <div id="chartListWrapper">
+      <!-- <div id="chartListWrapper">
         <div class="" id="chartList">
 
         </div>
-      </div>
+      </div> -->
 
       <div id="serviceMap">
 
