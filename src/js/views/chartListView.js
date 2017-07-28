@@ -7,9 +7,9 @@ let ChartListView = function(listID) {
     chartHeight: 200,
     chartMargins: {
       top: 10,
-      right: 10,
+      right: 0,
       bottom: 25,
-      left: 25
+      left: 35
     },
     chartList: null,
     selections: {},
@@ -141,10 +141,12 @@ let ChartListView = function(listID) {
         let propertyValue = curSelection.data.census[property_data.mainType][property_data.subType];
         //show data relative to area (i.e. density)
         data.push({
-          value: propertyValue / area,
+          value: (propertyValue / area) || 0, //fix for NaN values
           color: curSelection.color
         });
       }
+
+      console.log("selection bar data",data);
 
       //only draw when there are 2 selections
       if(data.length > 1){
@@ -154,13 +156,15 @@ let ChartListView = function(listID) {
         let yMax = yScale.domain()[1];
         graph.content.selectAll('.bar').data(data)
         .enter().append('rect').each(function (data_entry, index) {
-          // console.log(data_entry);
-          let height = yScale(yMax - data_entry.value);
+          let height = (data_entry.value != 0) ?  yScale(yMax - data_entry.value) : 0;
           let x = xOffset + xScale(index), y = yOffset + yScale(data_entry.value);
           d3.select(this).classed('bar', true)
               .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
               .attr('width', barWidth).attr('height', height)
-              .style('fill', data_entry.color)
+              .style('fill', data_entry.color).attr('id','selection-graph-bar')
+              .on('click',function(){
+                App.views.map.centerAroundRect(self.selections[selectionKeys[index]]);
+              });
 
           let buttonSize = yOffset * 2;
           let buttonOffsetY = boundsY[0] + yOffset * 1.5;
@@ -170,7 +174,9 @@ let ChartListView = function(listID) {
             .attr('width',buttonSize).attr('height',buttonSize)
             .attr('rx',3).attr('ry',3)
             .attr('id','delete-selection-button')
-            .on('click',self.selections[selectionKeys[index]].remove);
+            .on('click',function(){
+              App.controllers.rectSelector.removeRect(selectionKeys[index]);
+            });
 
           graph.content.append('text')
             .attr('x', x + barWidth / 2).attr('y', y + height + yOffset * 1.5 + buttonSize/4)
