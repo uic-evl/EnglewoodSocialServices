@@ -21,10 +21,12 @@ let MapView = function(div) {
       "black": "#3e3e3e"
     },
 
+    rectLayer: null,
     rects: {},
     rectColors: d3.schemeCategory10.slice(0),
     totalRects: 0,
 
+    choroplethLayer: null,
     choropleth: null
   };
 
@@ -59,6 +61,8 @@ let MapView = function(div) {
     self.map.addLayer(osm);
     self.map.setView([41.779786, -87.644778], 15);
 
+    self.choroplethLayer = L.layerGroup([]).addTo(self.map);
+    self.rectLayer = L.layerGroup([]).addTo(self.map);
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
     self.map.zoomControl.setPosition('bottomleft');
 
@@ -96,38 +100,38 @@ let MapView = function(div) {
 
       // create a marker for each social services location
       L.marker(
-        L.latLng(lat, lng), {
-          icon: self.icons[self.iconColorNames[0]],
-          riseOnHover: true, // moves the marker to the front on mouseover
-          // bind data to marker inside options
-          data: loc
-        }
-      ).bindPopup(function(layer) { // allow for the popup on click with the name of the location
-        return "<strong>" + loc["Organization Name"] + "</strong><br>" +
-          loc["Description of Services Provided in Englewood"] + "<br><br>" +
-          "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
-          "<span class='glyphicon glyphicon-share-alt'></span> " + loc["Address"] + "</a></strong><br>" +
-          (loc["Contact Phone Number"] ?
-          ("<span class='glyphicon glyphicon-earphone'></span> " + loc["Contact Phone Number"] + "</a></strong><br>") : "") +
-          (loc["Website"] ?
-          ("<strong><a href='" + loc["Website"] + "'target='_blank'>" +
-          "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
-      }).addTo(self.serviceGroup)
-      .on("click", function(e) {
-        if (this.options.data.visible) {
-          // let parentDiv = $("#serviceList");
-          // let innerListItem = $(d3.selectAll(".serviceEntry")
-          //   .filter((d) => d["Organization Name"] === this.options.data["Organization Name"]).nodes())
-          //
-          // parentDiv.scrollTop(parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top));
-          //
-          // $(".panel-heading", innerListItem).trigger("click");
+          L.latLng(lat, lng), {
+            icon: self.icons[self.iconColorNames[0]],
+            riseOnHover: true, // moves the marker to the front on mouseover
+            // bind data to marker inside options
+            data: loc
+          }
+        ).bindPopup(function(layer) { // allow for the popup on click with the name of the location
+          return "<strong>" + loc["Organization Name"] + "</strong><br>" +
+            loc["Description of Services Provided in Englewood"] + "<br><br>" +
+            "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
+            "<span class='glyphicon glyphicon-share-alt'></span> " + loc["Address"] + "</a></strong><br>" +
+            (loc["Contact Phone Number"] ?
+              ("<span class='glyphicon glyphicon-earphone'></span> " + loc["Contact Phone Number"] + "</a></strong><br>") : "") +
+            (loc["Website"] ?
+              ("<strong><a href='" + loc["Website"] + "'target='_blank'>" +
+                "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
+        }).addTo(self.serviceGroup)
+        .on("click", function(e) {
+          if (this.options.data.visible) {
+            // let parentDiv = $("#serviceList");
+            // let innerListItem = $(d3.selectAll(".serviceEntry")
+            //   .filter((d) => d["Organization Name"] === this.options.data["Organization Name"]).nodes())
+            //
+            // parentDiv.scrollTop(parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top));
+            //
+            // $(".panel-heading", innerListItem).trigger("click");
 
-          setSelectedService
+            setSelectedService
 
-          App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
-        }
-      });
+            App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
+          }
+        });
     }
   }
 
@@ -138,33 +142,33 @@ let MapView = function(div) {
     //     layer.setOpacity(1);
     //   });
     // } else {
-      // otherwise only show locations that match at least one of the selected properties
-      self.serviceGroup.eachLayer(function(layer) {
-        let loc = layer.options.data;
-        // let show = false;
-        //
-        // for (let property of Object.keys(serviceFilters)) {
-        //   if (loc[property] == 1) {
-        //     show = true;
-        //     break;
-        //   }
-        // }
+    // otherwise only show locations that match at least one of the selected properties
+    self.serviceGroup.eachLayer(function(layer) {
+      let loc = layer.options.data;
+      // let show = false;
+      //
+      // for (let property of Object.keys(serviceFilters)) {
+      //   if (loc[property] == 1) {
+      //     show = true;
+      //     break;
+      //   }
+      // }
 
-        let show = _.includes(filteredData, loc);
-        layer.options.data.visible = show;
+      let show = _.includes(filteredData, loc);
+      layer.options.data.visible = show;
 
-        if (show) {
-          layer.setOpacity(1);
-          layer.setZIndexOffset(100);
-          layer.setIcon(self.icons["blue"]);
-        } else {
-          layer.setOpacity(0.2);
-          layer.setZIndexOffset(0);
-          layer.setIcon(self.icons["grey"]);
-          // layer.setOpacity(0);
-        }
+      if (show) {
+        layer.setOpacity(1);
+        layer.setZIndexOffset(100);
+        layer.setIcon(self.icons["blue"]);
+      } else {
+        layer.setOpacity(0.2);
+        layer.setZIndexOffset(0);
+        layer.setIcon(self.icons["grey"]);
+        // layer.setOpacity(0);
+      }
 
-      });
+    });
     // }
   }
 
@@ -190,7 +194,7 @@ let MapView = function(div) {
     }
   }
 
-  function drawLocationMarker(position){
+  function drawLocationMarker(position) {
     self.currentLocationMarker = L.marker(position, {
       icon: self.icons[self.iconColorNames[1]],
       zIndexOffset: 200
@@ -206,14 +210,15 @@ let MapView = function(div) {
     let color = self.rectColors.shift();
 
     let rect = L.rectangle([llBound1, llBound2], {
-      color,
-      data: self.totalRects
-    })
-    .bindPopup(function(layer) { // allow for the popup on click with the name of the location
-      return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
+        color,
+        data: self.totalRects
+      })
+      .bindPopup(function(layer) { // allow for the popup on click with the name of the location
+        return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
       <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
-    })
-    .addTo(self.map);
+      })
+      // .setZIndex(200)
+      .addTo(self.rectLayer);
 
     self.rects[self.totalRects] = rect;
 
@@ -235,32 +240,43 @@ let MapView = function(div) {
   function drawChoropleth(data) {
     // remove old choropleth
     if (self.choropleth) {
-      self.map.removeLayer(self.choropleth);
+      self.choroplethLayer.removeLayer(self.choropleth);
     }
 
     // if data specified, add new choropleth
     if (data) {
       let colorScale = d3.scaleLinear()
-      .domain(d3.extent(data.features, f => f.properties.data))
-      .range(['#9ebcda','#6e016b']);
+        .domain(d3.extent(data.features, f => f.properties.data))
+        .range(['#9ebcda', '#6e016b']);
 
       console.log(colorScale.domain(), colorScale.range());
 
       self.choropleth = L.geoJSON(data, {
-        style: function(feature) {
-          return {
-            color: feature.properties.data === 0 ? "#444" : colorScale(feature.properties.data),
-            opacity: 0,
-            fillOpacity: 0.75
+          style: function(feature) {
+            return {
+              color: feature.properties.data === 0 ? "#444" : colorScale(feature.properties.data),
+              opacity: 0.1,
+              fillOpacity: 0.75,
+              className: "geoJSON-gridSpace"
+            }
           }
-        }
-      }).addTo(self.map);
+        })
+        .on("mouseover", function(geojson) {
+          // console.log(layer);
+          geojson.layer.bringToFront();
+        })
+        .bindPopup(function(layer) {
+          console.log(layer.feature.properties.data);
+          return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
+        }).addTo(self.choroplethLayer);
+
+      self.rectLayer.eachLayer(rect => rect.bringToFront());
     }
   }
 
   function jumpToLocation(position) {
     //remove previous circle marker
-    if(self.currentLocationMarker != undefined)
+    if (self.currentLocationMarker != undefined)
       self.map.removeLayer(self.currentLocationMarker);
 
     //move map to new poisition
