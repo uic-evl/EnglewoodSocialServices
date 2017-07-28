@@ -62,7 +62,8 @@ let CensusDataModel = function() {
           type: "Feature",
           geometry: feature.geometry,
           properties: {
-            data: feature.properties[propertyTypes.mainType][propertyTypes.subType]
+            data: feature.properties[propertyTypes.mainType][propertyTypes.subType],
+            description: propertyTypes
           }
         };
       })
