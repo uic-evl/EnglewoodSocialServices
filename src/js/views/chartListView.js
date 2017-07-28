@@ -60,7 +60,7 @@ let ChartListView = function(listID) {
 
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
     let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle').html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9 ]/g, "")} (/mi<sup>2</sup>)`);
-    let closeButton = heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove')
+    let closeButton = heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove text-right')
       .on('click',function(){
         removePropertyChart(property_data);
         App.controllers.mapData.removeChartFromList(property_data);
