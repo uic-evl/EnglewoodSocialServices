@@ -79,7 +79,8 @@ let ChartListView = function(listID) {
       .attr("y", self.chartMargins.top)
       .attr("width", chart.node().clientWidth - self.chartMargins.left - self.chartMargins.right)
       .attr("height", chart.node().clientHeight - self.chartMargins.top - self.chartMargins.bottom)
-      .classed('graph-background',true).attr('property-data', JSON.stringify(property_data));
+      .classed('graph-background',true).attr('property-data', JSON.stringify(property_data))
+      .style('stroke','none');
     graph.content = graph.append('g').classed('graph-content',true);
 
     updateChart(createPropertyID(property_data));
