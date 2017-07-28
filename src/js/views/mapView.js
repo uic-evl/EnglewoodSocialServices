@@ -118,7 +118,7 @@ let MapView = function(div) {
                 "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
         }).addTo(self.serviceGroup)
         .on("click", function(e) {
-          if (this.options.data.visible) {
+          if (this.options.data.visible && App.controllers.listToMapLink) {
             // let parentDiv = $("#serviceList");
             // let innerListItem = $(d3.selectAll(".serviceEntry")
             //   .filter((d) => d["Organization Name"] === this.options.data["Organization Name"]).nodes())
@@ -130,6 +130,8 @@ let MapView = function(div) {
             setSelectedService
 
             App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
+          } else {
+
           }
         });
     }
@@ -165,7 +167,6 @@ let MapView = function(div) {
         layer.setOpacity(0.2);
         layer.setZIndexOffset(0);
         layer.setIcon(self.icons["grey"]);
-        // layer.setOpacity(0);
       }
 
     });
@@ -250,6 +251,8 @@ let MapView = function(div) {
 
       console.log(colorScale.domain(), colorScale.range());
 
+      // TODO: draw color scale for map
+
       self.choropleth = L.geoJSON(data, {
           style: function(feature) {
             return {
@@ -263,6 +266,10 @@ let MapView = function(div) {
         .on("mouseover", function(geojson) {
           // console.log(layer);
           geojson.layer.bringToFront();
+        })
+        .on("mouseout", function(geojson) {
+          // console.log(layer);
+          geojson.layer.bringToBack();
         })
         .bindPopup(function(layer) {
           console.log(layer.feature.properties.data);

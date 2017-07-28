@@ -35,7 +35,8 @@ let RectSelectorController = function(buttonID) {
       .on("mousemove", resizeRect)
       .on("mouseup", finalizeRect);
 
-    self.drawingRect = self.svg.append("rect");
+    self.drawingRect = self.svg.append("rect")
+      .style("stroke-dasharray", "5, 5");
   }
 
   function handleButtonClick() {
@@ -103,14 +104,15 @@ let RectSelectorController = function(buttonID) {
     // App.views.chartList.createChart(self.rects[rect.id]);
     App.views.chartList.addSelection(self.rects[rect.id]);
 
-    self.drawable = false;
-    self.button.attr("class", "btn btn-success navbar-btn");
-    self.dragLayer.classed("disabled", true);
+    // self.drawable = false;
+    // self.button.attr("class", "btn btn-success navbar-btn");
+    // self.dragLayer.classed("disabled", true);
     self.drawingRect
       .attr("width", 0)
       .attr("height", 0);
 
     if (Object.keys(self.rects).length >= 10) {
+      self.drawable = false;
       self.button.attr("class", "btn btn-success navbar-btn disabled")
         .attr("disabled", true);
     }
