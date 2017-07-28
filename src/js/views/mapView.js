@@ -237,6 +237,10 @@ let MapView = function(div) {
     delete self.rects[rect];
   }
 
+  function centerAroundRect(rect) {
+    self.map.fitBounds(rect.bounds);
+  }
+
   function drawChoropleth(data) {
     // remove old choropleth
     if (self.choropleth) {
@@ -300,6 +304,8 @@ let MapView = function(div) {
 
     drawRect,
     removeRect,
+    centerAroundRect,
+
     drawChoropleth,
 
     jumpToLocation
