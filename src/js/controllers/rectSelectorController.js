@@ -115,6 +115,7 @@ let RectSelectorController = function(buttonID) {
       self.drawable = false;
       self.button.attr("class", "btn btn-success navbar-btn disabled")
         .attr("disabled", true);
+      self.dragLayer.classed("disabled", true);
     }
 
     self.drawingStart = null;
