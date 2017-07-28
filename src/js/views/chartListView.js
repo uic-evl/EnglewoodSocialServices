@@ -59,7 +59,7 @@ let ChartListView = function(listID) {
       // .style("background-color", d.color);
 
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
-    let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle').html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9 ]/g, "")} (/mi<sup>2</sup>)`);
+    let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle').html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")} (/mi<sup>2</sup>)`);
     let closeButton = heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove text-right')
       .on('click',function(){
         removePropertyChart(property_data);
@@ -104,6 +104,7 @@ let ChartListView = function(listID) {
       let selectionKeys = Object.keys(self.selections);
       let boundsX = [0, +graph.background.attr('width')];
       let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
+      
       let barWidth = xScale.range()[1] / selectionKeys.length;
       let data = [];
       for(let s of selectionKeys){
@@ -116,24 +117,45 @@ let ChartListView = function(listID) {
           color: curSelection.color
         });
       }
-      if(data.length > 1){
 
+      //only draw when there are 2 selections
+      if(data.length > 1){
         let boundsY = [+graph.background.attr('height'), 0];
         let yScale = d3.scaleLinear().domain([0, d3.max(data,(d) => {return d.value;})]).range(boundsY);
         let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
         let yMax = yScale.domain()[1];
         graph.content.selectAll('.bar').data(data)
         .enter().append('rect').each(function (data_entry, index) {
-          console.log(data_entry);
+          // console.log(data_entry);
+          let height = yScale(yMax - data_entry.value);
+          let x = xOffset + xScale(index), y = yOffset + yScale(data_entry.value);
           d3.select(this).classed('bar', true)
-          .attr('x', xOffset + xScale(index)).attr('y', yOffset + yScale(data_entry.value))
-          .attr('width', barWidth).attr('height', yScale(yMax - data_entry.value))
-          .style('fill', data_entry.color)//.attr('title', race);
+              .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
+              .attr('width', barWidth).attr('height', height)
+              .style('fill', data_entry.color)
+
+          let buttonSize = yOffset * 2;
+          let buttonOffsetY = boundsY[0] + yOffset * 1.5;
+          let buttonOffsetX = (barWidth / 2) - buttonSize / 2;
+          graph.content.append('rect')
+            .attr('x',xOffset + barWidth*index + buttonOffsetX).attr('y', buttonOffsetY)
+            .attr('width',buttonSize).attr('height',buttonSize)
+            .attr('rx',3).attr('ry',3)
+            .attr('id','delete-selection-button')
+            .on('click',self.selections[selectionKeys[index]].remove);
+
+          graph.content.append('text')
+            .attr('x', x + barWidth / 2).attr('y', y + height + yOffset * 1.5 + buttonSize/4)
+            .attr('text-anchor', 'middle').text('X').classed('delete-button-symbol',true);
         });
         
         let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0],(yScale.domain()[1]-yScale.domain()[0])/2,yScale.domain()[1]]);
         graph.content.append('g').classed('axis',true)
-        .attr('transform',`translate(${xOffset},${yOffset})`).call(yAxis);
+          .attr('transform',`translate(${xOffset},${yOffset})`).call(yAxis);
+
+        let xAxis = d3.axisBottom(xScale).tickFormat(() => {return ""; }).ticks(data.length);
+        graph.content.append('g').classed('axis',true)
+          .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
       }else{
         graph.content.append('text')
           .attr("x", self.chartMargins.left + 5)
@@ -159,7 +181,7 @@ let ChartListView = function(listID) {
   }
 
   function addPropertyChart(property_data){
-    console.log("addProperty",property_data);
+    // console.log("addProperty",property_data);
     if(self.chartList.selectAll(`#${createPropertyID(property_data)}`).empty()){
       createChart(property_data);
     }else{

@@ -96,7 +96,8 @@ let RectSelectorController = function(buttonID) {
         census: censusData.dataTotals
       },
       color: rect.color,
-      id: rect.id
+      id: rect.id,
+      remove: () => { return removeRect(rect.id); } //used for remove button on graphs
     };
 
     // App.views.chartList.createChart(self.rects[rect.id]);
