@@ -182,7 +182,11 @@ let FilterDropdownController = function() {
       }
     }
 
-    App.views.map.updateServicesWithFilter(filtersToSend);
+    let dataSubset = App.models.socialServices.getFilteredData(filtersToSend);
+
+    App.views.map.updateServicesWithFilter(dataSubset);
+
+    console.log();
   }
 
   return {
