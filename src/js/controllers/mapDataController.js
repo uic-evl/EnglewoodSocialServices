@@ -52,11 +52,25 @@ let MapDataController = function() {
         let panel = d3.select(this);
 
         // create link within tab
-        panel.append("div")
+        let panelHeading = panel.append("div")
           .attr("class", "panel-heading")
           .attr("data-toggle", "collapse")
-          .attr("href", "#" + _.kebabCase("main_" + c1))
-          .html(_.capitalize(_.startCase(c1)));
+          .attr("href", "#" + _.kebabCase("main_" + c1));
+
+        let title = panelHeading.append("span")
+          .attr("class", "panelTitle")
+          .text(_.capitalize(_.startCase(c1)));
+
+        let numCharts = panelHeading.append("span")
+          .attr("class", "label label-success numCharts")
+          .attr("data-count", 0)
+          .style("display", "none")
+          .text("0 Charts");
+
+        let hasMap = panelHeading.append("span")
+          .attr("class", "label label-success hasMap")
+          .style("display", "none")
+          .text("Map");
 
         // create tab content div for this t1 category
         let panelBody = panel.append("div")
@@ -104,8 +118,6 @@ let MapDataController = function() {
     // d3.event.stopPropagation(); // prevent menu close on link click
 
     // toggle whether or not it is selected
-    console.log(d);
-
     let reducedData = App.models.censusData.getSubsetGeoJSON(d);
     App.views.map.drawChoropleth(reducedData);
   }
@@ -124,15 +136,35 @@ let MapDataController = function() {
 
   function addChart(d) {
     d3.select(this).attr("class", "btn btn-danger chartButton");
+
+    let panelHeading = d3.select(self.mapDataPanel.selectAll("#" + _.kebabCase("main_" + d.mainType)).node().parentNode).selectAll(".panel-heading");
+    // update chart Number
+
+    let chartLabel = panelHeading.selectAll(".numCharts");
+    let numCharts = +chartLabel.attr("data-count")+1;
+
+    chartLabel.attr("data-count", numCharts)
+      .text(numCharts + (numCharts === 1 ? " Chart" : " Charts"))
+      .style("display", numCharts <= 0 ? "none": "inline");
   }
 
   function removeChart(d) {
     d3.select(this).attr("class", "btn btn-success chartButton");
+
+    let panelHeading = d3.select(self.mapDataPanel.selectAll("#" + _.kebabCase("main_" + d.mainType)).node().parentNode).selectAll(".panel-heading");
+    // update chart Number
+
+    let chartLabel = panelHeading.selectAll(".numCharts");
+    let numCharts = +chartLabel.attr("data-count") - 1;
+
+    chartLabel.attr("data-count", numCharts)
+      .text(numCharts + (numCharts === 1 ? " Chart" : " Charts"))
+      .style("display", numCharts <= 0 ? "none" : "inline");
   }
 
   function removeChartFromList(propertyTypes) {
     d3.selectAll("#" + _.kebabCase("main_" + propertyTypes.mainType)).selectAll("#" + _.kebabCase("sub_" + propertyTypes.subType))
-    .select(".chartButton")
+      .select(".chartButton")
       .each(removeChart);
   }
 
