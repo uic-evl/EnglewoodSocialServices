@@ -21,10 +21,12 @@ let MapView = function(div) {
       "black": "#3e3e3e"
     },
 
+    rectLayer: null,
     rects: {},
     rectColors: d3.schemeCategory10.slice(0),
     totalRects: 0,
 
+    choroplethLayer: null,
     choropleth: null
   };
 
@@ -59,6 +61,8 @@ let MapView = function(div) {
     self.map.addLayer(osm);
     self.map.setView([41.779786, -87.644778], 15);
 
+    self.choroplethLayer = L.layerGroup([]).addTo(self.map);
+    self.rectLayer = L.layerGroup([]).addTo(self.map);
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
     self.map.zoomControl.setPosition('bottomleft');
 
@@ -213,7 +217,8 @@ let MapView = function(div) {
       return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
       <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
     })
-    .addTo(self.map);
+    // .setZIndex(200)
+    .addTo(self.rectLayer);
 
     self.rects[self.totalRects] = rect;
 
@@ -235,7 +240,7 @@ let MapView = function(div) {
   function drawChoropleth(data) {
     // remove old choropleth
     if (self.choropleth) {
-      self.map.removeLayer(self.choropleth);
+      self.choroplethLayer.removeLayer(self.choropleth);
     }
 
     // if data specified, add new choropleth
@@ -254,7 +259,10 @@ let MapView = function(div) {
             fillOpacity: 0.75
           }
         }
-      }).addTo(self.map);
+      })
+      .addTo(self.choroplethLayer);
+
+      self.rectLayer.eachLayer(rect => rect.bringToFront());
     }
   }
 
