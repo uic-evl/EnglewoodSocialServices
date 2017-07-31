@@ -73,7 +73,7 @@
                     <!-- Choose a social service on the left and a nearby location (such as an address, intersection or landmark) on the right.<br> -->
 
                     <div class="row">
-                      <div class="col-md-6" style="margin-top:15px;">
+                      <div class="col-md-6" style="margin-top: 15px;">
                       <!-- Choose a social service -->
 
                         <!-- <button type="button" class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown">
@@ -82,13 +82,13 @@
                         </button>
                         <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul> -->
 
-                        <div class="btn-group" id="filterButtonGroup">
+                        <div class="btn-group btn-group-justified" id="modalFilterBtnGroup">
                           <div class="btn-group btn-block" id="selectServicesButton">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                               Select Services <span class="caret"></span>
                             </button>
                             <!-- <ul class="dropdown-menu" role="menu" id="filterDropdownList"> </ul>-->
-                             <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul>
+                             <ul class="dropdown-menu dropdown-toggle" role="menu" id="filterDropdownList" style="width:100%"></ul>
                           </div>
 
                           <button type="button" class="btn btn-danger" disabled id="allServicesButton">
@@ -101,7 +101,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-6" style="margin-top:15px;">
+                      <div class="col-md-6" style="margin-top: 15px;">
                       <!-- Choose a a nearby location  -->
                         <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
@@ -181,9 +181,6 @@
               <span class="glyphicon glyphicon-remove"></span>
               <span id="currentServiceSelection">Clear Selection</span>
             </button>
-            <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%">
-
-            </ul>
           </div>
 
           <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal"
