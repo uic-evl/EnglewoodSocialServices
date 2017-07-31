@@ -209,11 +209,20 @@ let FilterDropdownController = function() {
   function updateMainCategoryIcon(category) {
     let id = "#main_" + convertPropertyToID(category);
 
-    let item = self.filterDropdownList.selectAll(id);
+    let item = self.filterDropdownList.selectAll(".serviceType>" + id);
+    let selectAllButton = self.filterDropdownList.selectAll(".serviceSubtype>" + id);
     let state = self.mainCategoryStates[category];
 
     item.select(".glyphicon")
       .attr("class", "glyphicon " + self.mainStateToIcon[state]);
+
+    if (state === "some") {
+      selectAllButton.select(".glyphicon")
+        .attr("class", "glyphicon glyphicon-unchecked");
+    } else {
+      selectAllButton.select(".glyphicon")
+        .attr("class", "glyphicon " + self.mainStateToIcon[state]);
+    }
   }
 
   function updateSubCategoryIcon(category) {
