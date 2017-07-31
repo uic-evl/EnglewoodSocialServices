@@ -63,7 +63,6 @@ let FilterDropdownController = function() {
         // create link within tab
         listItem.append("a")
           .attr("tabindex", -1)
-          .attr("href", "#")
           .attr("id", "main_" + convertPropertyToID(c1))
           .html("<span class='glyphicon glyphicon-unchecked'></span>" + c1)
           // .html(c1)
@@ -83,7 +82,6 @@ let FilterDropdownController = function() {
           .attr("class", "serviceSubtype")
           .append("a")
           .datum(c1)
-          .attr("href", "#")
           .attr("id", "main_" + convertPropertyToID(c1))
           .html("<span class='glyphicon glyphicon-unchecked'></span>Select All")
           .on("click", function(c1) {
