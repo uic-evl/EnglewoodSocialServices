@@ -29,7 +29,7 @@ let FilterDropdownController = function() {
   function resetFilters() {
     console.log("Reset Filters");
 
-    self.filters = {}
+    self.filters = {};
 
     for (let mainCategory of Object.keys(self.mainCategoryStates)) {
       self.mainCategoryStates[mainCategory] = "none";
@@ -37,6 +37,9 @@ let FilterDropdownController = function() {
 
     self.filterDropdownList.selectAll(".glyphicon")
       .attr("class", "glyphicon glyphicon-unchecked");
+
+    self.allServicesButton.select('#currentServiceSelection').text("Clear Selection");
+    self.allServicesButton.attr('disabled',true);
 
     filtersUpdated();
   }
@@ -109,6 +112,9 @@ let FilterDropdownController = function() {
               selected = true;
             }
 
+            self.allServicesButton.select('#currentServiceSelection').text(`Clear Selection: ${c1}`);
+            self.allServicesButton.attr('disabled', null);
+
             updateMainCategoryIcon(c1);
 
             listItem.select("ul").selectAll(".serviceSubtype")
@@ -168,6 +174,9 @@ let FilterDropdownController = function() {
               // toggle whether or not it is selected
               self.filters[d.subType] = !curSelection;
             }
+
+            self.allServicesButton.select('#currentServiceSelection').text(`Clear Selection: ${_.truncate(d.subType,{length: 20})}`);
+            self.allServicesButton.attr('disabled', null);
 
             updateSubCategoryIcon(d.subType);
             updateMainCategoryOnSubUpdate(d.mainType);
