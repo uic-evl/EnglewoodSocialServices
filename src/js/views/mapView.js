@@ -64,7 +64,7 @@ let MapView = function(div) {
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
     self.rectLayer = L.layerGroup([]).addTo(self.map);
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
-    self.map.zoomControl.setPosition('bottomleft');
+    self.map.zoomControl.setPosition('bottomright');
 
     // causes map to recalculate size... (I shouldn't need to do this)
     // setTimeout(function() {

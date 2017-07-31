@@ -537,17 +537,28 @@ html {
   }
 }
 
+@basic: rgb(221,221,221);
+@basic-shade: shade(@basic, 15%);
+@default: #fff;
+@default-shade: shade(@default, 15%);
 @success: #5CB85C;
-@success-shade: shade(@success, 25%);
+@success-shade: shade(@success, 15%);
 @primary: #337AB7;
 @primary-shade: shade(@primary, 25%);
 @info: #5BC0DE;
-@info-shade: shade(@info, 25%);
+@info-shade: shade(@info, 15%);
 @warning: #f0ad4e;
-@warning-shade: shade(@warning, 25%);
+@warning-shade: shade(@warning, 15%);
 @danger: #d9534f;
-@danger-shade: shade(@danger, 25%);
+@danger-shade: shade(@danger, 20%);
 
+.btn {
+  .btn-gradient(to top, @basic-shade, @basic, @basic-shade);
+}
+
+.btn-default {
+  .btn-gradient(to top, @default-shade, @default, @default-shade);
+}
 
 .btn-success {
   .btn-gradient(to top, @success-shade, @success, @success-shade);
