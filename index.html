@@ -9,7 +9,7 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Zilla+Slab" rel="stylesheet">
-  
+
   <!-- CSS Libs -->
   <link rel="stylesheet" href="./lib/css/bootstrap.min.css">
   <link rel="stylesheet" href="./lib/css/leaflet.css">
@@ -48,22 +48,21 @@
 </head>
 
 <body onload="$('#landing-page').modal({ backdrop: 'static', keyboard: false });">
+  <script>
+    // When the user clicks on <div>, open the popup
+    function myFunction() {
+      var popup = document.getElementById("myPopup");
+      popup.classList.toggle("show");
+    }
+  </script>
 
-<script>
-// When the user clicks on <div>, open the popup
-function myFunction() {
-    var popup = document.getElementById("myPopup");
-    popup.classList.toggle("show");
-}
-</script>
-
-    <div id="landing-page" class="modal fade">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                <!-- help popup -->
-                <div class="popup" onclick="myFunction()"><span class="glyphicon glyphicon-question-sign"></span>
-                  <span class="popuptext" id="myPopup">If you have a specific social service in mind, you can choose either a main <i>category</i> (such as Education) or you can choose a <i>sub-category</i> (such as Tutoring/homework help).<br>
+  <div id="landing-page" class="modal fade">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- help popup -->
+          <div class="popup" onclick="myFunction()"><span class="glyphicon glyphicon-question-sign"></span>
+            <span class="popuptext" id="myPopup">If you have a specific social service in mind, you can choose either a main <i>category</i> (such as Education) or you can choose a <i>sub-category</i> (such as Tutoring/homework help).<br>
                   For choosing a location, you can enter a specific location or a nearby intersection or landmark. The services will be listed by distance to that location.<br><br>
                   If you are looking for a specific organization, you can search for it by name.
                   </span>
@@ -98,103 +97,109 @@ function myFunction() {
                         <button class="btn searchCount" disabled id="modalSearchCount">
                           0
                         </button>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Search by Org. Name" id="modalSearchInput">
-                    </div>
-                    <br>
+            </div>
+            <input type="text" class="form-control" placeholder="Search by Org. Name" id="modalSearchInput">
+          </div>
+          <br>
 
-                    <div id="acceptModal">
-                      <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
+          <div id="acceptModal">
+            <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
                         Start <span class="glyphicon glyphicon-log-out"></span>
                       </button>
-                    </div>
+          </div>
 
-                    <br><br>
+          <br><br>
 
-                </div>
+        </div>
 
-                <div class="modal-footer">
-                  <div class = "row">
-                    <div class = "col-md-6">
-                      <center><a href="">About us</a></center>
-                      <div class = "text-left">
-                        Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                      </div>
-
-                    </div>
-                    <div class = "col-md-6">
-                      <center><a href="">Contact</a></center>
-                      Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br>
-                      <span class="glyphicon glyphicon-earphone"></span> 800-808-0000
-                    </div>
-                  </div>
-
-                </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-md-6">
+              <center><a href="">About us</a></center>
+              <div class="text-left">
+                Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+              </div>
 
             </div>
+            <div class="col-md-6">
+              <center><a href="">Contact</a></center>
+              Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br>
+              <span class="glyphicon glyphicon-earphone"></span> 800-808-0000
+            </div>
+          </div>
+
         </div>
+
+      </div>
     </div>
+  </div>
   <nav class="navbar navbar-default navbar-fixed-top" id="topBar">
     <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand">Englewood Social Service Finder</a>
-        <!-- <button type="button" class="navbar-toggle" data-toggle="modal" data-target="#landing-page"> -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingMenu">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
+      <div class="row nav-row">
+        <div class="navbar-header">
+          <a class="navbar-brand">Englewood Social Service Finder</a>
+          <!-- <button type="button" class="navbar-toggle" data-toggle="modal" data-target="#landing-page"> -->
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingMenu">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
       </div>
+      <div class="row nav-row">
+        <div class="navbar-left navbar-collapse collapse" id="collapsingMenu">
+          <div class="nav btn-group" id="filterButtonGroup">
+            <div class="btn-group btn-block">
+              <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-block" data-toggle="dropdown">
+                Select Services
+                <span class="caret">
 
-      <div class="navbar-left navbar-collapse collapse" id="collapsingMenu">
-        <div class="nav btn-group" id="filterButtonGroup">
-          <div class="btn-group btn-block">
-            <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-block" data-toggle="dropdown">
-              Select Services
-              <span class="caret">
+                </span>
+              </button>
+              <ul class="dropdown-menu" role="menu" id="filterDropdownList">
+
+              </ul>
+            </div>
+            <button type="button" class="btn btn-warning navbar-btn" id="allServicesButton">
+              <span class="glyphicon glyphicon-refresh">
 
               </span>
+              Clear Selection
             </button>
             <ul class="dropdown-menu" role="menu" id="filterDropdownList" style="width:100%">
 
             </ul>
           </div>
-          <button type="button" class="btn btn-warning navbar-btn" id="allServicesButton">
-            <span class="glyphicon glyphicon-refresh">
 
-            </span>
-            Clear Selection
+          <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal"
+            id="locationModalButton">
+          <span class="glyphicon glyphicon-map-marker"></span>
+          Search From Specific Location
+        </button>
+
+          <div class="navbar-form navbar-left">
+            <div class="input-group">
+              <!-- <div class="input-group-btn">
+            <button class="btn searchCount" disabled id="searchCount">
+            5
           </button>
-        </div>
+        </div> -->
+              <input type="text" class="form-control" placeholder="Search by Org. Name" id="searchInput">
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="submit" id="searchButton">
+                  <i class="glyphicon glyphicon-search">
 
-        <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal" id="locationModalButton">
-                <span class="glyphicon glyphicon-map-marker"></span>
-                Search From Specific Location
-              </button>
-
-        <div class="navbar-form navbar-left">
-          <div class="input-group">
-            <!-- <div class="input-group-btn">
-              <button class="btn searchCount" disabled id="searchCount">
-                5
-              </button>
-            </div> -->
-            <input type="text" class="form-control" placeholder="Search by Org. Name" id="searchInput">
-            <div class="input-group-btn">
-              <button class="btn btn-default" type="submit" id="searchButton">
-                <i class="glyphicon glyphicon-search">
-
-                </i>
-              </button>
+                  </i>
+                </button>
+              </div>
             </div>
           </div>
+
+
         </div>
 
-
       </div>
-
-      <div class="navbar-right">
-        <!-- <button class="btn btn-success navbar-btn dropdown-toggle" data-toggle="dropdown" id="toggleHideServicesButton"> -->
+      <div class="row nav-row">
         <button class="btn btn-success navbar-btn" id="toggleHideServicesButton">
           <span class="glyphicon glyphicon-eye-open">
           </span>
@@ -213,7 +218,6 @@ function myFunction() {
             </div>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -238,7 +242,8 @@ function myFunction() {
           <h4 class="modal-title">Search From a Specific Location</h4>
         </div>
         <div class="modal-body">
-          <p>Enter a location (such as an address, intersection or landmark) to start your search for services from there:</p>
+          <p>Enter a location (such as an address, intersection or landmark) to start your search for services
+            from there:</p>
           <div class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
             <input id="addressInput" class="form-control" placeholder="Enter a location...">
