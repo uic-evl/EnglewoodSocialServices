@@ -205,7 +205,7 @@ html {
     .border-radius(6px 0 6px 6px);
   }
 
-  .dropdown-submenu:hover > .dropdown-menu {
+  .dropdown-submenu.open > .dropdown-menu {
     display: block;
   }
 
@@ -225,6 +225,22 @@ html {
 
   .dropdown-submenu:hover > a:after {
     border-right-color: #FFFFFF;
+  }
+}
+
+.serviceType {
+  a {
+    .glyphicon-unchecked {
+      color: transparent;
+    }
+  }
+}
+
+.serviceSubtype{
+  a {
+    .glyphicon-unchecked {
+      color: gray;
+    }
   }
 }
 ///// END multi-level dropdown styles

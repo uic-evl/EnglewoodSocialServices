@@ -54,7 +54,7 @@ let FilterDropdownController = function() {
 
     self.filterDropdownList.selectAll(".mainType")
       .data(tier1Categories)
-    .enter().append("li")
+      .enter().append("li")
       .attr("class", "dropdown-submenu serviceType")
       .each(function(c1) {
         let listItem = d3.select(this);
@@ -66,12 +66,33 @@ let FilterDropdownController = function() {
           .attr("href", "#")
           .attr("id", "main_" + convertPropertyToID(c1))
           .html("<span class='glyphicon glyphicon-unchecked'></span>" + c1)
+          // .html(c1)
+            .on((L.Browser.mobile ? "click" : "mouseover"), function(d) {
+              d3.event.stopPropagation();
+
+              self.filterDropdownList.selectAll(".serviceType").classed("open", false);
+              d3.select(this).node().parentNode.classList.toggle("open");
+            });
+
+
+        // create tab content div for this t1 category
+        let secondaryDropdown = listItem.append("ul")
+          .attr("class", "dropdown-menu")
+
+        secondaryDropdown.append("li")
+          .attr("class", "serviceSubtype")
+          .append("a")
+          .datum(c1)
+          .attr("href", "#")
+          .attr("id", "main_" + convertPropertyToID(c1))
+          .html("<span class='glyphicon glyphicon-unchecked'></span>Select All")
           .on("click", function(c1) {
             // d3.event.stopPropagation(); // prevent menu close on link click
+            self.filterDropdownList.selectAll(".serviceType").classed("open", false);
 
             //reset other filters to allow for only one main category selection at a time
             for (let mainCategory of Object.keys(self.mainCategoryStates)) {
-              if(mainCategory !== c1){
+              if (mainCategory !== c1) {
                 self.mainCategoryStates[mainCategory] = "none";
               }
             }
@@ -102,15 +123,13 @@ let FilterDropdownController = function() {
             filtersUpdated();
           });
 
-        // create tab content div for this t1 category
-        let secondaryDropdown = listItem.append("ul")
-          .attr("class", "dropdown-menu")
+        secondaryDropdown.append("li").attr("class", "divider");
 
         secondaryDropdown.selectAll(".serviceSubtype")
           .data(tier2Categories)
-        .enter().append("li")
+          .enter().append("li")
           .attr("class", "serviceSubtype")
-        .append("a")
+          .append("a")
           .datum(function(c2) {
             return {
               mainType: c1,
@@ -134,8 +153,8 @@ let FilterDropdownController = function() {
             self.filterDropdownList.selectAll(".glyphicon")
               .attr("class", "glyphicon glyphicon-unchecked");
             listItem.select("ul").selectAll(".serviceSubtype")
-              .each(function (subType) {
-                if(subType !== d.subType){
+              .each(function(subType) {
+                if (subType !== d.subType) {
                   self.filters[subType] = false;
 
                   updateSubCategoryIcon(subType);
@@ -145,9 +164,9 @@ let FilterDropdownController = function() {
             self.filters = {};
 
             //select current subcategory if previous filters indicate a main category selection
-            if(isMainCategorySelection){
+            if (isMainCategorySelection) {
               self.filters[d.subType] = true;
-            }else{
+            } else {
               // toggle whether or not it is selected
               self.filters[d.subType] = !curSelection;
             }
@@ -206,7 +225,7 @@ let FilterDropdownController = function() {
     let state = self.filters[category];
 
     item.select(".glyphicon")
-        .attr("class", "glyphicon " + (state ? "glyphicon-check" : "glyphicon-unchecked"));
+      .attr("class", "glyphicon " + (state ? "glyphicon-check" : "glyphicon-unchecked"));
   }
 
   function filtersUpdated() {
