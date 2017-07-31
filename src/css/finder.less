@@ -125,9 +125,11 @@ html {
 
   .dropdown-menu {
     width: 100%;
+    margin-top: -8px;
   }
 
   .serviceType > .dropdown-menu {
+    margin-top: 0;
     left: 100%;
     width: 100%;
   }
@@ -148,9 +150,6 @@ html {
     .serviceType > .dropdown-menu {
       left: 100%;
       width: auto;
-
-      max-height: 100%;
-      overflow-y: scroll;
     }
 
     .serviceSubtype {
@@ -178,6 +177,10 @@ html {
 
   #allServicesButton {
     width: 100%;
+  }
+
+  .dropdown-menu {
+    min-width: 100%;
   }
 
   .serviceType > .dropdown-menu {
