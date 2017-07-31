@@ -67,7 +67,7 @@ let FilterDropdownController = function() {
           .attr("id", "main_" + convertPropertyToID(c1))
           .html("<span class='glyphicon glyphicon-unchecked'></span>" + c1)
           .on("click", function(c1) {
-            d3.event.stopPropagation(); // prevent menu close on link click
+            // d3.event.stopPropagation(); // prevent menu close on link click
 
             //reset other filters to allow for only one main category selection at a time
             for (let mainCategory of Object.keys(self.mainCategoryStates)) {
@@ -122,7 +122,7 @@ let FilterDropdownController = function() {
             return "<span class='glyphicon glyphicon-unchecked'></span>" + d.subType;
           })
           .on("click", function(d) {
-            d3.event.stopPropagation(); // prevent menu close on link click
+            // d3.event.stopPropagation(); // prevent menu close on link click
 
             //reset other filters to allow for only one sub category selection at a time
             let isMainCategorySelection = Object.keys(self.filters).length > 1;
@@ -137,7 +137,7 @@ let FilterDropdownController = function() {
               .each(function (subType) {
                 if(subType !== d.subType){
                   self.filters[subType] = false;
-                  
+
                   updateSubCategoryIcon(subType);
                 }
               });
@@ -148,7 +148,7 @@ let FilterDropdownController = function() {
             if(isMainCategorySelection){
               self.filters[d.subType] = true;
             }else{
-              // toggle whether or not it is selected 
+              // toggle whether or not it is selected
               self.filters[d.subType] = !curSelection;
             }
 
