@@ -60,9 +60,11 @@ let modalController = function() {
 
     if (searchData.length === 0) {
       self.counter.classed("searchCountEmpty", true);
+      d3.select(self.counter.node().parentNode).classed("searchCountEmpty", true);
     } 
     else {
-     self.counter.classed("searchCountEmpty", false);
+      self.counter.classed("searchCountEmpty", false);
+     d3.select(self.counter.node().parentNode).classed("searchCountEmpty", false);
     }
 
   }

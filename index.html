@@ -80,7 +80,7 @@
                           Select Services
                           <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" role="menu" id="filterDropdownList" style="width:100%"></ul>
+                        <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul>
                       </div>
                       <div class="col-md-6">
                       <!-- Choose a a nearby location  -->
@@ -92,18 +92,11 @@
                     </div>
                     <br>Or search for a specific organization.
 
-                    <div class="input-group">
-                      <div class="input-group-btn">
-                        <button class="btn searchCount" disabled id="modalSearchCount">
-                          0
-                        </button>
-            </div>
-            <input type="text" class="form-control" placeholder="Search by Org. Name" id="modalSearchInput">
-          </div>
-          <br>
-
-          <div id="acceptModal">
-            <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
+                    <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
+                    <br>
+                    <span class="label label-default" style="font-size:inherit"><span id="modalSearchCount">0</span> organization(s) found.</span>
+                    <div id="acceptModal">
+                      <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
                         Start <span class="glyphicon glyphicon-log-out"></span>
                       </button>
           </div>
@@ -166,7 +159,7 @@
               </span>
               Clear Selection
             </button>
-            <ul class="dropdown-menu" role="menu" id="filterDropdownList" style="width:100%">
+            <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%">
 
             </ul>
           </div>
