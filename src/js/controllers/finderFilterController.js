@@ -22,7 +22,7 @@ let FilterDropdownController = function() {
   function init() {}
 
   function attachAllServicesButton(id) {
-    self.allServicesButton = d3.select(id)
+    self.allServicesButton = d3.selectAll(id)
       .on('click', resetFilters)
   }
 
@@ -38,7 +38,7 @@ let FilterDropdownController = function() {
     self.filterDropdownList.selectAll(".glyphicon")
       .attr("class", "glyphicon glyphicon-unchecked");
 
-    self.allServicesButton.select('#currentServiceSelection').text("Clear Selection");
+    self.allServicesButton.selectAll('#currentServiceSelection').text("Clear Selection");
     self.allServicesButton.attr('disabled',true);
 
     filtersUpdated();
@@ -112,7 +112,7 @@ let FilterDropdownController = function() {
               selected = true;
             }
 
-            self.allServicesButton.select('#currentServiceSelection').text(`Clear Selection: ${c1}`);
+            self.allServicesButton.selectAll('#currentServiceSelection').text(`Clear Selection: ${c1}`);
             self.allServicesButton.attr('disabled', null);
 
             updateMainCategoryIcon(c1);
@@ -175,7 +175,7 @@ let FilterDropdownController = function() {
               self.filters[d.subType] = !curSelection;
             }
 
-            self.allServicesButton.select('#currentServiceSelection').text(`Clear Selection: ${_.truncate(d.subType,{length: 20})}`);
+            self.allServicesButton.selectAll('#currentServiceSelection').text(`Clear Selection: ${_.truncate(d.subType,{length: 20})}`);
             self.allServicesButton.attr('disabled', null);
 
             updateSubCategoryIcon(d.subType);

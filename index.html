@@ -76,12 +76,31 @@
                       <div class="col-md-6" style="margin-top:15px;">
                       <!-- Choose a social service -->
 
-                        <button type="button" class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown">
+                        <!-- <button type="button" class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown">
                           Select Services
                           <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul>
+                        <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul> -->
+
+                        <div class="btn-group" id="filterButtonGroup">
+                          <div class="btn-group btn-block" id="selectServicesButton">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                              Select Services <span class="caret"></span>
+                            </button>
+                            <!-- <ul class="dropdown-menu" role="menu" id="filterDropdownList"> </ul>-->
+                             <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul> 
+                          </div>
+                          
+                          <button type="button" class="btn btn-danger" disabled id="allServicesButton">
+                            <span class="glyphicon glyphicon-remove"></span>
+                            <span id="currentServiceSelection">Clear Selection</span>
+                          </button>
+                          <!-- <div class="btn-group">
+                          </div> -->
+                           <!-- <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul>  -->
+                        </div>
                       </div>
+                      
                       <div class="col-md-6" style="margin-top:15px;">
                       <!-- Choose a a nearby location  -->
                         <div class="input-group">
@@ -156,9 +175,7 @@
               </ul>
             </div>
             <button type="button" class="btn btn-danger navbar-btn" disabled id="allServicesButton">
-              <span class="glyphicon glyphicon-remove">
-
-              </span>
+              <span class="glyphicon glyphicon-remove"></span>
               <span id="currentServiceSelection">Clear Selection</span>
             </button>
             <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%">
