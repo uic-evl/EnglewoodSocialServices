@@ -13,7 +13,7 @@ let FilterDropdownController = function() {
     mainStateToIcon: {
       "none": "glyphicon-unchecked",
       "some": "glyphicon-plus",
-      "all": "glyphicon-ok"
+      "all": "glyphicon-check"
     }
   };
 
@@ -206,7 +206,7 @@ let FilterDropdownController = function() {
     let state = self.filters[category];
 
     item.select(".glyphicon")
-        .attr("class", "glyphicon " + (state ? "glyphicon-ok" : "glyphicon-unchecked"));
+        .attr("class", "glyphicon " + (state ? "glyphicon-check" : "glyphicon-unchecked"));
   }
 
   function filtersUpdated() {
