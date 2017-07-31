@@ -29,6 +29,14 @@
           transition: @arguments;
 }
 
+.btn-gradient(@direction, @c0, @c1, @c2) {
+  // background: red; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(@direction, @c0, @c1, @c2); /* For Safari 5.1 to 6.0 */
+  background:    -moz-linear-gradient(@direction, @c0, @c1, @c2); /* For Firefox 3.6 to 15 */
+  background:      -o-linear-gradient(@direction, @c0, @c1, @c2); /* For Opera 11.1 to 12.0 */
+  background:         linear-gradient(@direction, @c0, @c1, @c2); /* Standard syntax */
+}
+
 .container-fluid,
 body,
 html {
@@ -236,7 +244,7 @@ html {
   }
 }
 
-.serviceSubtype{
+.serviceSubtype {
   a {
     .glyphicon-unchecked {
       color: gray;
@@ -400,22 +408,22 @@ html {
   .modal-header {
     background-color: #E5ECEA;
   }
-  .modal-title{
+  .modal-title {
     text-align: center;
     font-family: 'Zilla Slab', sans-serif;
   }
-  .modal-body{
+  .modal-body {
     font-family: 'Open Sans', sans-serif;
   }
-  .modal-footer{
+  .modal-footer {
     background-color: #E5ECEA;
     font-family: 'Open Sans', sans-serif;
   }
 }
 
-#topBar{
+#topBar {
   background-color: #E5ECEA;
-  .navbar-brand{
+  .navbar-brand {
     font-family: 'Zilla Slab', sans-serif;
     font-size: 145%;
   }
@@ -424,58 +432,66 @@ html {
 
 /* Popup container */
 .popup {
-    position: relative;
-    z-index: 100;
-    display: inline-block;
-    cursor: pointer;
+  position: relative;
+  z-index: 100;
+  display: inline-block;
+  cursor: pointer;
 }
 
 /* The actual popup (appears on bottom) */
 .popup .popuptext {
-    visibility: hidden;
-    text-align: left;
-    width: 250px;
-    background-color: #555;
-    color: #fff;
-    border-radius: 6px;
-    padding: 8px 0;
-    position: absolute;
-    z-index: 1;
-    top: 125%;
-    left: 50%;
-    margin-left: -80px;
+  visibility: hidden;
+  text-align: left;
+  width: 250px;
+  background-color: #555555;
+  color: #FFFFFF;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  margin-left: -80px;
 }
 
 /* Popup arrow */
 .popup .popuptext::after {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 35%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 35%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555555 transparent transparent transparent;
 }
 
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
 .popup .show {
-    visibility: visible;
-    -webkit-animation: fadeIn 1s;
-    animation: fadeIn 1s
-    // -webkit-animation: fadeOut 10s;
-    // animation: fadeOut 10s
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+          animation: fadeIn 1s;
+  // -webkit-animation: fadeOut 10s;
+  // animation: fadeOut 10s
 }
 
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity:1 ;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1 ;
+  }
 }
 
 // /* Add animation (fade out the popup) */
@@ -494,11 +510,11 @@ html {
 @hover-panel: #337AB7;
 
 #modalDivider {
-  margin-top:15px;
-  margin-bottom:15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   div {
     hr {
-      margin-top:10px;
+      margin-top: 10px;
     }
   }
   .divider-text {
@@ -508,14 +524,47 @@ html {
     .divider-text {
       margin: 0;
     }
-  } 
+  }
 }
 
-.modal-body>.row>.col-md-6 {
-  #filterButtonGroup{
+.modal-body > .row > .col-md-6 {
+  #filterButtonGroup {
     width: 100%;
-    #selectServicesButton,#allServicesButton {
+    #selectServicesButton,
+    #allServicesButton {
       width: 50%;
     }
   }
+}
+
+@success: #5CB85C;
+@success-shade: shade(@success, 25%);
+@primary: #337AB7;
+@primary-shade: shade(@primary, 25%);
+@info: #5BC0DE;
+@info-shade: shade(@info, 25%);
+@warning: #f0ad4e;
+@warning-shade: shade(@warning, 25%);
+@danger: #d9534f;
+@danger-shade: shade(@danger, 25%);
+
+
+.btn-success {
+  .btn-gradient(to top, @success-shade, @success, @success-shade);
+}
+
+.btn-primary {
+  .btn-gradient(to top, @primary-shade, @primary, @primary-shade);
+}
+
+.btn-info {
+  .btn-gradient(to top, @info-shade, @info, @info-shade);
+}
+
+.btn-warning {
+  .btn-gradient(to top, @warning-shade, @warning, @warning-shade);
+}
+
+.btn-danger {
+  .btn-gradient(to top, @danger-shade, @danger, @danger-shade);
 }
