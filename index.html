@@ -70,10 +70,10 @@
                   <h2 class="modal-title">Englewood Social Service Finder</h2>
                 </div>
                 <div class="modal-body">
-                    Choose a social service on the left and a nearby location (such as an address, intersection or landmark) on the right.<br>
+                    <!-- Choose a social service on the left and a nearby location (such as an address, intersection or landmark) on the right.<br> -->
 
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-6" style="margin-top:15px;">
                       <!-- Choose a social service -->
 
                         <button type="button" class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown">
@@ -82,7 +82,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-toggle disabled" role="menu" id="filterDropdownList" style="width:100%"></ul>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6" style="margin-top:15px;">
                       <!-- Choose a a nearby location  -->
                         <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
@@ -90,7 +90,13 @@
                         </div>
                       </div>
                     </div>
-                    <br>Or search for a specific organization.
+                    <!-- <br>Or search for a specific organization. -->
+
+                    <div class="row text-center" id="modalDivider">
+                      <div class="col-md-4"><hr></div>
+                      <div class="col-md-4 divider-text">Or</div>
+                      <div class="col-md-4"><hr></div>
+                    </div>
 
                     <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
                     <br>
