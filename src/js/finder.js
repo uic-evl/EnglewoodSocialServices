@@ -4,6 +4,7 @@ var App = App || {};
 
 let documentPromise = new Promise(function(resolve, reject) {
   $(document).ready(function() {
+    $('[data-toggle="popover"]').popover(); //needed for tooltip on landing page
     resolve();
   });
 });

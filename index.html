@@ -47,13 +47,13 @@
   <script src="./src/js/finder.js"></script>
 </head>
 
-<body onload="$('#landing-page').modal({ backdrop: 'static', keyboard: false });">
+<body onload="$('#landing-page').modal({ backdrop: 'static', keyboard: false }); ">
   <script>
     // When the user clicks on <div>, open the popup
-    function myFunction() {
-      var popup = document.getElementById("myPopup");
-      popup.classList.toggle("show");
-    }
+    // function myFunction() {
+    //   var popup = document.getElementById("myPopup");
+    //   popup.classList.toggle("show");
+    // }
   </script>
 
   <div id="landing-page" class="modal fade">
@@ -61,10 +61,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <!-- help popup -->
-          <div class="popup" onclick="myFunction()"><span class="glyphicon glyphicon-question-sign"></span>
-            <span class="popuptext" id="myPopup"> Select a category, or enter an address, or search by organization name, then press "Next".
-                  </span>
-                </div>
+            <a href="#" title="Instructions" data-toggle="popover" data-trigger="focus" data-content="Select a category, or enter an address, or search by organization name, then press 'Next'."><span class="glyphicon glyphicon-question-sign"></span></a>
                   <h2 class="modal-title">Englewood Social Service Finder</h2>
                 </div>
                 <div class="modal-body">
