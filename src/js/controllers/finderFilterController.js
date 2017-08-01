@@ -112,7 +112,7 @@ let FilterDropdownController = function() {
               selected = true;
             }
 
-            self.allServicesButton.selectAll('#currentServiceSelection').text(`Clear Selection: ${c1}`);
+            self.allServicesButton.selectAll('#currentServiceSelection').text(`${c1}`);
             self.allServicesButton.attr('disabled', null);
 
             updateMainCategoryIcon(c1);
@@ -175,7 +175,7 @@ let FilterDropdownController = function() {
               self.filters[d.subType] = !curSelection;
             }
 
-            self.allServicesButton.selectAll('#currentServiceSelection').text(`Clear Selection: ${_.truncate(d.subType,{length: 20})}`);
+            self.allServicesButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 20})}`);
             self.allServicesButton.attr('disabled', null);
 
             updateSubCategoryIcon(d.subType);
