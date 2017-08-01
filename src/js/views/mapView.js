@@ -107,12 +107,30 @@ let MapView = function(div) {
             data: loc
           }
         ).bindPopup(function(layer) { // allow for the popup on click with the name of the location
+          let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
+          let match = phoneRegex.exec(loc["Contact Phone Number"]);
+          let matches = [];
+
+          while (match != null) {
+              matches.push(match.slice(1, 5));
+              match = phoneRegex.exec(loc["Contact Phone Number"]);
+          }
+
+          matches = matches.map((num) => {
+            let phone = num.slice(0, 3).join("-");
+            if (num[3]) {
+              return [phone, num[3]].join(" ");
+            }
+
+            return phone;
+          });
+
           return "<strong>" + loc["Organization Name"] + "</strong><br>" +
             loc["Description of Services Provided in Englewood"] + "<br><br>" +
             "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
             "<span class='glyphicon glyphicon-share-alt'></span> " + loc["Address"] + "</a></strong><br>" +
-            (loc["Contact Phone Number"] ?
-              ("<span class='glyphicon glyphicon-earphone'></span> " + loc["Contact Phone Number"] + "</a></strong><br>") : "") +
+            (matches.length ?
+              ("<span class='glyphicon glyphicon-earphone'></span> " + matches.join(" or ") + "</a></strong><br>") : "") +
             (loc["Website"] ?
               ("<strong><a href='" + loc["Website"] + "'target='_blank'>" +
                 "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
