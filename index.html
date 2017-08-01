@@ -71,7 +71,6 @@
                 </div>
                 <div class="modal-body">
                     <!-- Choose a social service on the left and a nearby location (such as an address, intersection or landmark) on the right.<br> -->
-
                     <div class="row">
                       <div class="col-md-6" style="margin-top: 15px;">
                       <!-- Choose a social service -->
@@ -80,7 +79,6 @@
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                               Select Services <span class="caret"></span>
                             </button>
-                            <!-- <ul class="dropdown-menu" role="menu" id="filterDropdownList"> </ul> -->
                              <ul class="dropdown-menu dropdown-toggle" role="menu" id="filterDropdownList"></ul>
                           </div>
 
@@ -88,8 +86,6 @@
                             <span class="glyphicon glyphicon-remove"></span>
                             <span id="currentServiceSelection">Clear Selection</span>
                           </button>
-                          <!-- <div class="btn-group">
-                          </div> -->
                         </div>
                       </div>
 
@@ -114,7 +110,7 @@
                     <span class="label label-default" style="font-size:inherit"><span id="modalSearchCount">0</span> organization(s) found.</span>
                     <div id="acceptModal">
                       <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
-                        Start <span class="glyphicon glyphicon-log-out"></span>
+                        Next <span class="glyphicon glyphicon-log-out"></span>
                       </button>
           </div>
 
@@ -141,69 +137,11 @@
   </div>
   <nav class="navbar navbar-default navbar-fixed-top" id="topBar">
     <div class="container-fluid">
-      <div class="row nav-row">
+      <!-- <div class="row nav-row"> -->
         <div class="navbar-header">
-          <a class="navbar-brand">Englewood Social Service Finder</a>
-          <!-- <button type="button" class="navbar-toggle" data-toggle="modal" data-target="#landing-page"> -->
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingMenu">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-          <!-- <ul class="nav navbar-nav navbar-right">
-            <li><a href="about.html"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
-          </ul> -->
-      </div>
-      <div class="row nav-row">
-        <div class="navbar-left navbar-collapse collapse" id="collapsingMenu">
-          <div class="nav btn-group" id="filterButtonGroup">
-            <div class="btn-group btn-block">
-              <button type="button" class="btn btn-primary dropdown-toggle navbar-btn btn-block" data-toggle="dropdown">
-                Select Services
-                <span class="caret">
-
-                </span>
-              </button>
-              <ul class="dropdown-menu" role="menu" id="filterDropdownList">
-
-              </ul>
-            </div>
-            <button type="button" class="btn btn-warning navbar-btn" disabled id="allServicesButton">
-              <span class="glyphicon glyphicon-remove"></span>
-              <span id="currentServiceSelection">Clear Selection</span>
-            </button>
-          </div>
-
-          <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal"
-            id="locationModalButton">
-          <span class="glyphicon glyphicon-map-marker"></span>
-          Search From Specific Location
-        </button>
-
-          <div class="navbar-form navbar-left">
-            <div class="input-group">
-              <!-- <div class="input-group-btn">
-            <button class="btn searchCount" disabled id="searchCount">
-            5
-          </button>
-        </div> -->
-              <input type="text" class="form-control" placeholder="Search by Org. Name" id="searchInput">
-              <div class="input-group-btn">
-                <button class="btn btn-default" type="submit" id="searchButton">
-                  <i class="glyphicon glyphicon-search">
-
-                  </i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-
+          <a class="navbar-brand" data-toggle="modal" data-target="#landing-page" id="pageTitle">Englewood Social Service Finder</a>
         </div>
 
-      </div>
-      <div class="row nav-row">
         <button class="btn btn-success navbar-btn" id="toggleHideServicesButton">
           <span class="glyphicon glyphicon-eye-open">
           </span>
@@ -222,8 +160,6 @@
             </div>
           </div>
         </div>
-      </div>
-
     </div>
   </nav>
 
