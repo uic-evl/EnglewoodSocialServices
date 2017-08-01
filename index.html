@@ -48,14 +48,6 @@
 </head>
 
 <body onload="$('#landing-page').modal({ backdrop: 'static', keyboard: false }); ">
-  <script>
-    // When the user clicks on <div>, open the popup
-    // function myFunction() {
-    //   var popup = document.getElementById("myPopup");
-    //   popup.classList.toggle("show");
-    // }
-  </script>
-
   <div id="landing-page" class="modal fade">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -125,7 +117,7 @@
     <div class="container-fluid">
       <!-- <div class="row nav-row"> -->
         <div class="navbar-header">
-          <a class="navbar-brand" data-toggle="modal" data-target="#landing-page" id="pageTitle">Englewood Social Service Finder</a>
+          <a class="navbar-brand" data-toggle="modal" data-target="#landing-page" id="pageTitle"><span class="glyphicon glyphicon-circle-arrow-left"></span> Englewood Social Service Finder</a>
         </div>
 
         <button class="btn btn-success navbar-btn" id="toggleHideServicesButton">
