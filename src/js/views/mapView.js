@@ -199,7 +199,9 @@ let MapView = function(div) {
     });
 
     if (service) {
-      self.map.setView([Number(service.Y) + (L.Browser.mobile ? 0.003 : 0), service.X], 16);
+      let lat = Number(service.Y) + (L.Browser.mobile ? 0.003 : 0);
+      let lng = Number(service.X) - (+d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
+      self.map.setView([lat, lng], 16);
     }
   }
 
