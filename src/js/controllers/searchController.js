@@ -36,18 +36,7 @@ let SearchController = function() {
 
     let searchData = App.models.socialServices.getSearchedData(searchTerm);
 
-    // get number of elements in search
-    self.counter.html(searchData.length);
-
-    // uncomment if update on any text entry
-    // App.views.map.updateServicesWithFilter(searchData);
-    // App.views.serviceList.populateList(searchData);
-
-    if (searchData.length === 0) {
-      self.counter.classed("searchCountEmpty", true);
-    } else {
-      self.counter.classed("searchCountEmpty", false);
-    }
+    countChanged(searchData);
 
     if (self.lastSearchedTerm !== _.lowerCase(searchTerm)) {
       self.button.attr("class", "btn btn-success")
@@ -55,6 +44,16 @@ let SearchController = function() {
     } else {
       self.button.attr("class", "btn btn-default")
         .attr("disabled", true);
+    }
+  }
+
+  function countChanged(data) {
+    self.counter.html(data.length);
+
+    if (data.length === 0) {
+      self.counter.classed("searchCountEmpty", true);
+    } else {
+      self.counter.classed("searchCountEmpty", false);
     }
   }
 
@@ -78,10 +77,14 @@ let SearchController = function() {
     }
   }
 
+  function updateCounter() {
+
+  }
+
   return {
     attachDOMElements,
 
     setCount,
-    onInput
+    countChanged
   };
 };

@@ -39,7 +39,6 @@ let modalController = function() {
           // hitting enter in the input is equivalent to pressing accept button
           acceptButtonClicked();
           $('#landing-page').modal('hide');
-
         }
       });
 
@@ -72,22 +71,22 @@ let modalController = function() {
   function acceptButtonClicked(){
 
     var address = self.addressInput.node().value;
-    if(address.length != 0){
+    if(address.length !== 0){
       App.controllers.locationButton.getLatLngFromAddress(address);
     }
 
     let orgSearchText = self.orgSearchInput.node().value;
-    if(orgSearchText.length != 0){
-      let searchTerm = _.lowerCase(orgSearchText);
 
-      let searchData = App.models.socialServices.getSearchedData(searchTerm);
+    let searchTerm = _.lowerCase(orgSearchText);
 
-      App.views.map.updateServicesWithFilter(searchData);
-      App.views.serviceList.populateList(searchData);
+    let searchData = App.models.socialServices.getSearchedData(searchTerm);
 
-      d3.select("#searchInput").node().value = orgSearchText;
-      App.controllers.search.onInput();
-    }
+    App.views.map.updateServicesWithFilter(searchData);
+    App.views.serviceList.populateList(searchData);
+
+    // d3.select("#searchInput").node().value = orgSearchText;
+    App.controllers.search.countChanged(searchData);
+
 
   }
 
