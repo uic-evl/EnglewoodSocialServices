@@ -258,8 +258,8 @@ let FilterDropdownController = function() {
     App.views.map.updateServicesWithFilter(filteredData);
     App.views.serviceList.populateList(filteredData);
 
-    App.controllers.search.setCount(filteredData.length);
-    App.controllers.modal.setCount(filteredData.length);
+    App.controllers.search.countChanged(filteredData);
+    App.controllers.modal.countChanged(filteredData);
   }
 
   return {

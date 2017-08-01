@@ -54,10 +54,14 @@ let modalController = function() {
 
     let searchData = App.models.socialServices.getSearchedData(searchTerm);
 
-    // get number of elements in search
-    self.counter.html(searchData.length);
+    countChanged(searchData);
+  }
 
-    if (searchData.length === 0) {
+  function countChanged(data) {
+    // get number of elements in search
+    self.counter.html(data.length);
+
+    if (data.length === 0) {
       self.counter.classed("searchCountEmpty", true);
       d3.select(self.counter.node().parentNode).classed("searchCountEmpty", true);
     }
@@ -65,7 +69,6 @@ let modalController = function() {
       self.counter.classed("searchCountEmpty", false);
      d3.select(self.counter.node().parentNode).classed("searchCountEmpty", false);
     }
-
   }
 
   function acceptButtonClicked(){
@@ -93,6 +96,7 @@ let modalController = function() {
   initalize();
 
   return {
-    setCount
+    setCount,
+    countChanged
   };
 };
