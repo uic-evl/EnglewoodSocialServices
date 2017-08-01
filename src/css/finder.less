@@ -545,10 +545,18 @@ html {
   border-bottom: 1.25px solid shade(rgb(219,219,219), 5%);
   .box-shadow(0px 2px 10px rgba(0,0,0,0.5));
 
-  .navbar-brand {
+  #pageTitle {
     font-family: 'Zilla Slab', sans-serif;
-    font-size: 145%;
+    font-size: 150%;
   }
+
+  #icon {
+    font-size: 80%;
+    color: @c;
+    @c: spin(saturate(#777, 25%), 220);
+    
+  }
+
   font-family: 'Open Sans', sans-serif;
 }
 
