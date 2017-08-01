@@ -2,7 +2,6 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 // Allow for simple border-radius declaration
-
 .border-radius (@radius:5px) {
   -webkit-border-radius: @radius;
      -moz-border-radius: @radius;
@@ -30,7 +29,7 @@
 }
 
 .btn-gradient(@direction, @c0, @c1, @c2) {
-  // background: red; /* For browsers that do not support gradients */
+  background: @c1; /* For browsers that do not support gradients */
   background: -webkit-linear-gradient(@direction, @c0, @c1, @c2); /* For Safari 5.1 to 6.0 */
   background:    -moz-linear-gradient(@direction, @c0, @c1, @c2); /* For Firefox 3.6 to 15 */
   background:      -o-linear-gradient(@direction, @c0, @c1, @c2); /* For Opera 11.1 to 12.0 */
