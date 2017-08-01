@@ -119,16 +119,6 @@ let MapView = function(div) {
         }).addTo(self.serviceGroup)
         .on("click", function(e) {
           if (this.options.data.visible && App.controllers.listToMapLink) {
-            // let parentDiv = $("#serviceList");
-            // let innerListItem = $(d3.selectAll(".serviceEntry")
-            //   .filter((d) => d["Organization Name"] === this.options.data["Organization Name"]).nodes())
-            //
-            // parentDiv.scrollTop(parentDiv.scrollTop() + (innerListItem.position().top - parentDiv.position().top));
-            //
-            // $(".panel-heading", innerListItem).trigger("click");
-
-            setSelectedService
-
             App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
           } else {
 
@@ -191,7 +181,7 @@ let MapView = function(div) {
     });
 
     if (service) {
-      self.map.setView([service.Y, service.X], 16);
+      self.map.setView([Number(service.Y) + (L.Browser.mobile ? 0.003 : 0), service.X], 16);
     }
   }
 
