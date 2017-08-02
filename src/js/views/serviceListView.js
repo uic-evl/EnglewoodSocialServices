@@ -61,7 +61,7 @@ let ServiceListView = function(listID) {
 
         // create heading
         let panelHeading = panel.append("div")
-          .attr("class", "panel-heading")
+          .attr("class", "panel-heading collapsed")
           .attr("data-parent", "#accordion")
           .attr("data-toggle", "collapse")
           .attr("href", `#service${i}collapse`)

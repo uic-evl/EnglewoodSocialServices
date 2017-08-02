@@ -76,8 +76,7 @@ html {
   text-align: center;
 
   &:hover {
-    @c: spin(saturate(#777, 25%), 220);
-
+    @c: spin(saturate(#777777, 25%), 220);
     font-weight: bold;
     color: @c;
   }
@@ -440,8 +439,27 @@ html {
     margin-top: 2px;
   }
 
-  .panel-heading:hover {
+  .panel-heading {
     cursor: pointer;
+    position: relative;
+
+    &:after {
+      display: inline-block;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-family: 'Glyphicons Halflings';
+      content: '\e080';
+
+      .transform(rotate(-90deg));
+      // .transition(~"transform 0.5s, -moz-transform 0.5s, -webkit-transform 0.5s");
+    }
+
+    &.collapsed {
+      &:after {
+        .transform(rotate(90deg));
+      }
+    }
   }
 
   .panel-footer {
@@ -553,8 +571,7 @@ html {
   #icon {
     font-size: 80%;
     color: @c;
-    @c: spin(saturate(#777, 25%), 220);
-    
+    @c: spin(saturate(#777777, 25%), 220);
   }
 
   font-family: 'Open Sans', sans-serif;
