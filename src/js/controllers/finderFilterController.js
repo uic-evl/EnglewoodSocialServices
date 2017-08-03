@@ -188,7 +188,7 @@ let FilterDropdownController = function() {
 
             if (self.filters[d.subType]) {
               // self.allServicesButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 20})}`);
-              self.filterDropdownButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 20})}`);
+              self.filterDropdownButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 30})}`);
               self.filterDropdownButton.attr("class", "btn btn-success dropdown-toggle");
 
               self.allServicesButton.attr('disabled', null);
