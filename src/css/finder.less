@@ -74,7 +74,6 @@ html {
   cursor: pointer;
   width: 100%;
   text-align: center;
-  position: absolute; /*or fixed*/
     right: 0px;
 
   &:hover {
@@ -86,6 +85,7 @@ html {
   @media (min-width: 768px) {
     text-align: left;
     width: auto;
+    position: absolute; /*or fixed*/
 
     &:after {
       display: none;
@@ -259,6 +259,16 @@ html {
 }
 
 #toggleHideServicesButton {
+  margin-right: 0;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: auto;
+    margin-right: 25px;
+  }
+}
+
+#backToSearchButton {
   margin-right: 0;
   width: 100%;
 
