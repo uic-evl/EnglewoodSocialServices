@@ -59,7 +59,7 @@
         <div class="modal-body">
           <!-- Choose a social service on the left and a nearby location (such as an address, intersection or landmark) on the right.<br> -->
           <div class="row">
-            <div class="col-md-6" style="margin-top: 15px;">
+            <div class="col-md-5" style="margin-top: 15px;">
               <!-- Choose a social service -->
               <div class="btn-group btn-group-justified" id="modalFilterBtnGroup">
                 <div class="btn-group btn-block" id="selectServicesButton">
@@ -75,8 +75,10 @@
                 </button>
               </div>
             </div>
-
-            <div class="col-md-6" style="margin-top: 15px;">
+            <div class="col-md-2 text-center" style="margin-top: 25px;">
+              around...
+            </div>
+            <div class="col-md-5" style="margin-top: 15px;">
               <!-- Choose a a nearby location  -->
               <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
@@ -86,11 +88,7 @@
           </div>
           <!-- <br>Or search for a specific organization. -->
 
-          <div class="row text-center" id="modalDivider">
-            <div class="col-md-4"><hr></div>
-            <div class="col-md-4 divider-text">Or</div>
-            <div class="col-md-4"><hr></div>
-          </div>
+          <hr>
 
           <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
           <br>
