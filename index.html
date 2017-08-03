@@ -84,7 +84,7 @@
             <div class="col-md-5" style="margin-top: 15px;">
               <!-- Choose a a nearby location  -->
               <div class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
                 <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
               </div>
             </div>
@@ -92,10 +92,12 @@
           <!-- <br>Or search for a specific organization. -->
 
           <hr>
-
-          <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="	glyphicon glyphicon-briefcase"></i></span>
+            <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
+          </div>
           <br>
-          <span class="label label-default" style="font-size:inherit"><span id="modalSearchCount">0</span>          organization(s) found.</span>
+          <span class="btn btn-text-emphasis" style=""><span id="modalSearchCount">0</span>          organization(s) found.</span>
           <div id="acceptModal">
             <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
               Next <span class="glyphicon glyphicon-log-out"></span>
