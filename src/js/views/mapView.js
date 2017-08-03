@@ -306,6 +306,14 @@ let MapView = function(div) {
     drawLocationMarker(position);
   }
 
+  function clearLocation(){
+    if (self.currentLocationMarker != undefined)
+      self.map.removeLayer(self.currentLocationMarker);
+
+    self.map.setView([41.779786, -87.644778], 15);
+
+  }
+
   return {
     createMap,
     plotServices,
@@ -318,6 +326,7 @@ let MapView = function(div) {
 
     drawChoropleth,
 
-    jumpToLocation
+    jumpToLocation,
+    clearLocation
   };
 };

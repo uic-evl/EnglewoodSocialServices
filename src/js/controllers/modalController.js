@@ -77,6 +77,11 @@ let modalController = function() {
     if(address.length !== 0){
       App.controllers.locationButton.getLatLngFromAddress(address);
     }
+    else if(address.length ==0){
+      // self.map.setView([41.779786, -87.644778], 15);
+      // console.log(App.views.map);
+      App.views.map.clearLocation();
+    }
 
     let orgSearchText = self.orgSearchInput.node().value;
 
