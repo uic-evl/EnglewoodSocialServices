@@ -47,132 +47,149 @@ let ServiceListView = function(listID) {
 
   function populateList(englewoodLocations) {
 
+    let knownNames = englewoodLocations.map((d) => { return d["Organization Name"]; });
+    // console.log(knownNames);
+
     //remove previous entries
-    self.serviceList.selectAll(".serviceEntry").remove();
+    // self.serviceList.selectAll(".serviceEntry").remove();
 
-    //add new entries
-    self.serviceList.selectAll(".serviceEntry")
-      .data(englewoodLocations)
-      .enter()
-      .append("div").attr("class", "panel panel-info serviceEntry")
-      .each(function(d, i) {
-        let panel = d3.select(this);
-        let theseSubCategories = App.models.serviceTaxonomy.getAllTier2Categories().filter(c => d[c] == 1);
+    let selection = self.serviceList.selectAll(".serviceEntry");
+    if(selection.empty()){
+      //add new entries
+      console.log("Populating service list");
+      selection.data(englewoodLocations)
+        .enter()
+        .append("div").attr("class", "panel panel-info serviceEntry")
+        .each(function (d, i) {
+          let panel = d3.select(this);
+          let theseSubCategories = App.models.serviceTaxonomy.getAllTier2Categories().filter(c => d[c] == 1);
 
-        // create heading
-        let panelHeading = panel.append("div")
-          .attr("class", "panel-heading collapsed")
-          .attr("data-parent", "#accordion")
-          .attr("data-toggle", "collapse")
-          .attr("href", `#service${i}collapse`)
-          .on("click", function(d) {
-            let expanded = !panel.selectAll(".collapse").classed("in");
+          // create heading
+          let panelHeading = panel.append("div")
+            .attr("class", "panel-heading collapsed")
+            .attr("data-parent", "#accordion")
+            .attr("data-toggle", "collapse")
+            .attr("href", `#service${i}collapse`)
+            .on("click", function (d) {
+              let expanded = !panel.selectAll(".collapse").classed("in");
 
-            self.serviceList.selectAll(".serviceEntry").classed("opened", false);
-            panel.classed("opened", expanded);
+              self.serviceList.selectAll(".serviceEntry").classed("opened", false);
+              panel.classed("opened", expanded);
 
-            App.controllers.listToMapLink.listServiceSelected(expanded ? d : null);
-          });
+              App.controllers.listToMapLink.listServiceSelected(expanded ? d : null);
+            });
 
-        // create body
-        let panelBody = panel.append("div")
-          .attr("class", "panel-collapse collapse")
-          .attr("id", `service${i}collapse`)
-          .append("div")
-          .attr("class", "panel-body");
+          // create body
+          let panelBody = panel.append("div")
+            .attr("class", "panel-collapse collapse")
+            .attr("id", `service${i}collapse`)
+            .append("div")
+            .attr("class", "panel-body");
 
-        // create footer
-        let panelFooter = panel.append("div")
-          .attr("class", "panel-footer");
+          // create footer
+          let panelFooter = panel.append("div")
+            .attr("class", "panel-footer");
 
-        // add organization name to heading
-        panelHeading.append("h4")
-          .attr("class", "orgName")
-          .text(function(d) {
-            return d["Organization Name"];
-          })
-        .append("small")
-          .attr("class", "type")
-          .text(function(d) {
-            return _.startCase(d["Type of Organization"]);
-          });
-        // .append("small")
-        //   .attr("class", "serviceDistance")
-        //   .html(function(d) {
-        //     let theseMainCategories = App.models.serviceTaxonomy.getTier1CategoriesOf(theseSubCategories);
-        //
-        //     return "<br>" + theseMainCategories.join(", ");
-        //   });
+          // add organization name to heading
+          panelHeading.append("h4")
+            .attr("class", "orgName")
+            .text(function (d) {
+              return d["Organization Name"];
+            })
+            .append("small")
+            .attr("class", "type")
+            .text(function (d) {
+              return _.startCase(d["Type of Organization"]);
+            });
+          // .append("small")
+          //   .attr("class", "serviceDistance")
+          //   .html(function(d) {
+          //     let theseMainCategories = App.models.serviceTaxonomy.getTier1CategoriesOf(theseSubCategories);
+          //
+          //     return "<br>" + theseMainCategories.join(", ");
+          //   });
 
-        if (self.currentLocation) {
-          sortLocations(self.currentLocation);
-        }
+          // add description to body
+          panelBody.append("p")
+            .attr("class", "description")
+            .text(function (d) {
+              return d["Description of Services Provided in Englewood"];
+            });
 
-        // add description to body
-        panelBody.append("p")
-          .attr("class", "description")
-          .text(function(d) {
-            return d["Description of Services Provided in Englewood"];
-          });
+          panelBody.append("p")
+            .attr("class", "categories")
+            .text(function (d) {
+              return theseSubCategories.join(", ");
+            });
 
-        panelBody.append("p")
-          .attr("class", "categories")
-          .text(function(d) {
-            return theseSubCategories.join(", ");
-          });
+          // panelBody.append("p")
+          //   .attr("class", "proximity")
+          //   .text(function(d) {
+          //     return d["Proximity to Englewood"];
+          //   });
 
-        // panelBody.append("p")
-        //   .attr("class", "proximity")
-        //   .text(function(d) {
-        //     return d["Proximity to Englewood"];
-        //   });
+          // add link to address in footer
+          panelFooter.append("a")
+            .attr("href", "http://maps.google.com/?q=" + d["Address"])
+            .attr("target", "_blank")
+            .html(function (d) {
+              return "<span class='glyphicon glyphicon-share-alt'></span> " +
+                d["Address"];
+            });
 
-        // add link to address in footer
-        panelFooter.append("a")
-          .attr("href", "http://maps.google.com/?q=" + d["Address"])
-          .attr("target", "_blank")
-          .html(function(d) {
-            return "<span class='glyphicon glyphicon-share-alt'></span> " +
-              d["Address"];
-          });
+          // phone number
+          if (d["Contact Phone Number"]) {
+            let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
+            let match = phoneRegex.exec(d["Contact Phone Number"]);
+            let matches = [];
 
-        // phone number
-        if (d["Contact Phone Number"]) {
-          let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
-          let match = phoneRegex.exec(d["Contact Phone Number"]);
-          let matches = [];
-
-          while (match != null) {
+            while (match != null) {
               matches.push(match.slice(1, 5));
               match = phoneRegex.exec(d["Contact Phone Number"]);
+            }
+
+            if (matches.length) {
+              let numbers = matches.map(connectPhoneNumber);
+              panelFooter.append("p")
+                .html(function (d) {
+                  return "<span class='glyphicon glyphicon-earphone'></span> " +
+                    numbers.join(" or ");
+                });
+              d["Contact Phone Number"] = numbers;
+            }
           }
 
-          if (matches.length) {
-            let numbers = matches.map(connectPhoneNumber);
-            panelFooter.append("p")
-            .html(function(d) {
-              return "<span class='glyphicon glyphicon-earphone'></span> " +
-              numbers.join(" or ");
-            });
-            d["Contact Phone Number"] = numbers;
+          // website
+          if (d["Website"]) {
+            panelFooter.append("a")
+              .attr("href", d["Website"])
+              .attr("target", "_blank")
+              .html(function (d) {
+                return "<span class='glyphicon glyphicon-home'></span> " +
+                  d["Website"];
+                // _.truncate(d["Website"], 20);
+              });
           }
-        }
 
-        // website
-        if (d["Website"]) {
-          panelFooter.append("a")
-          .attr("href", d["Website"])
-          .attr("target", "_blank")
-          .html(function(d) {
-            return "<span class='glyphicon glyphicon-home'></span> " +
-            d["Website"];
-            // _.truncate(d["Website"], 20);
-          });
-        }
+          panelFooter.append("small")
+            .attr("class", "serviceDistance");
+        });
+      }else{
+        console.log("Filtering services");
+        selection
+          .style('display',function(d,i) { 
+            if(knownNames.indexOf(d["Organization Name"]) === -1){
+              return 'none';
+            }else{
+              return null;
+            }
+          })
+      }
 
-        panelFooter.append("small")
-          .attr("class", "serviceDistance");
-      });
+      if (self.currentLocation) {
+        sortLocations(self.currentLocation);
+      }
+
   }
 
   function connectPhoneNumber(arr) {
