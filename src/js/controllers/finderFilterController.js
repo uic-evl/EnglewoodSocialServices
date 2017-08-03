@@ -279,6 +279,8 @@ let FilterDropdownController = function() {
 
     App.controllers.search.countChanged(filteredData);
     App.controllers.modal.countChanged(filteredData);
+
+    App.controllers.modal.changeButtonState();
   }
 
   return {

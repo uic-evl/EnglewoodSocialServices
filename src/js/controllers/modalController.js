@@ -131,6 +131,7 @@ let modalController = function() {
 
   return {
     setCount,
-    countChanged
+    countChanged,
+    changeButtonState
   };
 };
