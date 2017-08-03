@@ -42,10 +42,12 @@
   <script src="./src/js/controllers/listToMapLinkingController.js"></script>
   <script src="./src/js/controllers/searchController.js"></script>
   <script src="./src/js/controllers/modalController.js"></script>
+  <script src="./src/js/controllers/clearButtonController.js"></script>
 
   <!-- Main Script -->
   <script src="./src/js/finder.js"></script>
 </head>
+
 
 <body onload="$('#landing-page').modal({ backdrop: 'static', keyboard: false }); ">
   <div id="landing-page" class="modal fade">
@@ -86,18 +88,20 @@
               <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
                 <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
+                <span class="input-group-addon" id="addressclear"><i class="glyphicon glyphicon-remove-circle"></i></span>
               </div>
             </div>
           </div>
           <!-- <br>Or search for a specific organization. -->
-
           <hr>
           <div class="input-group">
             <span class="input-group-addon"><i class="	glyphicon glyphicon-briefcase"></i></span>
             <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
+            <span class="input-group-addon" id="searchclear"><i class="glyphicon glyphicon-remove-circle"></i></span>
           </div>
           <br>
-          <span class="btn btn-text-emphasis" style=""><span id="modalSearchCount">0</span>          organization(s) found.</span>
+
+          <span class="btn btn-text-emphasis" style="font-size: 90%"><span id="modalSearchCount">0</span>          organization(s) found.</span>
           <div id="acceptModal">
             <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
               Next <span class="glyphicon glyphicon-log-out"></span>
