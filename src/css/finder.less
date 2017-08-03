@@ -54,6 +54,8 @@ html {
 
 .navbar-header {
   text-align: center;
+  float: none;
+  padding: 10px 5px;
 
   &:after {
     display: block;
@@ -63,6 +65,8 @@ html {
 
   @media (min-width: 768px) {
     text-align: left;
+    float: right;
+    padding: 0;
 
     &:after {
       display: none;
@@ -74,7 +78,7 @@ html {
   cursor: pointer;
   width: 100%;
   text-align: center;
-    right: 0px;
+  float: inherit;
 
   &:hover {
     @c: spin(saturate(#777777, 25%), 220);
@@ -85,11 +89,6 @@ html {
   @media (min-width: 768px) {
     text-align: left;
     width: auto;
-    position: absolute; /*or fixed*/
-
-    &:after {
-      display: none;
-    }
   }
 }
 
