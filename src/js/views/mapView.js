@@ -306,6 +306,19 @@ let MapView = function(div) {
     drawLocationMarker(position);
   }
 
+  function jumpToLocationNoMarker(position) {
+    //remove previous circle marker
+    if (self.currentLocationMarker != undefined)
+      self.map.removeLayer(self.currentLocationMarker);
+
+    //move map to new poisition
+    // self.map.setView([position.lat, position.lng], 16);
+
+    let lat = Number(position.lat) + (L.Browser.mobile ? 0.003 : 0);
+    let lng = Number(position.lng) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
+    self.map.setView([lat, lng], 16);
+  }
+
   function clearLocation(){
     if (self.currentLocationMarker != undefined)
       self.map.removeLayer(self.currentLocationMarker);
@@ -327,6 +340,7 @@ let MapView = function(div) {
     drawChoropleth,
 
     jumpToLocation,
-    clearLocation
+    clearLocation,
+    jumpToLocationNoMarker
   };
 };

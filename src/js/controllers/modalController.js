@@ -124,7 +124,24 @@ let modalController = function() {
         App.controllers.locationButton.getLatLngFromAddress(address);
       }
       else if(address.length ==0 ){
-        App.views.map.clearLocation();
+        
+        // var data = App.models.socialServices.getData();
+
+        if(searchData[0].Address != null){
+          // App.controllers.locationButton.getLatLngFromAddress(data[0].Address);
+          var replaced = searchData[0].Address.split(' ').join('+');
+          console.log(replaced);
+
+          var object = d3.json("https://maps.googleapis.com/maps/api/geocode/json?address=" + replaced + "&key=AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI", function(err, d) {
+            let pos = d.results[0].geometry.location;
+
+            App.views.map.jumpToLocationNoMarker(pos);
+          });
+        }
+        else{
+          App.views.map.clearLocation();
+        }
+      
       }
 
       App.views.map.updateServicesWithFilter(searchData);
