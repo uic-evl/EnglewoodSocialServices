@@ -5,6 +5,7 @@ var App = App || {};
 let FilterDropdownController = function() {
   let self = {
     filterDropdownList: null,
+    filterDropdownButton: null,
     allServicesButton: null,
 
     filters: {}, // equivalent to subcategory states
@@ -38,14 +39,18 @@ let FilterDropdownController = function() {
     self.filterDropdownList.selectAll(".glyphicon")
       .attr("class", "glyphicon glyphicon-unchecked");
 
-    self.allServicesButton.selectAll('#currentServiceSelection').text("Clear Selection");
-    self.allServicesButton.attr('disabled',true);
+    self.filterDropdownButton.selectAll('#currentServiceSelection').text("Select Services...");
+    self.filterDropdownButton.attr("class", "btn btn-default dropdown-toggle");
+
+    // self.allServicesButton.selectAll('#currentServiceSelection').text("Clear Selection");
+    // self.allServicesButton.attr('disabled',true);
 
     filtersUpdated();
   }
 
-  function setFilterDropdown(id) {
-    self.filterDropdownList = d3.selectAll(id);
+  function setFilterDropdown(listID, buttonID) {
+    self.filterDropdownList = d3.selectAll(listID);
+    self.filterDropdownButton = d3.selectAll(buttonID);
   }
 
   function populateDropdown() {
@@ -112,8 +117,14 @@ let FilterDropdownController = function() {
               selected = true;
             }
 
-            self.allServicesButton.selectAll('#currentServiceSelection').text(`${c1}`);
-            self.allServicesButton.attr('disabled', null);
+            if (selected) {
+              self.filterDropdownButton.selectAll('#currentServiceSelection').text(`${c1}`);
+              self.filterDropdownButton.attr("class", "btn btn-success dropdown-toggle");
+
+              self.allServicesButton.attr('disabled', null);
+            } else {
+              resetFilters();
+            }
 
             updateMainCategoryIcon(c1);
 
@@ -175,8 +186,16 @@ let FilterDropdownController = function() {
               self.filters[d.subType] = !curSelection;
             }
 
-            self.allServicesButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 20})}`);
-            self.allServicesButton.attr('disabled', null);
+            if (self.filters[d.subType]) {
+              // self.allServicesButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 20})}`);
+              self.filterDropdownButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 20})}`);
+              self.filterDropdownButton.attr("class", "btn btn-success dropdown-toggle");
+
+              self.allServicesButton.attr('disabled', null);
+            } else {
+              resetFilters();
+            }
+
 
             updateSubCategoryIcon(d.subType);
             updateMainCategoryOnSubUpdate(d.mainType);

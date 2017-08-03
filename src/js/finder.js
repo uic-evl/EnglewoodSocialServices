@@ -4,7 +4,6 @@ var App = App || {};
 
 let documentPromise = new Promise(function(resolve, reject) {
   $(document).ready(function() {
-    $('[data-toggle="popover"]').popover(); //needed for tooltip on landing page
     resolve();
   });
 });
@@ -47,12 +46,14 @@ window.onresize = function() {
   App.controllers.search = new SearchController();
 
   App.init = function() {
+    $('[data-toggle="popover"]').popover(); //needed for tooltip on landing page
+
     console.log("Loading Finder");
     App.views.map = new MapView("serviceMap");
     App.views.serviceList = new ServiceListView("#serviceList");
     App.views.serviceList.makeCollapsing("#toggleHideServicesButton", "#serviceListWrapper");
 
-    App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
+    App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList", "#filterDropdownButton");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
 
     App.controllers.locationButton.attachLocationButton("#locationButton");
