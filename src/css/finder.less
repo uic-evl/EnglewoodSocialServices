@@ -74,6 +74,8 @@ html {
   cursor: pointer;
   width: 100%;
   text-align: center;
+  position: absolute; /*or fixed*/
+    right: 0px;
 
   &:hover {
     @c: spin(saturate(#777777, 25%), 220);
@@ -569,11 +571,6 @@ html {
     font-size: 150%;
   }
 
-  #icon {
-    font-size: 80%;
-    color: @c;
-    @c: spin(saturate(#777777, 25%), 220);
-  }
 
   font-family: 'Open Sans', sans-serif;
 }
@@ -651,3 +648,4 @@ html {
 .btn-danger {
   .btn-gradient(to top, @danger-shade, @danger, @danger-shade);
 }
+

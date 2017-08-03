@@ -53,61 +53,63 @@
       <div class="modal-content">
         <div class="modal-header">
           <!-- help popup -->
-            <a href="#" title="Instructions" data-toggle="popover" data-trigger="focus" data-content="Select a category, or enter an address, or search by organization name, then press 'Next'."><span class="glyphicon glyphicon-question-sign"></span></a>
-                  <h2 class="modal-title">Englewood Social Service Finder</h2>
+          <a href="#" title="Instructions" data-toggle="popover" data-trigger="focus" data-content="Select a category, or enter an address, or search by organization name, then press 'Next'."><span class="glyphicon glyphicon-question-sign"></span></a>
+          <h2 class="modal-title">Englewood Social Service Finder</h2>
+        </div>
+        <div class="modal-body">
+          <!-- Choose a social service on the left and a nearby location (such as an address, intersection or landmark) on the right.<br> -->
+          <div class="row">
+            <div class="col-md-6" style="margin-top: 15px;">
+              <!-- Choose a social service -->
+              <div class="btn-group btn-group-justified" id="modalFilterBtnGroup">
+                <div class="btn-group btn-block" id="selectServicesButton">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Select Services <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-toggle" role="menu" id="filterDropdownList"></ul>
                 </div>
-                <div class="modal-body">
-                    <!-- Choose a social service on the left and a nearby location (such as an address, intersection or landmark) on the right.<br> -->
-                    <div class="row">
-                      <div class="col-md-6" style="margin-top: 15px;">
-                      <!-- Choose a social service -->
-                        <div class="btn-group btn-group-justified" id="modalFilterBtnGroup">
-                          <div class="btn-group btn-block" id="selectServicesButton">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                              Select Services <span class="caret"></span>
-                            </button>
-                             <ul class="dropdown-menu dropdown-toggle" role="menu" id="filterDropdownList"></ul>
-                          </div>
 
-                          <button type="button" class="btn btn-warning" disabled id="allServicesButton">
-                            <span class="glyphicon glyphicon-remove"></span>
-                            <span id="currentServiceSelection">Clear Selection</span>
-                          </button>
-                        </div>
-                      </div>
+                <button type="button" class="btn btn-warning" disabled id="allServicesButton">
+                  <span class="glyphicon glyphicon-remove"></span>
+                  <span id="currentServiceSelection">Clear Selection</span>
+                </button>
+              </div>
+            </div>
 
-                      <div class="col-md-6" style="margin-top: 15px;">
-                      <!-- Choose a a nearby location  -->
-                        <div class="input-group">
-                          <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-                          <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
-                        </div>
-                      </div>
-                    </div>
-                    <!-- <br>Or search for a specific organization. -->
+            <div class="col-md-6" style="margin-top: 15px;">
+              <!-- Choose a a nearby location  -->
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+                <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
+              </div>
+            </div>
+          </div>
+          <!-- <br>Or search for a specific organization. -->
 
-                    <div class="row text-center" id="modalDivider">
-                      <div class="col-md-4"><hr></div>
-                      <div class="col-md-4 divider-text">Or</div>
-                      <div class="col-md-4"><hr></div>
-                    </div>
+          <div class="row text-center" id="modalDivider">
+            <div class="col-md-4"><hr></div>
+            <div class="col-md-4 divider-text">Or</div>
+            <div class="col-md-4"><hr></div>
+          </div>
 
-                    <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
-                    <br>
-                    <span class="label label-default" style="font-size:inherit"><span id="modalSearchCount">0</span> organization(s) found.</span>
-                    <div id="acceptModal">
-                      <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
-                        Next <span class="glyphicon glyphicon-log-out"></span>
-                      </button>
+          <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
+          <br>
+          <span class="label label-default" style="font-size:inherit"><span id="modalSearchCount">0</span> organization(s) found.</span>
+          <div id="acceptModal">
+            <button type="button" class="btn btn-success" data-dismiss="modal" id="modalAcceptButton">
+              Next <span class="glyphicon glyphicon-log-out"></span>
+            </button>
           </div>
 
           <br><br>
 
         </div>
 
-        <div class="modal-footer">
-          <a href="./about.html">About</a> ||
-          <a href="./contact.html">Contact</a>
+        <div class="modal-footer"> 
+          <div class="row">
+            <div class="col-md-6 text-left"><a href="./about.html">About</a></div>
+            <div class="col-md-6"><a href="./contact.html">Contact</a></div>
+          </div>
         </div>
 
       </div>
@@ -116,28 +118,30 @@
   <nav class="navbar navbar-default navbar-fixed-top" id="topBar">
     <div class="container-fluid">
       <!-- <div class="row nav-row"> -->
-        <div class="navbar-header">
-                    <a class="navbar-brand" data-toggle="modal" data-target="#landing-page" id="pageTitle"><span class="glyphicon glyphicon-circle-arrow-left" id="icon"></span> Englewood Social Service Finder</a>
-        </div>
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#landing-page">
+        <span class="glyphicon glyphicon-circle-arrow-left" id="icon"></span> Back to Search
+      </button>
 
-        <button class="btn btn-success navbar-btn" id="toggleHideServicesButton">
-          <span class="glyphicon glyphicon-eye-open">
-          </span>
-          Service List
-          <span class="badge" id="searchCount">10</span>
+      <div class="navbar-header">
+        <a class="navbar-brand" data-toggle="modal" data-target="#landing-page" id="pageTitle">Englewood Social Service Finder</a>
+      </div>
 
-        </button>
+      <button class="btn btn-success navbar-btn" id="toggleHideServicesButton">
+        <span class="glyphicon glyphicon-eye-open"></span> Toggle Service List
+        <span class="badge" id="searchCount">10</span>
+      </button>
 
-        <div class="dropdown-menu" role="menu" id="serviceListWrapper">
-          <p class="title label-info">
-            List of Services
-          </p>
-          <div class="" id="serviceList">
-            <div class="panel-group" id="accordion">
+      <div class="dropdown-menu" role="menu" id="serviceListWrapper">
+        <p class="title label-info">
+          List of Services
+        </p>
+        <div class="" id="serviceList">
+          <div class="panel-group" id="accordion">
 
-            </div>
           </div>
         </div>
+      </div>
+
     </div>
   </nav>
 
@@ -162,29 +166,29 @@
         <div class="modal-body">
           <p>Enter a location (such as an address, intersection or landmark) to start your search for services
             from there:</p>
-          <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-            <input id="addressInput" class="form-control" placeholder="Enter a location...">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+              <input id="addressInput" class="form-control" placeholder="Enter a location...">
+            </div>
           </div>
-        </div>
-        <div class="modal-footer">
+          <div class="modal-footer">
           <!-- <div class="modal-left-buttons">
             <button type="button" class="btn btn-info" data-dismiss="modal" id="locationButton">
                         <span class="glyphicon glyphicon-map-marker"></span>
                         Jump to Current Location
                       </button>
-          </div> -->
-          <div class="modal-right-buttons">
-            <button type="button" class="btn btn-success" data-dismiss="modal" id="findAddressButton">
-              <span class="glyphicon glyphicon-ok"></span> Find
-            </button>
-          </div>
-        </div>
-      </div>
+                    </div> -->
+                    <div class="modal-right-buttons">
+                      <button type="button" class="btn btn-success" data-dismiss="modal" id="findAddressButton">
+                        <span class="glyphicon glyphicon-ok"></span> Find
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-    </div>
-  </div>
+              </div>
+            </div>
 
-</body>
+          </body>
 
-</html>
+          </html>
