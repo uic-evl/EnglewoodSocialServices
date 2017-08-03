@@ -20,12 +20,15 @@ let ServiceListView = function(listID) {
   function makeCollapsing(buttonID, listWrapperID) {
     let mobile = window.innerWidth < 769;
 
+    // let startOpen = !mobile;
+    let startOpen = true;
+
     self.wrapper = d3.select(listWrapperID)
-      .style("pointer-events", mobile ? "none" : "all")
-      .style("opacity", mobile ? 0 : 1)
+      .style("pointer-events", startOpen ? "all" : "none")
+      .style("opacity", startOpen ? 1 : 0)
       .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
 
-    self.toggleButton = d3.select(buttonID).classed("open", !mobile)
+    self.toggleButton = d3.select(buttonID).classed("open", startOpen)
       .on("click", function(d) {
         let open = !d3.select(this).classed("open");
         d3.select(this).classed("open", open);
@@ -177,7 +180,7 @@ let ServiceListView = function(listID) {
       }else{
         console.log("Filtering services");
         selection
-          .style('display',function(d,i) { 
+          .style('display',function(d,i) {
             if(knownNames.indexOf(d["Organization Name"]) === -1){
               return 'none';
             }else{

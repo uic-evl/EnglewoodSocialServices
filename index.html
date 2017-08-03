@@ -81,22 +81,27 @@
               </div>
             </div>
             <div class="col-md-2 text-center" style="margin-top: 25px;">
-              around...
+              around ...
             </div>
             <div class="col-md-5" style="margin-top: 15px;">
               <!-- Choose a a nearby location  -->
               <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
-                <input id="modalAddressInput" class="form-control" placeholder="Enter a location...">
+                <input id="modalAddressInput" class="form-control" placeholder="Search From a Location">
                 <span class="input-group-addon" id="addressclear"><i style="font-size: 18px" class="glyphicon glyphicon-remove-circle"></i></span>
               </div>
             </div>
           </div>
           <!-- <br>Or search for a specific organization. -->
-          <hr>
+          <div class="row text-center" id="modalDivider">
+            <div class="col-md-4"><hr></div>
+            <div class="col-md-4 divider-text">or</div>
+            <div class="col-md-4"><hr></div>
+          </div>
+
           <div class="input-group">
             <span class="input-group-addon"><i class="	glyphicon glyphicon-briefcase"></i></span>
-            <input type="text" class="form-control row" placeholder="Search by Org. Name" id="modalSearchInput" style="margin-left:inherit">
+            <input type="text" class="form-control row" placeholder="Search by Organization Name" id="modalSearchInput" style="margin-left:inherit">
             <span class="input-group-addon" id="searchclear"><i style="font-size: 18px" class="glyphicon glyphicon-remove-circle"></i></span>
           </div>
           <br>
@@ -128,7 +133,7 @@
       <div class="navbar-header">
         <a class="navbar-brand" data-toggle="modal" data-target="#landing-page" id="pageTitle">Englewood Social Service Finder</a>
       </div>
-      
+
       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#landing-page" id="backToSearchButton">
         <span class="glyphicon glyphicon-circle-arrow-left" id="icon"></span> Back to Search
       </button>
