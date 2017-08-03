@@ -9,7 +9,8 @@ let modalController = function() {
     acceptButton: null,
     orgSearchInput: null,
     counter: null,
-    addressInput: null
+    addressInput: null,
+    backButton: null
   };
 
   function initalize(){
@@ -42,6 +43,12 @@ let modalController = function() {
       });
 
     self.counter = d3.selectAll("#modalSearchCount");
+
+    self.backButton = d3.selectAll("#backToSearchButton")
+      .on("click", function(){
+        App.controllers.serviceFilterDropdown.resetFilters()
+      });
+    
   }
 
   function setCount(count) {

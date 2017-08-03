@@ -287,6 +287,7 @@ let FilterDropdownController = function() {
     setFilterDropdown,
     attachAllServicesButton,
 
-    populateDropdown
+    populateDropdown,
+    resetFilters
   };
 };
