@@ -54,6 +54,17 @@ let modalController = function() {
         onInput();
 
       });
+
+      d3.selectAll("#pageTitle")
+      .on("click", function(){
+        App.controllers.serviceFilterDropdown.resetFilters();
+        self.orgSearchInput.node().value = "";
+        self.addressInput.node().value = "";
+        document.getElementById("addressclear").style.display="none";
+        document.getElementById("searchclear").style.display="none";
+        onInput();
+
+      });
     
   }
 
@@ -126,6 +137,7 @@ let modalController = function() {
       else if(address.length ==0 ){
         
         // var data = App.models.socialServices.getData();
+
 
         if(searchData[0].Address != null){
           // App.controllers.locationButton.getLatLngFromAddress(data[0].Address);
