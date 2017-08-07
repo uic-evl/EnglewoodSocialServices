@@ -44,7 +44,8 @@ Promise.all([documentPromise, less.pageLoadFinished])
     App.views.chartList = new ChartListView("#chartList");
     App.views.chartList.makeCollapsing("#toggleHideChartsButton", "#chartListWrapper");
 
-    App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
+    // App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
+    App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList", "#filterDropdownButton");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
 
     // App.controllers.mapData.setDataDropdown("#mapSettingsPanel");
