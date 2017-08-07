@@ -1,8 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Zilla+Slab);
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
+@import "btn.less"; // button gradient styling
+
 // Allow for simple border-radius declaration
-.border-radius (@radius:5px) {
+.border-radius(@radius:5px) {
   -webkit-border-radius: @radius;
      -moz-border-radius: @radius;
           border-radius: @radius;
@@ -26,14 +28,6 @@
       -ms-transition: @arguments; /* IE10 is actually unprefixed */
        -o-transition: @arguments;
           transition: @arguments;
-}
-
-.btn-gradient(@direction, @c0, @c1, @c2) {
-  background: @c1; /* For browsers that do not support gradients */
-  background: -webkit-linear-gradient(@direction, @c0, @c1, @c2); /* For Safari 5.1 to 6.0 */
-  background:    -moz-linear-gradient(@direction, @c0, @c1, @c2); /* For Firefox 3.6 to 15 */
-  background:      -o-linear-gradient(@direction, @c0, @c1, @c2); /* For Opera 11.1 to 12.0 */
-  background:         linear-gradient(@direction, @c0, @c1, @c2); /* Standard syntax */
 }
 
 .container-fluid,
@@ -239,7 +233,6 @@ html {
   }
 
   @media (min-width: 768px) {
-
     #filterDropdownList {
       width: 100%;
     }
@@ -610,7 +603,7 @@ html {
   }
 }
 
-#selectServicesButton .caret{
+#selectServicesButton .caret {
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
@@ -627,65 +620,21 @@ html {
   }
 }
 
-@basic: rgb(221,221,221);
-@basic-shade: shade(@basic, 15%);
-@default: #FFFFFF;
-@default-shade: shade(@default, 15%);
-@success: #5CB85C;
-@success-shade: shade(@success, 15%);
-@primary: #337AB7;
-@primary-shade: shade(@primary, 25%);
-@info: #5BC0DE;
-@info-shade: shade(@info, 15%);
-@warning: #F0AD4E;
-@warning-shade: shade(@warning, 15%);
-@danger: #D9534F;
-@danger-shade: shade(@danger, 20%);
-
-.btn {
-  .btn-gradient(to top, @basic-shade, @basic, @basic-shade);
-}
-
-.btn-default {
-  .btn-gradient(to top, @default-shade, @default, @default-shade);
-}
-
-.btn-success {
-  .btn-gradient(to top, @success-shade, @success, @success-shade);
-}
-
-.btn-primary {
-  .btn-gradient(to top, @primary-shade, @primary, @primary-shade);
-}
-
-.btn-info {
-  .btn-gradient(to top, @info-shade, @info, @info-shade);
-}
-
-.btn-warning {
-  .btn-gradient(to top, @warning-shade, @warning, @warning-shade);
-}
-
-.btn-danger {
-  .btn-gradient(to top, @danger-shade, @danger, @danger-shade);
-}
-
 .btn-text-emphasis {
   background: none;
   font-weight: bolder;
   font-size: 20px;
   padding: 2px;
-  color: #333;
-
+  color: #333333;
   pointer-events: none;
 }
 
 #searchclear {
-    background: linear-gradient(to top, @danger-shade, @danger, @danger-shade);
-    color: white;
+  .btn-gradient(to top, @danger-shade, @danger, @danger-shade);
+  color: white;
 }
 
 #addressclear {
-    background: linear-gradient(to top, @danger-shade, @danger, @danger-shade);
-    color: white;
+  .btn-gradient(to top, @danger-shade, @danger, @danger-shade);
+  color: white;
 }
