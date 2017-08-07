@@ -172,7 +172,7 @@ let MapView = function(div) {
         layer.setZIndexOffset(100);
         layer.setIcon(self.icons["blue"]);
       } else {
-        layer.setOpacity(0.2);
+        layer.setOpacity(0);
         layer.setZIndexOffset(0);
         layer.setIcon(self.icons["grey"]);
       }

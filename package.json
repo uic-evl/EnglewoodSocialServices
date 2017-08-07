@@ -1,0 +1,27 @@
+{
+  "name": "englewoodsocialservices",
+  "version": "1.0.0",
+  "description": "Visualizing Social Services in Englewood",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/uic-evl/EnglewoodSocialServices.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uic-evl/EnglewoodSocialServices/issues"
+  },
+  "homepage": "https://github.com/uic-evl/EnglewoodSocialServices#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "http-auth": "^3.2.3"
+  }
+}
