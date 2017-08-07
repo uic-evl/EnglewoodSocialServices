@@ -4,12 +4,20 @@ var App = App || {};
 
 let documentPromise = new Promise(function(resolve, reject) {
   $(document).ready(function() {
+    console.log("$(document).ready done");
+    resolve();
+  });
+});
+
+let windowPromise = new Promise(function(resolve, reject) {
+  $(window).on("load", function() {
+    console.log("$(window).on('load') done");
     resolve();
   });
 });
 
 // make sure both the document and CSS are loaded
-Promise.all([documentPromise, less.pageLoadFinished])
+Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   .then(function() {
     setTimeout(function() {
       App.init();
