@@ -36,11 +36,9 @@ let ServiceListView = function(listID) {
         d3.select(this).select(".glyphicon").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
         if(open){
           document.getElementById("serviceListButtonText").innerHTML="Hide Service List";
-          console.log("open!");
         }
         else{
           document.getElementById("serviceListButtonText").innerHTML="Show Service List";
-          console.log("close");
         }
         
         self.wrapper
