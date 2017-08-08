@@ -19,7 +19,9 @@ var input = document.getElementById("exampleInputFile").value;
 
 
 function clickedButton(){
+	d3.event.preventDefault();
 	document.getElementById("fileName").innerHTML= document.getElementById("exampleInputFile").value;
+
 }
 
 function confirmClicked(){

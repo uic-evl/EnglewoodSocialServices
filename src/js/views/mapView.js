@@ -297,7 +297,7 @@ let MapView = function(div) {
 
     let lat = Number(position.lat) + (L.Browser.mobile ? 0.003 : 0);
     let lng = Number(position.lng) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
-    self.map.setView([lat, lng], 16);
+    self.map.setView([lat, lng], 14);
   }
 
   function clearLocation(){
