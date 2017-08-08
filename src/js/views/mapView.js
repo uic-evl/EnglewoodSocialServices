@@ -141,34 +141,25 @@ let MapView = function(div) {
           } else {
 
           }
+        })
+        .on("mouseover", function(e) {
+          // open popup forcefully
+          if (!this._popup._latlng) {
+            this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
+          }
+
+          this._popup.openOn(self.map);
+        })
+        .on("mouseout", function(e) {
+          if (!this.options.data.expanded) {
+            self.map.closePopup();
+          }
         });
     }
   }
 
   function updateServicesWithFilter(filteredData, serviceFilters) {
-
     plotServices(filteredData);
-
-
-    // self.serviceGroup.eachLayer(function(layer) {
-    //
-    //   let loc = layer.options.data;
-    //
-    //   let show = _.includes(filteredData, loc);
-    //   layer.options.data.visible = show;
-    //
-    //   if (show) {
-    //     layer.setOpacity(1);
-    //     layer.setZIndexOffset(100);
-    //     layer.setIcon(self.icons["blue"]);
-    //   } else {
-    //     layer.setOpacity(0);
-    //     layer.setZIndexOffset(0);
-    //     layer.setIcon(self.icons["grey"]);
-    //     layer.unbindPopup();
-    //   }
-    //
-    // });
   }
 
   function setSelectedService(service) {

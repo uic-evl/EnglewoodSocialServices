@@ -15,6 +15,7 @@ let ListToMapLinkingController = function() {
     // }, 500);
 
     let expanded = !dPanel.selectAll(".collapse").classed("in");
+    data.expanded = expanded;
 
     d3.selectAll("#serviceList").selectAll(".serviceEntry").classed("opened", false);
     dPanel.classed("opened", expanded);
