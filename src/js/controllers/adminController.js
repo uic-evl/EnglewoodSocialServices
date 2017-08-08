@@ -81,6 +81,7 @@ function sendCSV(e) {
   console.log(e);
 
   xhr.onload = function() {
+    // LOG file received in this.responseText -- populate log 
     console.log(this.responseText);
   };
   xhr.onerror = function(e) {
