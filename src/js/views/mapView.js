@@ -295,9 +295,18 @@ let MapView = function(div) {
     //move map to new poisition
     // self.map.setView([position.lat, position.lng], 16);
 
-    let lat = Number(position.lat) + (L.Browser.mobile ? 0.003 : 0);
-    let lng = Number(position.lng) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
-    self.map.setView([lat, lng], 14);
+    // let lat = Number(position.lat) + (L.Browser.mobile ? 0.003 : 0);
+    // let lng = Number(position.lng) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
+    // self.map.setView([lat, lng], 14);
+
+    var markerArray = []; 
+
+    self.serviceGroup.eachLayer(function(layer) {
+      markerArray.push(layer); 
+    });
+
+    var group = L.featureGroup(markerArray); 
+            self.map.fitBounds(group.getBounds()); 
   }
 
   function clearLocation(){
