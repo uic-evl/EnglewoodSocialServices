@@ -60,6 +60,8 @@ Promise.all([documentPromise, less.pageLoadFinished])
 
     App.controllers.rectSelector = new RectSelectorController("#newRectSelector");
     App.controllers.rectSelector.attachDragLayer("#serviceMap");
+    App.controllers.rectSelector.attachSpecificSelector("#rectSelector1", "1");
+    App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");

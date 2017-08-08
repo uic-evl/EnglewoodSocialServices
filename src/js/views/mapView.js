@@ -195,7 +195,7 @@ let MapView = function(div) {
     self.map.addLayer(self.currentLocationMarker);
   }
 
-  function drawRect(bound1, bound2) {
+  function drawRect(bound1, bound2, rectID) {
     let llBound1 = self.map.containerPointToLatLng(bound1);
     let llBound2 = self.map.containerPointToLatLng(bound2);
 
@@ -203,7 +203,7 @@ let MapView = function(div) {
 
     let rect = L.rectangle([llBound1, llBound2], {
         color,
-        data: self.totalRects
+        data: rectID || self.totalRects
       })
       .bindPopup(function(layer) { // allow for the popup on click with the name of the location
         return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
@@ -212,10 +212,10 @@ let MapView = function(div) {
       // .setZIndex(200)
       .addTo(self.rectLayer);
 
-    self.rects[self.totalRects] = rect;
+    self.rects[rectID || self.totalRects] = rect;
 
     return {
-      id: self.totalRects++,
+      id: rectID || self.totalRects++,
       color,
       bounds: [llBound1, llBound2]
     };

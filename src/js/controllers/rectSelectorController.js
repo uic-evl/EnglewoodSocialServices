@@ -5,6 +5,7 @@ var App = App || {};
 let RectSelectorController = function(buttonID) {
   let self = {
     button: null,
+    specificButtons: {},
     dragLayer: null,
     svg: null,
 
@@ -12,6 +13,7 @@ let RectSelectorController = function(buttonID) {
     drawing: false,
     drawingRect: false,
     drawingStart: null,
+    specificSelector: null,
 
     rects: {}
   };
@@ -21,6 +23,14 @@ let RectSelectorController = function(buttonID) {
   function init() {
     self.button = d3.select(buttonID)
       .on("click", handleButtonClick);
+  }
+
+  function attachSpecificSelector(buttonID,rectID){
+    self.specificButtons[rectID] = d3.select(buttonID)
+      .on('click', function(){
+        self.specificSelector = rectID;
+        handleButtonClickForSpecificSelector(rectID);
+      });
   }
 
   function attachDragLayer(id) {
@@ -37,6 +47,21 @@ let RectSelectorController = function(buttonID) {
 
     self.drawingRect = self.svg.append("rect")
       .style("stroke-dasharray", "5, 5");
+  }
+
+  function handleButtonClickForSpecificSelector(id){
+    self.drawable = !self.drawable;
+
+    if (self.specificButtons[id].classed("btn-success")) { //just added a rectangle
+      self.specificButtons[id].attr("class", "btn btn-warning");
+      self.dragLayer.classed("disabled", false);
+    } else { //removing a rectangle
+      self.specificButtons[id].attr("class", "btn btn-success");
+      self.dragLayer.classed("disabled", true);
+      removeRect(id);
+      let msg = `<span class="glyphicon glyphicon-plus"></span> Add Selection ${self.specificSelector}`;
+      self.specificButtons[self.specificSelector].html(msg);
+    }
   }
 
   function handleButtonClick() {
@@ -85,7 +110,7 @@ let RectSelectorController = function(buttonID) {
     let b1 = L.point(self.drawingStart.x, self.drawingStart.y);
     let b2 = L.point(d3.event.layerX, d3.event.layerY);
 
-    let rect = App.views.map.drawRect(b1, b2);
+    let rect = App.views.map.drawRect(b1, b2, self.specificSelector);
     let censusData = App.models.censusData.getDataWithinBounds(rect.bounds);
 
     console.log(censusData);
@@ -103,22 +128,27 @@ let RectSelectorController = function(buttonID) {
     // App.views.chartList.createChart(self.rects[rect.id]);
     App.views.chartList.addSelection(self.rects[rect.id]);
 
-    // self.drawable = false;
-    // self.button.attr("class", "btn btn-success navbar-btn");
-    // self.dragLayer.classed("disabled", true);
+    self.drawable = false;
+    self.button.attr("class", "btn btn-success navbar-btn");
+    self.dragLayer.classed("disabled", true);
     self.drawingRect
       .attr("width", 0)
       .attr("height", 0);
 
-    if (Object.keys(self.rects).length >= 10) {
+    if (Object.keys(self.rects).length >= 2) {
       self.drawable = false;
       self.button.attr("class", "btn btn-success navbar-btn disabled")
         .attr("disabled", true);
       self.dragLayer.classed("disabled", true);
     }
 
-    self.drawingStart = null;
+    if (self.specificSelector !== null){
+      let msg = `<span class="glyphicon glyphicon-remove"></span> Remove Selection ${self.specificSelector}`;
+      self.specificButtons[self.specificSelector].html(msg);
+    }
 
+    self.drawingStart = null;
+    self.specificSelector = null;
   }
 
   function removeRect(id) {
@@ -137,13 +167,19 @@ let RectSelectorController = function(buttonID) {
         self.button.attr("class", "btn btn-success navbar-btn")
           .attr("disabled", null);
       }
+
+    }
+    if(self.specificButtons[id]){
+      self.specificButtons[id].attr("class", "btn btn-success");
+      let msg = `<span class="glyphicon glyphicon-plus"></span> Add Selection ${id}`;
+      self.specificButtons[id].html(msg);
     }
 
   }
 
   return {
     attachDragLayer,
-
+    attachSpecificSelector,
     removeRect
   };
 }
