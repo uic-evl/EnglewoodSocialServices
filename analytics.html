@@ -128,7 +128,8 @@
 
       <div class="navbar-right">
 
-        <button type="button" class="btn btn-success navbar-btn" id="newRectSelector">
+        <!-- Disable until selection code is fully implemented, then remove -->
+        <button type="button" class="btn btn-success navbar-btn" id="newRectSelector" style="display:none">
           <span class="glyphicon glyphicon-plus"></span>
           <span class="glyphicon glyphicon-stop"></span>
            Selection
@@ -146,6 +147,22 @@
           <p class="title label-info">
             Chart List
           </p>
+          <div class="row">
+            <div class="btn-group btn-group-justified" id="selectionButtonGroup">
+              <div class="btn-group">
+                <button type="button" class="btn btn-success" id="rectSelector1">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Add Selection 1
+                </button>
+              </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-success" id="rectSelector2">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Add Selection 2
+                </button>
+              </div>
+            </div>
+          </div>
           <div class="" id="chartList">
 
           </div>
