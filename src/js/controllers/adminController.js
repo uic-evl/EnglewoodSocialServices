@@ -9,6 +9,7 @@ d3.select("#confirmButton")
   .on("click", confirmClicked);
 
 var input = document.getElementById("exampleInputFile").value;
+let filename;
 
 // if(input.length != 0){
 //       $('#modalAcceptButton').removeClass("disabled");
@@ -21,8 +22,6 @@ var input = document.getElementById("exampleInputFile").value;
 function clickedButton() {
   d3.event.preventDefault();
   document.getElementById("fileName").innerHTML = document.getElementById("exampleInputFile").value;
-
-
 
 
   getLogFile()
@@ -48,6 +47,8 @@ function confirmClicked() {
     alert("Please select a file before clicking 'Load'");
   } else {
     file = input.files[0];
+    filename = file.name;
+
     fr = new FileReader();
     fr.onload = sendCSV;
     fr.readAsText(file);
@@ -74,9 +75,10 @@ function getLogFile() {
 
 function sendCSV(e) {
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "/admin/csv");
-  // xhr.setRequestHeader("Content-type", "application/json");
-  xhr.setRequestHeader("Content-type", "text/plain");
+  xhr.open("PUT", "/admin/csv");
+  xhr.setRequestHeader("Content-type", "application/json");
+
+  console.log(e);
 
   xhr.onload = function() {
     console.log(this.responseText);
@@ -85,8 +87,5 @@ function sendCSV(e) {
     reject(e);
   };
 
-  // xhr.send(JSON.stringify({"file": e.target.result}));
-  // xhr.send({"file": e.target.result});
-  xhr.send(e.target.result);
-  console.log(e.target.result);
+  xhr.send(JSON.stringify({"data": e.target.result, "name": filename}));
 }

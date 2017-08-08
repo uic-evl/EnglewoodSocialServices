@@ -15,7 +15,8 @@ var basic = auth.basic({
 var app = express();
 let admin = express();
 
-admin.use(bodyParser.text({type: "text/csv"}));
+admin.use(bodyParser.json());
+// admin.use(bodyParser.text({type: "text/csv"}));
 admin.use(auth.connect(basic));
 // admin.use(express.static("./"))
 
@@ -36,13 +37,15 @@ admin.get('/log', (req, res) => {
   res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
 });
 
-admin.post('/csv', (req, res) => {
-  console.log("Send CSV File");
-  console.log(req.body);
+admin.put('/csv', (req, res) => {
+  fs.writeFileSync(path.join(__dirname, "admin-data", "TestWrite.csv"), req.body.data);
 
-  res.send("Got File!");
+  addToLog(req.body.name, res);
 });
 
-function addToLog(req, res) {
+function addToLog(fileName, res) {
+  let time = new Date().toString();
+  fs.appendFileSync(path.join(__dirname, "admin-data", "LOG.csv"), `${time},${fileName}\n`);
 
+  res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
 }
