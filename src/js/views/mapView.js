@@ -146,39 +146,29 @@ let MapView = function(div) {
   }
 
   function updateServicesWithFilter(filteredData, serviceFilters) {
-    // if (Object.keys(serviceFilters).length === 0) {
-    //   // if there are no filters, show all locations
-    //   self.serviceGroup.eachLayer(function(layer) {
+
+    plotServices(filteredData);
+
+
+    // self.serviceGroup.eachLayer(function(layer) {
+    //
+    //   let loc = layer.options.data;
+    //
+    //   let show = _.includes(filteredData, loc);
+    //   layer.options.data.visible = show;
+    //
+    //   if (show) {
     //     layer.setOpacity(1);
-    //   });
-    // } else {
-    // otherwise only show locations that match at least one of the selected properties
-    self.serviceGroup.eachLayer(function(layer) {
-      let loc = layer.options.data;
-      // let show = false;
-      //
-      // for (let property of Object.keys(serviceFilters)) {
-      //   if (loc[property] == 1) {
-      //     show = true;
-      //     break;
-      //   }
-      // }
-
-      let show = _.includes(filteredData, loc);
-      layer.options.data.visible = show;
-
-      if (show) {
-        layer.setOpacity(1);
-        layer.setZIndexOffset(100);
-        layer.setIcon(self.icons["blue"]);
-      } else {
-        layer.setOpacity(0);
-        layer.setZIndexOffset(0);
-        layer.setIcon(self.icons["grey"]);
-      }
-
-    });
-    // }
+    //     layer.setZIndexOffset(100);
+    //     layer.setIcon(self.icons["blue"]);
+    //   } else {
+    //     layer.setOpacity(0);
+    //     layer.setZIndexOffset(0);
+    //     layer.setIcon(self.icons["grey"]);
+    //     layer.unbindPopup();
+    //   }
+    //
+    // });
   }
 
   function setSelectedService(service) {
