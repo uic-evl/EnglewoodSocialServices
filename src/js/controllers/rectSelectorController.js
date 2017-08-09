@@ -55,6 +55,8 @@ let RectSelectorController = function(buttonID) {
     if (self.specificButtons[id].classed("btn-success")) { //just added a rectangle
       self.specificButtons[id].attr("class", "btn btn-warning");
       self.dragLayer.classed("disabled", false);
+      let msg = `Adding Selection ${id}...`;
+      self.specificButtons[id].html(msg);
     } else { //removing a rectangle
       self.specificButtons[id].attr("class", "btn btn-success");
       self.dragLayer.classed("disabled", true);

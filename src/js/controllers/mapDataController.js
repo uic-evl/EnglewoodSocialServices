@@ -87,7 +87,8 @@ let MapDataController = function() {
           .datum(function(c2) {
             return {
               mainType: c1,
-              subType: c2
+              subType: c2,
+              type: "census"
             };
           })
           .attr("id", d => _.kebabCase("sub_" + d.subType))
