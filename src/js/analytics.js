@@ -46,7 +46,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   // App.controllers.locationButton = new LocationButtonController();
   App.controllers.search = new SearchController();
 
-  App.init = function() {
+  App.init = function () {
+    $('[data-toggle="tooltip"]').tooltip(); //needed for button tooltips
     console.log("Loading Analytics");
     App.views.map = new MapView("serviceMap");
     App.views.map.drawEnglewoodOutline();

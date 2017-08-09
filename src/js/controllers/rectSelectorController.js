@@ -150,7 +150,7 @@ let RectSelectorController = function(buttonID) {
     if (self.specificSelector !== null){
       let msg = `<span class="glyphicon glyphicon-remove"></span> Map Area ${self.specificSelector}`;
       self.specificButtons[self.specificSelector].html(msg);
-      // self.specificButtons[self.specificSelector].attr("class", "btn btn-warning");
+      // self.specificButtons[self.specificSelector].attr('data-original-title', "Click to remove area selection");
     }
 
     self.drawingStart = null;
@@ -178,6 +178,7 @@ let RectSelectorController = function(buttonID) {
     if(self.specificButtons[id]){
       let msg = `<span class="glyphicon glyphicon-plus"></span> Select Map Area ${id}`;
       self.specificButtons[id].html(msg);
+      // self.specificButtons[id].attr('data-original-title',"Click and drag to select an area");
     }
 
   }
