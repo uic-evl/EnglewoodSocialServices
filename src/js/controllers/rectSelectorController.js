@@ -114,7 +114,9 @@ let RectSelectorController = function(buttonID) {
 
     let rect = App.views.map.drawRect(b1, b2, self.specificSelector);
     let censusData = App.models.censusData.getDataWithinBounds(rect.bounds);
+    let serviceData = App.models.socialServices.getDataWithinBounds(rect.bounds);
 
+    console.log(serviceData);
     console.log(censusData);
 
     self.rects[rect.id] =  {
