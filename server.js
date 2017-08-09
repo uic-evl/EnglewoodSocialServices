@@ -16,11 +16,9 @@ var app = express();
 let admin = express();
 
 admin.use(bodyParser.json());
-// admin.use(bodyParser.text({type: "text/csv"}));
 admin.use(auth.connect(basic));
-// admin.use(express.static("./"))
 
-app.use('/admin', admin);
+app.use('/admin*', admin);
 app.use(express.static("./"));
 
 app.listen(4000, function () {
@@ -29,7 +27,6 @@ app.listen(4000, function () {
 
 // Setup route.
 admin.get('/', (req, res) => {
-    // res.send(`Hello from express - ${req.user}!`);
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 

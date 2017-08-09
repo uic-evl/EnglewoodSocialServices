@@ -1,6 +1,6 @@
 "use strict";
 
-let MapDataController = function() {
+let MapDataController = function () {
   let self = {
     dataDropdownList: null,
 
@@ -26,9 +26,9 @@ let MapDataController = function() {
     self.dataDropdownList = d3.select(id);
   }
 
-  function setCensusClearButton(){
+  function setCensusClearButton() {
     self.censusResetButton = d3.selectAll("#allCensusButton")
-    .on('click', resetFilters);
+      .on('click', resetFilters);
 
     self.censusDropdownButton = d3.select("#censusDropdownButton");
 
@@ -37,26 +37,26 @@ let MapDataController = function() {
 
   function setupDataPanel(buttonID, listWrapperID) {
     self.mapDataPanel = d3.select(listWrapperID)
-    .style("pointer-events", "none")
-    .style("opacity", 0)
-    .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+      .style("pointer-events", "none")
+      .style("opacity", 0)
+      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
 
     self.toggleButton = d3.select(buttonID).classed("open", false)
-    .on("click", function(d) {
-      let open = !d3.select(this).classed("open");
-      d3.select(this).classed("open", open);
+      .on("click", function (d) {
+        let open = !d3.select(this).classed("open");
+        d3.select(this).classed("open", open);
 
-      d3.select(this).select(".glyphicon").attr("class", open ? "glyphicon glyphicon-arrow-up" : "glyphicon glyphicon-arrow-down");
+        d3.select(this).select(".glyphicon").attr("class", open ? "glyphicon glyphicon-arrow-up" : "glyphicon glyphicon-arrow-down");
 
-      self.mapDataPanel
-      .style("pointer-events", open ? "all" : "none")
-      .style("opacity", open ? 1 : 0);
-    });
+        self.mapDataPanel
+          .style("pointer-events", open ? "all" : "none")
+          .style("opacity", open ? 1 : 0);
+      });
   }
 
   function attachResetOverlayButton(id) {
     self.resetButton = d3.select(id)
-    .on("click", resetOverlay);
+      .on("click", resetOverlay);
   }
 
   function resetOverlay() {
@@ -87,7 +87,7 @@ let MapDataController = function() {
     App.views.chartList.removePropertyChart(current_census_properties);
 
     self.censusDropdownList.selectAll(".glyphicon")
-    .attr("class", "glyphicon glyphicon-unchecked");
+      .attr("class", "glyphicon glyphicon-unchecked");
 
     self.censusDropdownButton.selectAll('#currentServiceSelection').text("Select Census Category...");
     self.censusDropdownButton.attr("class", "btn btn-default dropdown-toggle");
@@ -106,32 +106,32 @@ let MapDataController = function() {
     }
 
     self.censusDropdownList.selectAll(".mainType")
-    .data(tier1Categories)
-    .enter().append("li")
-    .attr("class", "dropdown-submenu serviceType")
-    .each(function(c1) {
-      var title = c1;
-      title = title.toLowerCase();
-      title = title.replace(/_/g, ' ');
+      .data(tier1Categories)
+      .enter().append("li")
+      .attr("class", "dropdown-submenu serviceType")
+      .each(function (c1) {
+        var title = c1;
+        title = title.toLowerCase();
+        title = title.replace(/_/g, ' ');
 
-      let listItem = d3.select(this);
+        let listItem = d3.select(this);
         // create link within tab
         listItem.append("a")
-        .attr("tabindex", -1)
-        .attr("id", "main_" + convertPropertyToID(c1))
-        .html("<span class='glyphicon glyphicon-unchecked'></span>" + title)
+          .attr("tabindex", -1)
+          .attr("id", "main_" + convertPropertyToID(c1))
+          .html("<span class='glyphicon glyphicon-unchecked'></span>" + title)
           // .html(c1)
-          .on((L.Browser.mobile ? "click" : "mouseover"), function(d) {
-              // d3.event.stopPropagation();
+          .on((L.Browser.mobile ? "click" : "mouseover"), function (d) {
+            // d3.event.stopPropagation();
 
-              // self.filterDropdownList.selectAll(".serviceType").classed("open", false);
-              // d3.select(this).node().parentNode.classList.toggle("open");
-            });
+            // self.filterDropdownList.selectAll(".serviceType").classed("open", false);
+            // d3.select(this).node().parentNode.classList.toggle("open");
+          });
 
 
         // create tab content div for this t1 category
         let secondaryDropdown = listItem.append("ul")
-        .attr("class", "dropdown-menu")
+          .attr("class", "dropdown-menu")
 
         // secondaryDropdown.append("li")
         //   .attr("class", "serviceSubtype")
@@ -188,22 +188,22 @@ let MapDataController = function() {
         // secondaryDropdown.append("li").attr("class", "divider");
 
         secondaryDropdown.selectAll(".secondaryCategory")
-        .data(categories[c1])
-        .enter().append("li")
-        .attr("class", "secondaryCategory serviceSubtype")
-        .append("a")
-        .datum(function(c2) {
-          return {
-            mainType: c1,
-            subType: c2,
-            type: "census"
-          };
-        })
-        .attr("id", d => "sub_" + convertPropertyToID(d.subType))
-        .html(function(d) {
-          return "<span class='glyphicon glyphicon-unchecked'></span>" + d.subType;
-        })
-        .on("click", function(d) {
+          .data(categories[c1])
+          .enter().append("li")
+          .attr("class", "secondaryCategory serviceSubtype")
+          .append("a")
+          .datum(function (c2) {
+            return {
+              mainType: c1,
+              subType: c2,
+              type: "census"
+            };
+          })
+          .attr("id", d => "sub_" + convertPropertyToID(d.subType))
+          .html(function (d) {
+            return "<span class='glyphicon glyphicon-unchecked'></span>" + d.subType;
+          })
+          .on("click", function (d) {
             // d3.event.stopPropagation(); // prevent menu close on link click
 
             //reset other filters to allow for only one sub category selection at a time
@@ -214,15 +214,15 @@ let MapDataController = function() {
               }
             }
             self.censusDropdownList.selectAll(".glyphicon")
-            .attr("class", "glyphicon glyphicon-unchecked");
+              .attr("class", "glyphicon glyphicon-unchecked");
             listItem.select("ul").selectAll(".serviceSubtype")
-            .each(function(subType) {
-              if (subType !== d.subType) {
-                self.filters[subType] = false;
+              .each(function (subType) {
+                if (subType !== d.subType) {
+                  self.filters[subType] = false;
 
-                updateSubCategoryIcon(subType);
-              }
-            });
+                  updateSubCategoryIcon(subType);
+                }
+              });
             let curSelection = self.filters[d.subType];
             self.filters = {};
 
@@ -256,13 +256,13 @@ let MapDataController = function() {
       });
 
 
-}
+  }
 
-function convertPropertyToID(propertyName) {
-  return propertyName.replace(/\W+/g, '_')
-}
+  function convertPropertyToID(propertyName) {
+    return propertyName.replace(/\W+/g, '_')
+  }
 
-function mapButtonClick(d) {
+  function mapButtonClick(d) {
     // d3.event.stopPropagation(); // prevent menu close on link click
 
     // toggle whether or not it is selected
@@ -320,11 +320,11 @@ function mapButtonClick(d) {
     // update chart Number
 
     let chartLabel = panelHeading.selectAll(".numCharts");
-    let numCharts = +chartLabel.attr("data-count")+1;
+    let numCharts = +chartLabel.attr("data-count") + 1;
 
     chartLabel.attr("data-count", numCharts)
-    .text(numCharts + (numCharts === 1 ? " Chart" : " Charts"))
-    .style("display", numCharts <= 0 ? "none": "inline");
+      .text(numCharts + (numCharts === 1 ? " Chart" : " Charts"))
+      .style("display", numCharts <= 0 ? "none" : "inline");
   }
 
   function removeChart(d) {
@@ -337,14 +337,14 @@ function mapButtonClick(d) {
     let numCharts = +chartLabel.attr("data-count") - 1;
 
     chartLabel.attr("data-count", numCharts)
-    .text(numCharts + (numCharts === 1 ? " Chart" : " Charts"))
-    .style("display", numCharts <= 0 ? "none" : "inline");
+      .text(numCharts + (numCharts === 1 ? " Chart" : " Charts"))
+      .style("display", numCharts <= 0 ? "none" : "inline");
   }
 
   function removeChartFromList(propertyTypes) {
     d3.selectAll("#" + _.kebabCase("main_" + propertyTypes.mainType)).selectAll("#" + _.kebabCase("sub_" + propertyTypes.subType))
-    .select(".chartButton")
-    .each(removeChart);
+      .select(".chartButton")
+      .each(removeChart);
   }
 
   function updateMainCategoryOnSubUpdate(category) {
