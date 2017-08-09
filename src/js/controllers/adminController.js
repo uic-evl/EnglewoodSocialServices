@@ -4,15 +4,27 @@ getLogFile()
     .then(function(data) {
       var logText = data.split(/\n/);
       
-
       for (var i = 0; i < logText.length-1; i++) {
-      	var test = logText[i].split(',');
-      	console.log(test);
+      	var entry = logText[i].split(',');
       	var rows = "";
-      	rows += "<tr><td>" + test[0] + "</td><td>" + test[1] + "</td></tr>";
+      	rows += "<tr><td>" + entry[0] + "</td><td>" + entry[1] + "</td></tr>";
         $(rows).appendTo("#list tbody");
       }
     });
+
+d3.select("#exampleInputFile")
+	.on('change', function(){
+		var testing = document.getElementById("exampleInputFile").value;
+
+		if(testing.length !== 0){
+			console.log("File selected!");
+			document.getElementById("submitButton").disabled = false;
+		}
+		else{
+			console.log("No file!");
+			document.getElementById("submitButton").disabled = true;
+		}
+	});
 
 d3.select("#submitButton")
   .on("click", clickedButton);
@@ -31,8 +43,6 @@ function clickedButton() {
   getLogFile()
     .then(function(data) {
       console.log("Log:", data);
-      // var test = data.split(',');
-      // console.log(test);
     });
 }
 
