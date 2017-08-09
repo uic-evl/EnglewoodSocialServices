@@ -14,6 +14,21 @@ getLogFile()
       }
     });
 
+d3.select("#exampleInputFile")
+	.on('change', function(){
+		// d3.select("#exampleInputFile").value();
+		var testing = document.getElementById("exampleInputFile").value;
+		// console.log(document.getElementById("exampleInputFile").value);
+		if(testing.length !== 0){
+			console.log("File selected!");
+			document.getElementById("submitButton").disabled = false;
+		}
+		else{
+			console.log("No file!");
+			document.getElementById("submitButton").disabled = true;
+		}
+	});
+
 d3.select("#submitButton")
   .on("click", clickedButton);
 
