@@ -18,9 +18,9 @@ let admin = express();
 admin.use(bodyParser.json());
 // admin.use(bodyParser.text({type: "text/csv"}));
 admin.use(auth.connect(basic));
-// admin.use(express.static("./"))
 
 app.use('/admin', admin);
+app.use('/admin.html', admin);
 app.use(express.static("./"));
 
 app.listen(4000, function () {
