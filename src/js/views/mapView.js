@@ -78,7 +78,7 @@ let MapView = function(div) {
     //add outline of Englewood
     d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function(error, d){
       L.geoJSON(d).addTo(self.map).setStyle({fillColor: 'transparent',
-        weight: 2,
+        weight: 3,
         opacity: .5,
         color: 'black',  //Outline color
         fillOpacity: 0.7});
