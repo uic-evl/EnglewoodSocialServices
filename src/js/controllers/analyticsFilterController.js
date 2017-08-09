@@ -34,6 +34,7 @@ let FilterDropdownController = function() {
     };
 
     current_service_properties.subType = (Object.keys(self.filters).length === 1) ? Object.keys(self.filters)[0] : "All";
+    current_service_properties.subFilters = self.filters;
 
     self.filters = {};
 
@@ -130,25 +131,30 @@ let FilterDropdownController = function() {
               self.filterDropdownButton.selectAll('#currentServiceSelection').text(`${c1}`);
               self.filterDropdownButton.attr("class", "btn btn-success dropdown-toggle navbar-btn");
               self.allServicesButton.style('display', null);
-
-              App.views.chartList.addServiceChart({
-                mainType: c1,
-                subType: "All",
-                type: "service"
-              });
             } else {
               resetFilters();
-              
             }
 
             updateMainCategoryIcon(c1);
 
+            let current_service_properties = {
+              mainType: c1,
+              subType: "All",
+              subFilters: [],
+              type: "service"
+            }
+
             listItem.select("ul").selectAll(".serviceSubtype")
               .each(function (d) {
                 self.filters[d] = selected;
+                current_service_properties.subFilters.push(d);
 
                 updateSubCategoryIcon(d);
               });
+
+            if(selected){
+              App.views.chartList.addServiceChart(current_service_properties);
+            }
 
             filtersUpdated();
           });
@@ -311,7 +317,7 @@ let FilterDropdownController = function() {
   return {
     setFilterDropdown,
     attachAllServicesButton,
-
+    resetFilters,
     populateDropdown
   };
 };

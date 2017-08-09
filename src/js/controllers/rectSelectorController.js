@@ -53,7 +53,7 @@ let RectSelectorController = function(buttonID) {
     self.drawable = !self.drawable;
 
     if (self.specificButtons[id].classed("btn-success")) { //just added a rectangle
-      self.specificButtons[id].attr("class", "btn btn-warning");
+      self.specificButtons[id].attr("class", "btn btn-default");
       self.dragLayer.classed("disabled", false);
       let msg = `Adding Selection ${id}...`;
       self.specificButtons[id].html(msg);
@@ -150,6 +150,7 @@ let RectSelectorController = function(buttonID) {
     if (self.specificSelector !== null){
       let msg = `<span class="glyphicon glyphicon-remove"></span> Remove Selection ${self.specificSelector}`;
       self.specificButtons[self.specificSelector].html(msg);
+      self.specificButtons[self.specificSelector].attr("class", "btn btn-warning");
     }
 
     self.drawingStart = null;
