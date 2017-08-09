@@ -1,6 +1,18 @@
 "use strict";
 
-console.log("we in nerds");
+getLogFile()
+    .then(function(data) {
+      var logText = data.split(/\n/);
+      
+
+      for (var i = 0; i < logText.length-1; i++) {
+      	var test = logText[i].split(',');
+      	console.log(test);
+      	var rows = "";
+      	rows += "<tr><td>" + test[0] + "</td><td>" + test[1] + "</td></tr>";
+        $(rows).appendTo("#list tbody");
+      }
+    });
 
 d3.select("#submitButton")
   .on("click", clickedButton);
@@ -11,14 +23,6 @@ d3.select("#confirmButton")
 var input = document.getElementById("exampleInputFile").value;
 let filename;
 
-// if(input.length != 0){
-//       $('#modalAcceptButton').removeClass("disabled");
-//     }
-//     else{
-//       $('#modalAcceptButton').addClass("disabled");
-//     }
-
-
 function clickedButton() {
   d3.event.preventDefault();
   document.getElementById("fileName").innerHTML = document.getElementById("exampleInputFile").value;
@@ -27,6 +31,8 @@ function clickedButton() {
   getLogFile()
     .then(function(data) {
       console.log("Log:", data);
+      // var test = data.split(',');
+      // console.log(test);
     });
 }
 
@@ -89,4 +95,7 @@ function sendCSV(e) {
   };
 
   xhr.send(JSON.stringify({"data": e.target.result, "name": filename}));
+
+	location.reload();
+
 }
