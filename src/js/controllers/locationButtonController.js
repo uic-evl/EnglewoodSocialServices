@@ -107,9 +107,14 @@ let LocationButtonController = function() {
     console.log(replaced);
 
     var object = d3.json("https://maps.googleapis.com/maps/api/geocode/json?address=" + replaced + "&key=AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI", function(err, d) {
+      
+      if (d.results && d.results[0]) {
       let pos = d.results[0].geometry.location;
 
       updateCurrentLocation(pos);
+      } else {
+        alert("Address Not Found");
+      }
     });
 
   }
