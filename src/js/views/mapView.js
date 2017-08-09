@@ -214,6 +214,14 @@ let MapView = function(div) {
 
     let color = self.rectColors.shift();
 
+    if(rectID){
+      if(rectID == 1){
+        color = "#1f77b4";
+      }else if(rectID == 2){
+        color = "#ff7f0e";
+      }
+    }
+
     let rect = L.rectangle([llBound1, llBound2], {
         color,
         data: rectID || self.totalRects

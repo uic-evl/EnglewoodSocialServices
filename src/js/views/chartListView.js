@@ -304,7 +304,7 @@ let ChartListView = function(listID) {
         data.push({
           value: (propertyValue) || 0, //fix for NaN values
           color: curSelection.color,
-          // id: curSelection.id
+          id: curSelection.id
         });
       }
       let boundsY = [+graph.background.attr('height'), 0];
