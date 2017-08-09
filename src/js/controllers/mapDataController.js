@@ -86,7 +86,6 @@ let MapDataController = function() {
   }
 
   function populateDropdown(categories) {
-    console.log(categories);
     self.data = categories;
     let tier1Categories = Object.keys(categories);
 
@@ -175,8 +174,6 @@ let MapDataController = function() {
         //   });
 
         // secondaryDropdown.append("li").attr("class", "divider");
-
-        console.log(categories[c1]);
 
         secondaryDropdown.selectAll(".secondaryCategory")
         .data(categories[c1])
