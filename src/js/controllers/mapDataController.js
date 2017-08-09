@@ -86,6 +86,8 @@ let MapDataController = function () {
     console.log("current_census_properties", current_census_properties);
     App.views.chartList.removePropertyChart(current_census_properties);
 
+    removeMap();
+
     self.censusDropdownList.selectAll(".glyphicon")
       .attr("class", "glyphicon glyphicon-unchecked");
 
@@ -242,6 +244,7 @@ let MapDataController = function () {
 
               document.getElementById("allCensusButton").style.display = "";
 
+              addMap(d);
             } else {
               resetFilters();
             }
@@ -267,12 +270,12 @@ let MapDataController = function () {
 
     // toggle whether or not it is selected
     if (d3.select(this).classed("btn-danger")) {
-      removeMap.call(this, d);
+      // removeMap.call(this, d);
       App.views.map.drawChoropleth();
     } else {
       self.mapDataPanel.selectAll(".mapButton").each(removeMap);
 
-      addMap.call(this, d);
+      // addMap.call(this, d);
       let reducedData = App.models.censusData.getSubsetGeoJSON(d);
       App.views.map.drawChoropleth(reducedData);
     }
@@ -283,20 +286,23 @@ let MapDataController = function () {
 
   function addMap(d) {
     // update panel-heading
-    let panelHeading = d3.select(self.mapDataPanel.selectAll("#" + _.kebabCase("main_" + d.mainType)).node().parentNode).selectAll(".panel-heading");
+    // let panelHeading = d3.select(self.mapDataPanel.selectAll("#" + _.kebabCase("main_" + d.mainType)).node().parentNode).selectAll(".panel-heading");
 
-    let mapLabel = panelHeading.selectAll(".hasMap");
-    mapLabel.style("display", "inline");
-    d3.select(this).attr("class", "btn btn-danger mapButton");
+    // let mapLabel = panelHeading.selectAll(".hasMap");
+    // mapLabel.style("display", "inline");
+    // d3.select(this).attr("class", "btn btn-danger mapButton");
+    let reducedData = App.models.censusData.getSubsetGeoJSON(d);
+    App.views.map.drawChoropleth(reducedData);
   }
 
-  function removeMap(d) {
+  function removeMap() {
     // update panel-heading
-    let panelHeading = d3.select(self.mapDataPanel.selectAll("#" + _.kebabCase("main_" + d.mainType)).node().parentNode).selectAll(".panel-heading");
+    // let panelHeading = d3.select(self.mapDataPanel.selectAll("#" + _.kebabCase("main_" + d.mainType)).node().parentNode).selectAll(".panel-heading");
 
-    let mapLabel = panelHeading.selectAll(".hasMap");
-    mapLabel.style("display", "none");
-    d3.select(this).attr("class", "btn btn-success mapButton");
+    // let mapLabel = panelHeading.selectAll(".hasMap");
+    // mapLabel.style("display", "none");
+    // d3.select(this).attr("class", "btn btn-success mapButton");
+    App.views.map.drawChoropleth();
   }
 
   function chartButtonClick(d) {
