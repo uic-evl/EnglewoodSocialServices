@@ -211,7 +211,7 @@ let ChartListView = function(listID) {
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
             .attr('text-anchor','middle').style('font-size',textSize)
-            .text(`Selection ${self.selections[selectionKeys[index]].id}`);
+            .text(`Map Area ${self.selections[selectionKeys[index]].id}`);
         });
 
       let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
@@ -331,7 +331,7 @@ let ChartListView = function(listID) {
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
             .attr('text-anchor', 'middle').style('font-size', textSize)
-            .text(`Selection ${self.selections[selectionKeys[index]].id}`);
+            .text(`Map Area ${self.selections[selectionKeys[index]].id}`);
         });
 
       let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);

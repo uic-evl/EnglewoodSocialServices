@@ -52,16 +52,16 @@ let RectSelectorController = function(buttonID) {
   function handleButtonClickForSpecificSelector(id){
     self.drawable = !self.drawable;
 
-    if (self.specificButtons[id].classed("btn-success")) { //just added a rectangle
-      self.specificButtons[id].attr("class", "btn btn-default");
+    if (!self.specificButtons[id].classed("added")) { //just started adding a rectangle
+      self.specificButtons[id].classed('added',true);
       self.dragLayer.classed("disabled", false);
       let msg = `Adding Selection ${id}...`;
       self.specificButtons[id].html(msg);
     } else { //removing a rectangle
-      self.specificButtons[id].attr("class", "btn btn-success");
+      self.specificButtons[id].classed('added',false);
       self.dragLayer.classed("disabled", true);
       removeRect(id);
-      let msg = `<span class="glyphicon glyphicon-plus"></span> Add Selection ${self.specificSelector}`;
+      let msg = `<span class="glyphicon glyphicon-plus"></span> Select Map Area ${self.specificSelector}`;
       self.specificButtons[self.specificSelector].html(msg);
     }
   }
@@ -148,9 +148,9 @@ let RectSelectorController = function(buttonID) {
     }
 
     if (self.specificSelector !== null){
-      let msg = `<span class="glyphicon glyphicon-remove"></span> Remove Selection ${self.specificSelector}`;
+      let msg = `<span class="glyphicon glyphicon-remove"></span> Map Area ${self.specificSelector}`;
       self.specificButtons[self.specificSelector].html(msg);
-      self.specificButtons[self.specificSelector].attr("class", "btn btn-warning");
+      // self.specificButtons[self.specificSelector].attr("class", "btn btn-warning");
     }
 
     self.drawingStart = null;
@@ -176,8 +176,7 @@ let RectSelectorController = function(buttonID) {
 
     }
     if(self.specificButtons[id]){
-      self.specificButtons[id].attr("class", "btn btn-success");
-      let msg = `<span class="glyphicon glyphicon-plus"></span> Add Selection ${id}`;
+      let msg = `<span class="glyphicon glyphicon-plus"></span> Select Map Area ${id}`;
       self.specificButtons[id].html(msg);
     }
 
