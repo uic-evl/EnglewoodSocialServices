@@ -30,6 +30,11 @@ let ChartListView = function(listID) {
     }
 
     //default entry
+    addServiceChart({
+      mainType: "All Services",
+      subType: "Total Count",
+      type: "service"
+    });
     checkSelections();
   }
 
@@ -237,6 +242,38 @@ let ChartListView = function(listID) {
     }
   }
 
+  function updateServiceChart(chart,service_data){
+    chart = chart || self.chartList.select(".census"); //only one census property at a single time
+    let graph = chart.select('.graph-group');
+    graph.background = graph.select('.graph-background');
+    graph.content = graph.append('g').classed('graph-content', true);
+    let selectionKeys = Object.keys(self.selections);
+
+
+    chart.selectAll(".panel-footer").remove();
+
+    //check if service is specific
+    if (service_data.mainType.toLowerCase() === "all services" && service_data.subType.toLowerCase() === "total count") {
+      chart.append('div').classed('panel-footer', true).text("Select a service category to compare specific service data across the selected areas.")
+    }
+
+    //check selection count
+    if(selectionKeys.length < 2){
+      let text_element = graph.content.append('text')
+        .attr('text-anchor', 'middle')
+        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2)
+        .attr("y", +graph.background.attr('height') / 2)
+      addMultilineText(text_element, [`Select ${2 - selectionKeys.length} more ${2 - selectionKeys.length === 1 ? "area" : "areas"} where you'd`, `like to compare data`]);
+      return;
+    }
+
+    //graph data
+    graph.content.append('text')
+      .attr("x", self.chartMargins.left + 5)
+      .attr("y", self.chartMargins.top + 15)
+      .text(`Service chart not implemented yet`);
+  }
+
   function addMultilineText(text_element,message_arr, options){
     options = options || {};
     let x = options.x || +text_element.attr('x') || 0;
@@ -286,10 +323,7 @@ let ChartListView = function(listID) {
       //         .text(d);
       //     });
       }else if (property_data.type === "service"){
-        graph.content.append('text')
-          .attr("x", self.chartMargins.left + 5)
-          .attr("y", self.chartMargins.top + 15)
-          .text(`Service chart not implemented yet`);
+        updateServiceChart(chart,property_data);
       }else{
         graph.content.append('text')
           .attr("x", self.chartMargins.left + 5)
@@ -345,6 +379,11 @@ let ChartListView = function(listID) {
     removeChart(createPropertyID(service_data));
 
     if (self.chartList.selectAll(`.service`).empty()) {
+      addServiceChart({ //show all services by default
+        mainType: "All Services",
+        subType: "Total Count",
+        type: "service"
+      });
       checkSelections();
     }
   }
@@ -409,7 +448,8 @@ let ChartListView = function(listID) {
     removePropertyChart,
     addSelection,
     removeSelection,
-
+    addServiceChart,
+    removeServiceChart,
     makeCollapsing,
     resize
   };

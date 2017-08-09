@@ -123,7 +123,8 @@ let RectSelectorController = function(buttonID) {
       bounds: rect.bounds,
       area: censusData.area * 3.86102e-7, // meters to miles
       data: {
-        census: censusData.dataTotals
+        census: censusData.dataTotals,
+        service: serviceData
       },
       color: rect.color,
       id: rect.id,
