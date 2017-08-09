@@ -142,7 +142,7 @@ let modalController = function() {
         // App.views.map.clearLocation();
 
         //code to center on first location in list
-        if(searchData[0].Address != null){
+        if(searchData && searchData[0] && searchData[0].Address != null){
           // App.controllers.locationButton.getLatLngFromAddress(data[0].Address);
           var replaced = searchData[0].Address.split(' ').join('+');
           console.log(replaced);
