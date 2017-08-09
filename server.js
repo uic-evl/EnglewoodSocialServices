@@ -18,16 +18,11 @@ let admin = express();
 admin.use(bodyParser.json());
 admin.use(auth.connect(basic));
 
-app.use('/admin*', admin);
+app.use('/admin', admin);
 app.use(express.static("./"));
 
 app.listen(4000, function () {
   console.log('Example app listening on port 4000!')
-});
-
-// Setup route.
-admin.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 admin.get('/log', (req, res) => {
@@ -38,6 +33,11 @@ admin.put('/csv', (req, res) => {
   fs.writeFileSync(path.join(__dirname, "admin-data", "TestWrite.csv"), req.body.data);
 
   addToLog(req.body.name, res);
+});
+
+// Setup route.
+admin.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 function addToLog(fileName, res) {
