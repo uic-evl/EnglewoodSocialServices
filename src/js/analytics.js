@@ -49,6 +49,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   App.init = function() {
     console.log("Loading Analytics");
     App.views.map = new MapView("serviceMap");
+    App.views.map.drawEnglewoodOutline();
     App.views.chartList = new ChartListView("#chartList");
     App.views.chartList.makeCollapsing("#toggleHideChartsButton", "#chartListWrapper");
 

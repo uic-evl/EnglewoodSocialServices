@@ -70,6 +70,19 @@ let MapView = function(div) {
     // setTimeout(function() {
     //   self.map.invalidateSize();
     // }, 0);
+
+    
+  }
+
+  function drawEnglewoodOutline(){
+    //add outline of Englewood
+    d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function(error, d){
+      L.geoJSON(d).addTo(self.map).setStyle({fillColor: 'transparent',
+        weight: 2,
+        opacity: .5,
+        color: 'black',  //Outline color
+        fillOpacity: 0.7});
+    });
   }
 
   // initialize the different icon options by color
@@ -328,6 +341,7 @@ let MapView = function(div) {
     centerAroundRect,
 
     drawChoropleth,
+    drawEnglewoodOutline,
 
     jumpToLocation,
     clearLocation,
