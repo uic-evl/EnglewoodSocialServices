@@ -77,11 +77,14 @@ let MapView = function(div) {
   function drawEnglewoodOutline(){
     //add outline of Englewood
     d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function(error, d){
-      L.geoJSON(d).addTo(self.map).setStyle({fillColor: 'transparent',
+      L.geoJSON(d).addTo(self.map).setStyle({
+        fillColor: 'transparent',
         weight: 3,
         opacity: .5,
         color: 'black',  //Outline color
-        fillOpacity: 0.7});
+        fillOpacity: 0.7,
+        className: "geoJSON-englewoodOutline"
+      });
     });
   }
 
@@ -283,10 +286,10 @@ let MapView = function(div) {
           // console.log(layer);
           geojson.layer.bringToFront();
         })
-        .on("mouseout", function(geojson) {
-          // console.log(layer);
-          geojson.layer.bringToBack();
-        })
+        // .on("mouseout", function(geojson) {
+        //   // console.log(layer);
+        //   geojson.layer.bringToBack();
+        // })
         .bindPopup(function(layer) {
           console.log(layer.feature.properties.data);
           return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
