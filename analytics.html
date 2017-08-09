@@ -58,10 +58,6 @@
       </div>
 
       <div class="navbar-left">
-        <button type="button" class="btn btn-primary navbar-btn" id="mapPanelToggle">
-            <span id="mapText">Select Census Category</span>
-            <span class="glyphicon glyphicon-arrow-down"></span>
-        </button>
         <div class="nav btn-group" id="filterButtonGroup">
            <div class="btn-group"> 
             <button type="button" class="btn btn-default dropdown-toggle navbar-btn rounded" data-toggle="dropdown" id="filterDropdownButton">
@@ -75,6 +71,23 @@
            </div> 
           <!-- <div class="btn-group">  -->
             <button type="button" class="btn btn-warning navbar-btn" id="allServicesButton" style="display:none;">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button> 
+          <!-- </div> -->
+        </div>
+        <div class="nav btn-group" id="censusButtonGroup">
+           <div class="btn-group"> 
+            <button type="button" class="btn btn-default dropdown-toggle navbar-btn rounded" data-toggle="dropdown" id="censusDropdownButton">
+              <span id="currentServiceSelection">
+                Select Census Category...
+              </span>
+                <span class="caret"></span>
+            </button>
+            <!-- <ul class="dropdown-menu" role="menu" id="filterDropdownList"></ul> -->
+            <ul class="dropdown-menu dropdown-toggle" role="menu" id="censusDropdownList"></ul>
+           </div> 
+          <!-- <div class="btn-group">  -->
+            <button type="button" class="btn btn-warning navbar-btn" id="allCensusButton" style="display:none;">
               <span class="glyphicon glyphicon-remove"></span>
             </button> 
           <!-- </div> -->

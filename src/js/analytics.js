@@ -74,6 +74,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
 
+    App.controllers.mapData.setCensusClearButton();
+
     // load other data sources when asked to plot
 
     Promise.all([socialServiceP, serviceTaxonomyP])
