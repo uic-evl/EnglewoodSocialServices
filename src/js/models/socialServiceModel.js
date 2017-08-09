@@ -57,6 +57,8 @@ let SocialServiceModel = function() {
     return getSearchAndFilterSubset();
   }
 
+  
+
   function getSearchAndFilterSubset() {
 
     let filteredData = Object.keys(self.filters).length == 0 ? self.data :
@@ -77,10 +79,15 @@ let SocialServiceModel = function() {
 
   }
 
+  function getDataWithinBounds(bounds) {
+    return _.filter(self.data, service => service.Y < bounds[0].lat && service.Y >= bounds[1].lat && service.X < bounds[1].lng && service.X >= bounds[0].lng);
+  }
+
   return {
     loadData,
     getData,
     getFilteredData,
-    getSearchedData
+    getSearchedData,
+    getDataWithinBounds
   };
 };
