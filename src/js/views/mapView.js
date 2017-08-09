@@ -251,9 +251,9 @@ let MapView = function(div) {
       self.choropleth = L.geoJSON(data, {
           style: function(feature) {
             return {
-              color: feature.properties.data === 0 ? "#444" : colorScale(feature.properties.data),
-              opacity: 0.1,
-              fillOpacity: 0.75,
+              color: colorScale(feature.properties.data),
+              opacity: feature.properties.data === 0 ? 0 : 0.1,
+              fillOpacity: feature.properties.data === 0 ? 0 : 0.75,
               className: "geoJSON-gridSpace"
             }
           }
