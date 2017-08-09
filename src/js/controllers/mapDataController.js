@@ -68,11 +68,23 @@ let MapDataController = function () {
   function resetFilters() {
     console.log("Reset Filters");
 
+    let current_census_properties = {
+      type: "census"
+    };
+
+    current_census_properties.subType = (Object.keys(self.filters).length === 1) ? Object.keys(self.filters)[0] : "All";
+    
     self.filters = {};
 
     for (let mainCategory of Object.keys(self.mainCategoryStates)) {
+      if (self.mainCategoryStates[mainCategory] !== "none") {
+        current_census_properties.mainType = mainCategory;
+      }
       self.mainCategoryStates[mainCategory] = "none";
     }
+
+    console.log("current_census_properties", current_census_properties);
+    App.views.chartList.removePropertyChart(current_census_properties);
 
     self.censusDropdownList.selectAll(".glyphicon")
       .attr("class", "glyphicon glyphicon-unchecked");
@@ -393,7 +405,7 @@ let MapDataController = function () {
   return {
     setupDataPanel,
     attachResetOverlayButton,
-
+    resetFilters,
     populateDropdown,
     removeChartFromList,
     setCensusClearButton

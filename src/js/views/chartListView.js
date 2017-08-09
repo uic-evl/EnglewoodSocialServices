@@ -114,16 +114,24 @@ let ChartListView = function(listID) {
     let heading = panel.append("div").attr("class", "panel-heading").append('div').classed('row',true);
 
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
-    let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle').html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" ? " (per sq. mi.)" : ""}`);
+    let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle text-left')
+    if(property_data.type !== "service"){
+      propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" ? " (per sq. mi.)" : ""}`);
+    }else{
+      propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`);
+    }
     let closeButton = heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove text-right')
       .on('click',function(){
-        if(property_data.type === "census")
-          removePropertyChart(property_data);
-        else if(property_data.type === "service")
-          removeServiceChart(property_data);
-        else
+        if(property_data.type === "census"){
+          // removePropertyChart(property_data);
+          App.controllers.mapData.resetFilters();
+        }else if(property_data.type === "service"){
+          // removeServiceChart(property_data);
+          App.controllers.serviceFilterDropdown.resetFilters();
+        }else{
           console.log("Unknown chart type",property_data.type);
-        App.controllers.mapData.removeChartFromList(property_data);
+          App.controllers.mapData.removeChartFromList(property_data);
+        }
       });
 
     // let area = heading.append("h4").attr("class", "rectArea").html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
@@ -204,24 +212,6 @@ let ChartListView = function(listID) {
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
             .attr('text-anchor','middle').style('font-size',textSize)
             .text(`Selection ${self.selections[selectionKeys[index]].id}`);
-
-          
-          //button to remove selection
-          // let buttonSize = yOffset * 2;
-          // let buttonOffsetY = boundsY[0] + yOffset * 1.5;
-          // let buttonOffsetX = (barWidth / 2) - buttonSize / 2;
-          // graph.content.append('rect')
-          //   .attr('x', xOffset + barWidth * index + buttonOffsetX).attr('y', buttonOffsetY)
-          //   .attr('width', buttonSize).attr('height', buttonSize)
-          //   .attr('rx', 3).attr('ry', 3)
-          //   .attr('id', 'delete-selection-button')
-          //   .on('click', function () {
-          //     App.controllers.rectSelector.removeRect(selectionKeys[index]);
-          //   });
-
-          // graph.content.append('text')
-          //   .attr('x', x + barWidth / 2).attr('y', y + height + yOffset * 1.5 + buttonSize / 4)
-          //   .attr('text-anchor', 'middle').text('X').classed('delete-button-symbol', true);
         });
 
       let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
@@ -240,6 +230,11 @@ let ChartListView = function(listID) {
         // .attr("y", self.chartMargins.top + 15)
       addMultilineText(text_element,[`Select ${2 - data.length} more ${2 - data.length === 1 ? "area" : "areas"} where you'd`,`like to compare data`]);
     }
+
+    chart.selectAll('.panel-footer').remove();
+
+    chart.append('div').attr("class", 'panel-footer text-left', true)
+      .html("<b>Census Data</b>");
   }
 
   function updateServiceChart(chart,service_data){
@@ -248,13 +243,22 @@ let ChartListView = function(listID) {
     graph.background = graph.select('.graph-background');
     graph.content = graph.append('g').classed('graph-content', true);
     let selectionKeys = Object.keys(self.selections);
+    let boundsX = [0, +graph.background.attr('width')];
+    let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
+    
+    let barWidth = xScale.range()[1] / selectionKeys.length;
+    let data = [];
 
-
+    console.log({service_data});
     chart.selectAll(".panel-footer").remove();
+
+    let footer = chart.append('div').attr("class",'panel-footer text-left', true);
 
     //check if service is specific
     if (service_data.mainType.toLowerCase() === "all services" && service_data.subType.toLowerCase() === "total count") {
-      chart.append('div').classed('panel-footer', true).text("Select a service category to compare specific service data across the selected areas.")
+      footer.html("<b>Service Data</b><br>Select a service category to compare specific service data across the selected areas.")
+    }else{
+      footer.html("<b>Service Data</b>")
     }
 
     //check selection count
@@ -265,13 +269,79 @@ let ChartListView = function(listID) {
         .attr("y", +graph.background.attr('height') / 2)
       addMultilineText(text_element, [`Select ${2 - selectionKeys.length} more ${2 - selectionKeys.length === 1 ? "area" : "areas"} where you'd`, `like to compare data`]);
       return;
-    }
+    }else{
+      for (let s of selectionKeys) {
+        let curSelection = self.selections[s];
+        let area = curSelection.area;
+        let propertyValue;
+        let showAll = service_data.mainType.toLowerCase() === "all services" && service_data.subType.toLowerCase() === "total count";
+        try {
+          // propertyValue = curSelection.data.census[property_data.mainType][property_data.subType];
+          if (!showAll) {
+            let filters = service_data.subFilters || [service_data.subType];
+            let services = curSelection.data.service;
+            let filteredServices = services.filter((s) => {
+              let keep = false;
+              for (let property in s) {
+                if (filters.indexOf(property) > -1 && s[property] == 1) {
+                  keep = true;
+                  break;
+                }
+              }
+              return keep;
+            });
 
-    //graph data
-    graph.content.append('text')
-      .attr("x", self.chartMargins.left + 5)
-      .attr("y", self.chartMargins.top + 15)
-      .text(`Service chart not implemented yet`);
+            propertyValue = filteredServices.length;
+          } else { //no service filters active, so just show all
+            propertyValue = curSelection.data.service.length;
+          }
+        } catch (err) {
+          console.log(err);
+          propertyValue = 0;
+        }
+
+        //show data relative to area (i.e. density)
+        data.push({
+          value: (propertyValue) || 0, //fix for NaN values
+          color: curSelection.color,
+          // id: curSelection.id
+        });
+      }
+      let boundsY = [+graph.background.attr('height'), 0];
+      let yScale = d3.scaleLinear().domain([0, d3.max(data, (d) => { return d.value; })]).range(boundsY);
+      let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
+      let yMax = yScale.domain()[1];
+      graph.content.selectAll('.bar').data(data)
+        .enter().append('rect').each(function (data_entry, index) {
+          let height = (data_entry.value != 0) ? yScale(yMax - data_entry.value) : 0;
+          let x = xOffset + xScale(index), y = yOffset + yScale(data_entry.value);
+          d3.select(this).classed('bar', true)
+            .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
+            .attr('width', barWidth).attr('height', height)
+            .style('fill', data_entry.color).attr('id', 'selection-graph-bar')
+            .on('click', function () {
+              console.log(data_entry.value);
+              App.views.map.centerAroundRect(self.selections[selectionKeys[index]]);
+            });
+
+          let textSize = 14;
+          let textOffsetY = boundsY[0] + yOffset * 1.5 + textSize * 1.15;
+          let textOffsetX = (barWidth / 2) - textSize / 2;
+
+          graph.content.append('text')
+            .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
+            .attr('text-anchor', 'middle').style('font-size', textSize)
+            .text(`Selection ${self.selections[selectionKeys[index]].id}`);
+        });
+
+      let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
+      graph.content.append('g').classed('axis', true)
+        .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
+
+      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(data.length);
+      graph.content.append('g').classed('axis', true)
+        .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
+    }
   }
 
   function addMultilineText(text_element,message_arr, options){
