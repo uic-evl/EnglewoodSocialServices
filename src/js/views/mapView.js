@@ -43,6 +43,10 @@ let MapView = function (div) {
     self.map = L.map(div);
     console.log(self.map.getSize());
 
+    if (self.map.getSize().y === 1) {
+      alert("Error loading map. Please reload your page");
+    }
+
     // create the map layer using data from openstreetmap
     // var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
     // // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
