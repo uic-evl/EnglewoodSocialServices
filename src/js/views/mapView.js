@@ -59,7 +59,7 @@ let MapView = function (div) {
     });
 
     self.map.addLayer(osm);
-    self.map.setView([41.779786, -87.644778], 15);
+    self.map.setView([41.7750541, -87.6585445], 14);
 
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
     self.rectLayer = L.layerGroup([]).addTo(self.map);
