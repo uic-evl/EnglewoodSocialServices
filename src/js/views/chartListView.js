@@ -120,7 +120,7 @@ let ChartListView = function(listID) {
     let heading = panel.append("div").attr("class", "panel-heading").append('div').classed('row',true);
 
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
-    let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle text-left')
+    let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle text-left');
     if(property_data.type !== "service"){
       propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" ? " (per sq. mi.)" : ""}`);
     }else{

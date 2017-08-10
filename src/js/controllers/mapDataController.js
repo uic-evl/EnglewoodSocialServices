@@ -126,7 +126,7 @@ let MapDataController = function () {
 
         // create tab content div for this t1 category
         let secondaryDropdown = listItem.append("ul")
-          .attr("class", "dropdown-menu")
+          .attr("class", "dropdown-menu");
 
         secondaryDropdown.selectAll(".secondaryCategory")
           .data(categories[c1])
@@ -159,7 +159,7 @@ let MapDataController = function () {
                 if (subType !== d.subType) {
                   self.filters[subType] = false;
 
-                  updateSubCategoryIcon(subType);
+                  updateSubCategoryIcon(d.mainType, subType);
                 }
               });
             let curSelection = self.filters[d.subType];
@@ -187,7 +187,7 @@ let MapDataController = function () {
             }
 
 
-            updateSubCategoryIcon(d.subType);
+            updateSubCategoryIcon(d.mainType, d.subType);
             updateMainCategoryOnSubUpdate(d.mainType);
 
             chartButtonClick(d);
@@ -309,11 +309,14 @@ let MapDataController = function () {
     }
   }
 
-  function updateSubCategoryIcon(category) {
-    let id = "#sub_" + convertPropertyToID(category);
+  function updateSubCategoryIcon(mainCategory,subCategory) {
+    let id = "#sub_" + convertPropertyToID(subCategory);
+    let main_id = "#main_" + convertPropertyToID(mainCategory);
 
-    let item = self.censusDropdownList.selectAll(id);
-    let state = self.filters[category];
+    let item = d3.select(self.censusDropdownList.selectAll(main_id).node().parentNode).selectAll(id);
+    let state = self.filters[subCategory];
+
+    console.log(...arguments,main_id,id,state);
 
     item.select(".glyphicon")
       .attr("class", "glyphicon " + (state ? "glyphicon-check" : "glyphicon-unchecked"));
