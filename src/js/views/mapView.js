@@ -287,7 +287,7 @@ let MapView = function (div) {
       console.log(colorScale.domain(), colorScale.range());
 
       // TODO: draw color scale for map
-      d3.select("#legend").append("svg").attr("width", 50).attr("height", 50);
+      d3.select("#legend").append("svg").attr("width", 200).attr("height", 60);
       var svg = d3.select("#legend").select("svg");
 
       svg.append("g")
@@ -297,7 +297,7 @@ let MapView = function (div) {
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
         .orient('horizontal')
-        .cells(10)
+        .cells(5)
         .scale(colorScale);
 
       svg.select(".legendLinear")
