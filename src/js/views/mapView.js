@@ -273,7 +273,7 @@ let MapView = function (div) {
       self.choroplethLayer.removeLayer(self.choropleth);
 
       self.englewoodOutline.setStyle({ fillOpacity: 0.35 });
-      d3.select(".legendLinear").remove();
+      d3.select("#svgLegend").remove();
     }
 
     // if data specified, add new choropleth
@@ -287,8 +287,9 @@ let MapView = function (div) {
       console.log(colorScale.domain(), colorScale.range());
 
       // TODO: draw color scale for map
-      d3.select("#legend").append("svg").attr("width", 200).attr("height", 60);
-      var svg = d3.select("#legend").select("svg");
+      let svg = d3.select("#legend").append("svg").attr("width", 200).attr("height", 60)
+        .style('background-color',"rgba(150,150,150,0.75)")
+        .attr('id','svgLegend');
 
       svg.append("g")
         .attr("class", "legendLinear")
