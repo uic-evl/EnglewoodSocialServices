@@ -42,23 +42,33 @@ let MapView = function (div) {
 
     self.map = L.map(div);
     console.log(self.map.getSize());
+
     // create the map layer using data from openstreetmap
+    // var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
+    // // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
+    // // var osmUrl = 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'; // light
 
-    var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
-    // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
-    // var osmUrl = 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'; // light
+    // var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 
-    var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    // var osm = new L.TileLayer(osmUrl, {
+    //   minZoom: 11,
+    //   maxZoom: 18,
+    //   zoomSnap: 0.25,
+    //   zoomDelta: 0.25,
+    //   attribution: osmAttrib
+    // });
+    // self.map.addLayer(osm);
 
-    var osm = new L.TileLayer(osmUrl, {
-      minZoom: 11,
+
+    // use mapbox map
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18,
-      zoomSnap: 0.25,
-      zoomDelta: 0.25,
-      attribution: osmAttrib
-    });
+      id: 'mapbox.streets',
+      accessToken: 'pk.eyJ1IjoiYW5kcmV3dGJ1cmtzIiwiYSI6ImNpdnNmcHQ0ejA0azYydHBrc3drYWRwcTgifQ.pCA_a_l6sPcMo8oGzg5stQ'
+    }).addTo(self.map);
 
-    self.map.addLayer(osm);
+    
     self.map.setView([41.7750541, -87.6585445], 14);
 
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
