@@ -110,6 +110,7 @@ let MapView = function (div) {
         shadowSize: [41, 41]
       });
     }
+
   }
 
   function plotServices(englewoodLocations) {
@@ -272,6 +273,7 @@ let MapView = function (div) {
       self.choroplethLayer.removeLayer(self.choropleth);
 
       self.englewoodOutline.setStyle({ fillOpacity: 0.35 });
+      d3.select(".legendLinear").remove();
     }
 
     // if data specified, add new choropleth
@@ -285,6 +287,22 @@ let MapView = function (div) {
       console.log(colorScale.domain(), colorScale.range());
 
       // TODO: draw color scale for map
+      d3.select("#legend").append("svg").attr("width", 50).attr("height", 50);
+      var svg = d3.select("#legend").select("svg");
+
+      svg.append("g")
+        .attr("class", "legendLinear")
+        .attr("transform", "translate(20,20)");
+
+      var legendLinear = d3.legendColor()
+        .shapeWidth(30)
+        .orient('horizontal')
+        .cells(10)
+        .scale(colorScale);
+
+      svg.select(".legendLinear")
+        .call(legendLinear);
+
 
       self.choropleth = L.geoJSON(data, {
           style: function (feature) {
@@ -318,6 +336,7 @@ let MapView = function (div) {
 
       self.rectLayer.eachLayer(rect => rect.bringToFront());
     }
+
   }
 
   function jumpToLocation(position) {
