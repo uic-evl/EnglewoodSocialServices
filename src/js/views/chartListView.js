@@ -81,6 +81,12 @@ let ChartListView = function(listID) {
         d3.select(this).classed("open", open);
 
         d3.select(this).select(".glyphicon").attr("class", open ? "glyphicon glyphicon-eye-close" : "glyphicon glyphicon-eye-open");
+        if (open) {
+          document.getElementById("chartListButtonText").innerHTML = "Hide Chart List";
+        }
+        else {
+          document.getElementById("chartListButtonText").innerHTML = "Show Chart List";
+        }
 
         self.wrapper
           .style("pointer-events", open ? "all" : "none")
