@@ -59,7 +59,7 @@ let MapView = function (div) {
     });
 
     self.map.addLayer(osm);
-    self.map.setView([41.779786, -87.644778], 15);
+    self.map.setView([41.7750541, -87.6585445], 14);
 
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
     self.rectLayer = L.layerGroup([]).addTo(self.map);
@@ -70,13 +70,12 @@ let MapView = function (div) {
     // setTimeout(function() {
     //   self.map.invalidateSize();
     // }, 0);
-
-
   }
 
   function drawEnglewoodOutline() {
     //add outline of Englewood
     d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function (error, d) {
+<<<<<<< HEAD
       L.geoJSON(d, {
         style: {
           fillColor: 'transparent',
@@ -87,6 +86,16 @@ let MapView = function (div) {
           className: "geoJSON-englewoodOutline"
         }
       }).addTo(self.map);
+=======
+      L.geoJSON(d).addTo(self.map).setStyle({
+        fillColor: 'transparent',
+        weight: 7,
+        opacity: .5,
+        color: '#004D23', //Outline color
+        fillOpacity: 0.1,
+        className: "geoJSON-englewoodOutline"
+      });
+>>>>>>> 2c8b5385529a90a400b3fbb986963c983ba09398
     });
   }
 
