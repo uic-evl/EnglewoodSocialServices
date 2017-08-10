@@ -80,7 +80,10 @@ let SocialServiceModel = function() {
   }
 
   function getDataWithinBounds(bounds) {
-    return _.filter(self.data, service => service.Y < bounds[0].lat && service.Y >= bounds[1].lat && service.X < bounds[1].lng && service.X >= bounds[0].lng);
+    let lat = d3.extent(bounds, b => b.lat);
+    let lng = d3.extent(bounds, b => b.lng);
+
+    return _.filter(self.data, service => service.Y >= lat[0] && service.Y < lat[1] && service.X >= lng[0] && service.X < lng[1]);
   }
 
   return {
