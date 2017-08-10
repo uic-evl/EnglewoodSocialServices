@@ -32,12 +32,9 @@ d3.select("#submitButton")
 d3.select("#confirmButton")
   .on("click", confirmClicked);
 
-var input = document.getElementById("exampleInputFile").value;
-let filename;
-
 function clickedButton() {
   d3.event.preventDefault();
-  document.getElementById("fileName").innerHTML = document.getElementById("exampleInputFile").value;
+  document.getElementById("fileName").innerHTML = document.getElementById("exampleInputFile").files[0].name; ;
 
 
   getLogFile()
