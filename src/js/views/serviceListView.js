@@ -100,6 +100,10 @@ let ServiceListView = function(listID) {
             .attr("class", "panel-footer");
 
           // add organization name to heading
+          panelHeading.append("small")
+            .attr("class", "detailText")
+            .text("Details");
+            
           panelHeading.append("h4")
             .attr("class", "orgName")
             .text(function (d) {

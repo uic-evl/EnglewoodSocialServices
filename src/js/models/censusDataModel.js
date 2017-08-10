@@ -55,7 +55,7 @@ let CensusDataModel = function() {
   function getSubsetGeoJSON(propertyTypes) {
     // return (self.gridData);
 
-    return {
+    let subset = {
       type: "FeatureCollection",
       features: _.map(self.gridData.features, feature => {
         return {
@@ -68,6 +68,10 @@ let CensusDataModel = function() {
         };
       })
     };
+
+    subset.features = _.filter(subset.features, o => o.properties.data);
+
+    return subset;
   }
 
   function getDataWithinBounds(bounds) {

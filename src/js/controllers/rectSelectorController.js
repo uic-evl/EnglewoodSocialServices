@@ -5,6 +5,7 @@ var App = App || {};
 let RectSelectorController = function(buttonID) {
   let self = {
     button: null,
+    specificButtons: {},
     dragLayer: null,
     svg: null,
 
@@ -12,6 +13,7 @@ let RectSelectorController = function(buttonID) {
     drawing: false,
     drawingRect: false,
     drawingStart: null,
+    specificSelector: null,
 
     rects: {}
   };
@@ -21,6 +23,14 @@ let RectSelectorController = function(buttonID) {
   function init() {
     self.button = d3.select(buttonID)
       .on("click", handleButtonClick);
+  }
+
+  function attachSpecificSelector(buttonID,rectID){
+    self.specificButtons[rectID] = d3.select(buttonID)
+      .on('click', function(){
+        self.specificSelector = rectID;
+        handleButtonClickForSpecificSelector(rectID);
+      });
   }
 
   function attachDragLayer(id) {
@@ -37,6 +47,23 @@ let RectSelectorController = function(buttonID) {
 
     self.drawingRect = self.svg.append("rect")
       .style("stroke-dasharray", "5, 5");
+  }
+
+  function handleButtonClickForSpecificSelector(id){
+    self.drawable = !self.drawable;
+
+    if (!self.specificButtons[id].classed("added")) { //just started adding a rectangle
+      self.specificButtons[id].classed('added',true);
+      self.dragLayer.classed("disabled", false);
+      let msg = `Adding Selection ${id}...`;
+      self.specificButtons[id].html(msg);
+    } else { //removing a rectangle
+      self.specificButtons[id].classed('added',false);
+      self.dragLayer.classed("disabled", true);
+      removeRect(id);
+      let msg = `<span class="glyphicon glyphicon-plus"></span> Select Map Area ${self.specificSelector}`;
+      self.specificButtons[self.specificSelector].html(msg);
+    }
   }
 
   function handleButtonClick() {
@@ -85,16 +112,19 @@ let RectSelectorController = function(buttonID) {
     let b1 = L.point(self.drawingStart.x, self.drawingStart.y);
     let b2 = L.point(d3.event.layerX, d3.event.layerY);
 
-    let rect = App.views.map.drawRect(b1, b2);
+    let rect = App.views.map.drawRect(b1, b2, self.specificSelector);
     let censusData = App.models.censusData.getDataWithinBounds(rect.bounds);
+    let serviceData = App.models.socialServices.getDataWithinBounds(rect.bounds);
 
+    console.log(serviceData);
     console.log(censusData);
 
     self.rects[rect.id] =  {
       bounds: rect.bounds,
       area: censusData.area * 3.86102e-7, // meters to miles
       data: {
-        census: censusData.dataTotals
+        census: censusData.dataTotals,
+        service: serviceData
       },
       color: rect.color,
       id: rect.id,
@@ -103,22 +133,28 @@ let RectSelectorController = function(buttonID) {
     // App.views.chartList.createChart(self.rects[rect.id]);
     App.views.chartList.addSelection(self.rects[rect.id]);
 
-    // self.drawable = false;
-    // self.button.attr("class", "btn btn-success navbar-btn");
-    // self.dragLayer.classed("disabled", true);
+    self.drawable = false;
+    self.button.attr("class", "btn btn-success navbar-btn");
+    self.dragLayer.classed("disabled", true);
     self.drawingRect
       .attr("width", 0)
       .attr("height", 0);
 
-    if (Object.keys(self.rects).length >= 10) {
+    if (Object.keys(self.rects).length >= 2) {
       self.drawable = false;
       self.button.attr("class", "btn btn-success navbar-btn disabled")
         .attr("disabled", true);
       self.dragLayer.classed("disabled", true);
     }
 
-    self.drawingStart = null;
+    if (self.specificSelector !== null){
+      let msg = `<span class="glyphicon glyphicon-remove"></span> Map Area ${self.specificSelector}`;
+      self.specificButtons[self.specificSelector].html(msg);
+      // self.specificButtons[self.specificSelector].attr('data-original-title', "Click to remove area selection");
+    }
 
+    self.drawingStart = null;
+    self.specificSelector = null;
   }
 
   function removeRect(id) {
@@ -137,13 +173,19 @@ let RectSelectorController = function(buttonID) {
         self.button.attr("class", "btn btn-success navbar-btn")
           .attr("disabled", null);
       }
+
+    }
+    if(self.specificButtons[id]){
+      let msg = `<span class="glyphicon glyphicon-plus"></span> Select Map Area ${id}`;
+      self.specificButtons[id].html(msg);
+      // self.specificButtons[id].attr('data-original-title',"Click and drag to select an area");
     }
 
   }
 
   return {
     attachDragLayer,
-
+    attachSpecificSelector,
     removeRect
   };
 }

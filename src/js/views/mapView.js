@@ -2,7 +2,7 @@
 
 var App = App || {};
 
-let MapView = function(div) {
+let MapView = function (div) {
   let self = {
     map: null,
     serviceLayer: null,
@@ -42,24 +42,38 @@ let MapView = function(div) {
 
     self.map = L.map(div);
     console.log(self.map.getSize());
+
+    if (self.map.getSize().y === 1) {
+      alert("Error loading map. Please reload your page");
+    }
+
     // create the map layer using data from openstreetmap
+    // var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
+    // // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
+    // // var osmUrl = 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'; // light
 
-    var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // normal
-    // var osmUrl = 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'; // dark
-    // var osmUrl = 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'; // light
+    // var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 
-    var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    // var osm = new L.TileLayer(osmUrl, {
+    //   minZoom: 11,
+    //   maxZoom: 18,
+    //   zoomSnap: 0.25,
+    //   zoomDelta: 0.25,
+    //   attribution: osmAttrib
+    // });
+    // self.map.addLayer(osm);
 
-    var osm = new L.TileLayer(osmUrl, {
-      minZoom: 11,
+
+    // use mapbox map
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18,
-      zoomSnap: 0.25,
-      zoomDelta: 0.25,
-      attribution: osmAttrib
-    });
+      id: 'mapbox.streets',
+      accessToken: 'pk.eyJ1IjoiYW5kcmV3dGJ1cmtzIiwiYSI6ImNpdnNmcHQ0ejA0azYydHBrc3drYWRwcTgifQ.pCA_a_l6sPcMo8oGzg5stQ'
+    }).addTo(self.map);
 
-    self.map.addLayer(osm);
-    self.map.setView([41.779786, -87.644778], 15);
+    
+    self.map.setView([41.7750541, -87.6585445], 14);
 
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
     self.rectLayer = L.layerGroup([]).addTo(self.map);
@@ -70,6 +84,22 @@ let MapView = function(div) {
     // setTimeout(function() {
     //   self.map.invalidateSize();
     // }, 0);
+  }
+
+  function drawEnglewoodOutline() {
+    //add outline of Englewood
+    d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function (error, d) {
+      self.englewoodOutline = L.geoJSON(d, {
+        style: {
+          color: "#006837",
+          weight: 3,
+          opacity: .75,
+          fillColor: '#d9f0a3', //Outline color
+          fillOpacity: 0.35,
+          className: "geoJSON-englewoodOutline"
+        }
+      }).addTo(self.map);
+    });
   }
 
   // initialize the different icon options by color
@@ -84,6 +114,7 @@ let MapView = function(div) {
         shadowSize: [41, 41]
       });
     }
+
   }
 
   function plotServices(englewoodLocations) {
@@ -106,14 +137,14 @@ let MapView = function(div) {
             // bind data to marker inside options
             data: loc
           }
-        ).bindPopup(function(layer) { // allow for the popup on click with the name of the location
+        ).bindPopup(function (layer) { // allow for the popup on click with the name of the location
           let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
           let match = phoneRegex.exec(loc["Contact Phone Number"]);
           let matches = [];
 
           while (match != null) {
-              matches.push(match.slice(1, 5));
-              match = phoneRegex.exec(loc["Contact Phone Number"]);
+            matches.push(match.slice(1, 5));
+            match = phoneRegex.exec(loc["Contact Phone Number"]);
           }
 
           matches = matches.map((num) => {
@@ -135,54 +166,35 @@ let MapView = function(div) {
               ("<strong><a href='" + loc["Website"] + "'target='_blank'>" +
                 "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
         }).addTo(self.serviceGroup)
-        .on("click", function(e) {
+        .on("click", function (e) {
           if (this.options.data.visible && App.controllers.listToMapLink) {
             App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
           } else {
 
+          }
+        })
+        .on("mouseover", function (e) {
+          // open popup forcefully
+          if (!this._popup._latlng) {
+            this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
+          }
+
+          this._popup.openOn(self.map);
+        })
+        .on("mouseout", function (e) {
+          if (!this.options.data.expanded) {
+            self.map.closePopup();
           }
         });
     }
   }
 
   function updateServicesWithFilter(filteredData, serviceFilters) {
-    // if (Object.keys(serviceFilters).length === 0) {
-    //   // if there are no filters, show all locations
-    //   self.serviceGroup.eachLayer(function(layer) {
-    //     layer.setOpacity(1);
-    //   });
-    // } else {
-    // otherwise only show locations that match at least one of the selected properties
-    self.serviceGroup.eachLayer(function(layer) {
-      let loc = layer.options.data;
-      // let show = false;
-      //
-      // for (let property of Object.keys(serviceFilters)) {
-      //   if (loc[property] == 1) {
-      //     show = true;
-      //     break;
-      //   }
-      // }
-
-      let show = _.includes(filteredData, loc);
-      layer.options.data.visible = show;
-
-      if (show) {
-        layer.setOpacity(1);
-        layer.setZIndexOffset(100);
-        layer.setIcon(self.icons["blue"]);
-      } else {
-        layer.setOpacity(0);
-        layer.setZIndexOffset(0);
-        layer.setIcon(self.icons["grey"]);
-      }
-
-    });
-    // }
+    plotServices(filteredData);
   }
 
   function setSelectedService(service) {
-    self.serviceGroup.eachLayer(function(layer) {
+    self.serviceGroup.eachLayer(function (layer) {
       if (service && service["Organization Name"] === layer.options.data["Organization Name"]) {
         layer.setIcon(self.icons["orange"]);
 
@@ -214,34 +226,42 @@ let MapView = function(div) {
     self.map.addLayer(self.currentLocationMarker);
   }
 
-  function drawRect(bound1, bound2) {
+  function drawRect(bound1, bound2, rectID) {
     let llBound1 = self.map.containerPointToLatLng(bound1);
     let llBound2 = self.map.containerPointToLatLng(bound2);
 
     let color = self.rectColors.shift();
 
+    if (rectID) {
+      if (rectID == 1) {
+        color = "#1f77b4";
+      } else if (rectID == 2) {
+        color = "#ff7f0e";
+      }
+    }
+
     let rect = L.rectangle([llBound1, llBound2], {
         color,
-        data: self.totalRects
+        data: rectID || self.totalRects
       })
-      .bindPopup(function(layer) { // allow for the popup on click with the name of the location
+      .bindPopup(function (layer) { // allow for the popup on click with the name of the location
         return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
       <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
       })
       // .setZIndex(200)
       .addTo(self.rectLayer);
 
-    self.rects[self.totalRects] = rect;
+    self.rects[rectID || self.totalRects] = rect;
 
     return {
-      id: self.totalRects++,
+      id: rectID || self.totalRects++,
       color,
       bounds: [llBound1, llBound2]
     };
   }
 
   function removeRect(rect) {
-    self.map.removeLayer(self.rects[rect]);
+    self.rectLayer.removeLayer(self.rects[rect]);
     self.rectColors.push(self.rects[rect].options.color);
 
     delete self.rects[rect];
@@ -255,43 +275,79 @@ let MapView = function(div) {
     // remove old choropleth
     if (self.choropleth) {
       self.choroplethLayer.removeLayer(self.choropleth);
+
+      self.englewoodOutline.setStyle({ fillOpacity: 0.35 });
+      d3.select("#svgLegend").remove();
     }
 
     // if data specified, add new choropleth
     if (data) {
+      self.englewoodOutline.setStyle({fillOpacity: 0});
+
+      // take ceiling when taking extent so as not to have values equal to 0
       let colorScale = d3.scaleLinear()
-        .domain(d3.extent(data.features, f => f.properties.data))
+        .domain(d3.extent(data.features, f => Math.ceil(f.properties.data*100)/100))
         .range(['#9ebcda', '#6e016b']);
 
       console.log(colorScale.domain(), colorScale.range());
 
       // TODO: draw color scale for map
+      let svg = d3.select("#legend").append("svg").attr("width", 200).attr("height", 60)
+        .style('background-color',"rgba(150,150,150,0.75)")
+        .attr('id','svgLegend');
+
+      svg.append("g")
+        .attr("class", "legendLinear")
+        .attr("transform", "translate(20,20)");
+
+      var legendLinear = d3.legendColor()
+        .shapeWidth(30)
+        .orient('horizontal')
+        .labelFormat(d3.format(".02f"))
+        .cells(5)
+        .scale(colorScale);
+
+      svg.select(".legendLinear")
+        .call(legendLinear);
+
 
       self.choropleth = L.geoJSON(data, {
-          style: function(feature) {
+          style: function (feature) {
             return {
-              color: feature.properties.data === 0 ? "#444" : colorScale(feature.properties.data),
-              opacity: 0.1,
-              fillOpacity: 0.75,
+              color: colorScale(feature.properties.data),
+              opacity: feature.properties.data === 0 ? 0 : 0.1,
+              fillOpacity: feature.properties.data === 0 ? 0 : 0.75,
               className: "geoJSON-gridSpace"
             }
           }
         })
-        .on("mouseover", function(geojson) {
+        .on("mouseover", function (geojson) {
           // console.log(layer);
           geojson.layer.bringToFront();
         })
-        .on("mouseout", function(geojson) {
-          // console.log(layer);
-          geojson.layer.bringToBack();
-        })
-        .bindPopup(function(layer) {
-          console.log(layer.feature.properties.data);
-          return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
+        // .on("mouseout", function(geojson) {
+        //   // console.log(layer);
+        //   geojson.layer.bringToBack();
+        // })
+        .bindPopup(function (layer) {
+          // console.log(layer.feature.properties.data);
+          let data = layer.feature.properties.data;
+          let description = layer.feature.properties.description;
+          let mainTypeTitle = description.mainType.split("_").map((d) => {
+            return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`;
+          }).join(" ");
+          let subTypeTitle = `${description.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
+          // return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
+          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this location:</b> ${layer.feature.properties.data.toFixed(2)}`;
         }).addTo(self.choroplethLayer);
 
-      self.rectLayer.eachLayer(rect => rect.bringToFront());
+      self.rectLayer.eachLayer(rect => {
+        if(rect) {
+          rect.bringToFront();
+        }
+      });
     }
+
   }
 
   function jumpToLocation(position) {
@@ -316,10 +372,26 @@ let MapView = function(div) {
 
     let lat = Number(position.lat) + (L.Browser.mobile ? 0.003 : 0);
     let lng = Number(position.lng) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
-    self.map.setView([lat, lng], 16);
+    self.map.setView([lat, lng], 14);
   }
 
-  function clearLocation(){
+  function fitMapAroundServices() {
+    var markerArray = [];
+
+    self.serviceGroup.eachLayer(function (layer) {
+      if (layer.options.data &&
+        Number(layer.options.data.X) &&
+        Number(layer.options.data.Y) &&
+        _.includes(layer.options.data.Address, "Illinois")) {
+        markerArray.push(layer);
+      }
+    });
+
+    var group = L.featureGroup(markerArray);
+    self.map.fitBounds(group.getBounds());
+  }
+
+  function clearLocation() {
     if (self.currentLocationMarker != undefined)
       self.map.removeLayer(self.currentLocationMarker);
 
@@ -338,9 +410,11 @@ let MapView = function(div) {
     centerAroundRect,
 
     drawChoropleth,
+    drawEnglewoodOutline,
 
     jumpToLocation,
+    jumpToLocationNoMarker,
     clearLocation,
-    jumpToLocationNoMarker
+    fitMapAroundServices
   };
 };

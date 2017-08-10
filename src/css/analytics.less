@@ -30,6 +30,14 @@
           transition: @arguments;
 }
 
+button#rectSelector1 {
+  color: #1f77b4;
+}
+
+button#rectSelector2 {
+  color: #e67e0d;
+}
+
 .container-fluid,
 body,
 html {
@@ -99,6 +107,15 @@ html {
   border: 1px solid #C1C1C1;
   .border-radius(10px);
   z-index: 0;
+
+    svg{
+      position: absolute;
+      float:right;
+    }
+}
+
+.geoJSON-englewoodOutline {
+  pointer-events: none;
 }
 
 .geoJSON-gridSpace:hover {
@@ -149,6 +166,10 @@ html {
   background-color: rgba(255,255,255,0.25);
 }
 
+button.btn.btn-default.dropdown-toggle.navbar-btn.rounded {
+  border-radius: 4px;
+}
+
 ///// START multi-level dropdown styles
 * {
   .dropdown-submenu {
@@ -158,12 +179,17 @@ html {
       color: #5CB85C;
     }
 
+    .glyphicon-check {
+      color: #5CB85C;
+    }
+
     .glyphicon-plus {
       color: #5BC0DE;
     }
 
     .glyphicon-unchecked {
-      color: transparent;
+      // color: transparent;
+      color: gray;
     }
   }
 
@@ -200,7 +226,7 @@ html {
 ///// END multi-level dropdown styles
 // chart list on lefthand side
 #toggleHideChartsButton {
-  margin-right: 25px;
+  margin-left: 4px;
 }
 
 #chartListWrapper {
@@ -372,8 +398,13 @@ html {
   cursor: pointer;
 }
 
-rect#selection-graph-bar:hover {
+
+rect#selection-graph-bar {
   opacity: 0.65;
+}
+
+rect#selection-graph-bar:hover {
+  opacity: 0.85;
 }
 
 rect#delete-selection-button {
@@ -399,4 +430,81 @@ text.delete-button-symbol {
     font-size: 145%;
   }
   font-family: 'Open Sans', sans-serif;
+}
+
+.navbar-header {
+  text-align: center;
+  float: none;
+  padding: 10px 5px;
+
+  &:after {
+    display: block;
+    border-top: 0.5px solid shade(rgb(219,219,219), 5%);
+    margin: 2px 10px;
+  }
+
+  @media (min-width: 768px) {
+    text-align: left;
+    float: right;
+    padding: 0;
+
+    &:after {
+      display: none;
+    }
+  }
+}
+
+#selectionButtonGroup {
+  padding: 15px;
+}
+
+#censusDropdownList{
+  // text-transform: lowercase;
+  text-transform: capitalize;  
+}
+
+#censusDropdownButton{
+  // text-transform: lowercase;
+  text-transform: capitalize;  
+}
+
+#censusDropdownList {
+  a {
+    .glyphicon {
+      margin-right: 6px;
+      margin-left: 4px;
+    }
+  }
+}
+
+#censusDropdownList {
+  a {
+    margin-left: 4px;
+  }
+}
+
+#censusList{
+  .glyphicon-ok {
+      color: #5CB85C;
+    }
+
+    .glyphicon-check {
+      color: #5CB85C;
+    }
+
+    .glyphicon-plus {
+      color: #5BC0DE;
+    }
+
+    .glyphicon-unchecked {
+      // color: transparent;
+      color: gray;
+    }
+}
+
+#legend{
+  position: absolute;
+  z-index: 100;
+  right: 10px;
+  top: 75px;
 }

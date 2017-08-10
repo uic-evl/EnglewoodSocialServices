@@ -21,7 +21,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   .then(function() {
     setTimeout(function() {
       App.init();
-    }, 0);
+    }, 500);
   })
   .catch(function(err) {
     console.log(err);

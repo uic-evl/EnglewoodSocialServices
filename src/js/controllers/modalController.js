@@ -2,7 +2,7 @@
 
 var App = App || {};
 
-let modalController = function() {
+let modalController = function () {
   let self = {
     modal: null,
     body: null,
@@ -13,18 +13,18 @@ let modalController = function() {
     backButton: null
   };
 
-  function initalize(){
+  function initalize() {
 
     self.modal = d3.select("#landing-page");
     self.body = self.modal.select(".modal-body");
 
     self.acceptButton = self.modal.select("#modalAcceptButton")
       .on('click', acceptButtonClicked);
-      
+
 
     self.orgSearchInput = d3.selectAll("#modalSearchInput")
       .on("input", onInput)
-      .on("keyup", function() {
+      .on("keyup", function () {
         if (d3.event.keyCode == 13) {
           console.log("enter!");
           // hitting enter in the input is equivalent to pressing accept button
@@ -34,7 +34,7 @@ let modalController = function() {
 
     self.addressInput = d3.select('#modalAddressInput')
       .on("input", changeButtonState)
-      .on("keyup", function() {
+      .on("keyup", function () {
         if (d3.event.keyCode == 13) {
           console.log("enter!");
           // hitting enter in the input is equivalent to pressing accept button
@@ -45,27 +45,27 @@ let modalController = function() {
     self.counter = d3.selectAll("#modalSearchCount");
 
     self.backButton = d3.selectAll("#backToSearchButton")
-      .on("click", function(){
+      .on("click", function () {
         App.controllers.serviceFilterDropdown.resetFilters();
         self.orgSearchInput.node().value = "";
         self.addressInput.node().value = "";
-        document.getElementById("addressclear").style.display="none";
-        document.getElementById("searchclear").style.display="none";
+        document.getElementById("addressclear").style.display = "none";
+        document.getElementById("searchclear").style.display = "none";
         onInput();
 
       });
 
-      d3.selectAll("#pageTitle")
-      .on("click", function(){
+    d3.selectAll("#pageTitle")
+      .on("click", function () {
         App.controllers.serviceFilterDropdown.resetFilters();
         self.orgSearchInput.node().value = "";
         self.addressInput.node().value = "";
-        document.getElementById("addressclear").style.display="none";
-        document.getElementById("searchclear").style.display="none";
+        document.getElementById("addressclear").style.display = "none";
+        document.getElementById("searchclear").style.display = "none";
         onInput();
 
       });
-    
+
   }
 
   function setCount(count) {
@@ -89,14 +89,13 @@ let modalController = function() {
     if (data.length === 0) {
       self.counter.classed("searchCountEmpty", true);
       d3.select(self.counter.node().parentNode).classed("searchCountEmpty", true);
-    }
-    else {
+    } else {
       self.counter.classed("searchCountEmpty", false);
-     d3.select(self.counter.node().parentNode).classed("searchCountEmpty", false);
+      d3.select(self.counter.node().parentNode).classed("searchCountEmpty", false);
     }
   }
 
-  function changeButtonState(){
+  function changeButtonState() {
     let orgSearchText = self.orgSearchInput.node().value;
 
     let searchTerm = _.lowerCase(orgSearchText);
@@ -106,15 +105,14 @@ let modalController = function() {
     var address = self.addressInput.node().value;
 
     var service = document.getElementById("currentServiceSelection").innerHTML;
-    if(searchTerm.length != 0 || address.length != 0 || !service.includes("Select Services...")){
+    if (searchTerm.length != 0 || address.length != 0 || !service.includes("Select Services...")) {
       $('#modalAcceptButton').removeClass("disabled");
-    }
-    else{
+    } else {
       $('#modalAcceptButton').addClass("disabled");
     }
   }
 
-  function acceptButtonClicked(){
+  function acceptButtonClicked() {
 
     let orgSearchText = self.orgSearchInput.node().value;
 
@@ -127,33 +125,32 @@ let modalController = function() {
     var service = document.getElementById("currentServiceSelection").innerHTML;
     //make sure at least one option is chosen
     console.log(service);
-    if(searchTerm.length == 0 && address.length == 0 && service.includes("Select Services...")){
+    if (searchTerm.length == 0 && address.length == 0 && service.includes("Select Services...")) {
       console.log("its empty!!");
-    }
-    else{
-      if(address.length !== 0){
+    } else {
+      if (address.length !== 0) {
         App.controllers.locationButton.getLatLngFromAddress(address);
-      }
-      else if(address.length ==0 ){
-        
+      } else if (address.length == 0) {
+
         // var data = App.models.socialServices.getData();
 
+        //to center on default location
+        // App.views.map.clearLocation();
 
-        if(searchData[0].Address != null){
-          // App.controllers.locationButton.getLatLngFromAddress(data[0].Address);
-          var replaced = searchData[0].Address.split(' ').join('+');
-          console.log(replaced);
+        //code to center on first location in list
+        if (searchData && searchData[0] && searchData[0].X != null && searchData[0].Y != null) {
+          // jump to first services
+          // App.views.map.jumpToLocationNoMarker({
+          //   lat: searchData[0].Y,
+          //   lng: searchData[0].X
+          // });
 
-          var object = d3.json("https://maps.googleapis.com/maps/api/geocode/json?address=" + replaced + "&key=AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI", function(err, d) {
-            let pos = d.results[0].geometry.location;
-
-            App.views.map.jumpToLocationNoMarker(pos);
-          });
-        }
-        else{
+          // fit map around all services
+          App.views.map.fitMapAroundServices();
+        } else {
           App.views.map.clearLocation();
         }
-      
+
       }
 
       App.views.map.updateServicesWithFilter(searchData);
@@ -162,9 +159,9 @@ let modalController = function() {
       App.controllers.search.countChanged(searchData);
       $('#landing-page').modal('hide');
 
-      }
-    
-    
+    }
+
+
 
 
   }

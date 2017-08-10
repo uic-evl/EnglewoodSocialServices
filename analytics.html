@@ -23,6 +23,8 @@
   <script src="./lib/js/turf.min.js"></script>
   <script src="./lib/js/rbush.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
+
   <!-- CSS Src -->
   <link rel="stylesheet/less" href="./src/css/analytics.less">
 
@@ -59,28 +61,40 @@
 
       <div class="navbar-left">
         <div class="nav btn-group" id="filterButtonGroup">
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle navbar-btn" data-toggle="dropdown">
-              Select Services
-              <span class="caret">
-
+           <div class="btn-group"> 
+            <button type="button" class="btn btn-default dropdown-toggle navbar-btn rounded" data-toggle="dropdown" id="filterDropdownButton">
+              <span id="currentServiceSelection">
+                Select Services...
               </span>
+                <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" id="filterDropdownList">
-
-            </ul>
-          </div>
-          <button type="button" class="btn btn-warning navbar-btn" id="allServicesButton">
-            <span class="glyphicon glyphicon-refresh">
-
-            </span>
-            Clear Selection
-          </button>
+            <!-- <ul class="dropdown-menu" role="menu" id="filterDropdownList"></ul> -->
+            <ul class="dropdown-menu dropdown-toggle" role="menu" id="filterDropdownList"></ul>
+           </div> 
+          <!-- <div class="btn-group">  -->
+            <button type="button" class="btn btn-default navbar-btn" id="allServicesButton" style="display:none;">
+              <span class="glyphicon glyphicon-remove text-danger"></span>
+            </button> 
+          <!-- </div> -->
         </div>
-        <button type="button" class="btn btn-primary navbar-btn" id="mapPanelToggle">
-            <span id="mapText">Census Maps</span>
-            <span class="glyphicon glyphicon-arrow-down"></span>
-        </button>
+        <div class="nav btn-group" id="censusButtonGroup">
+           <div class="btn-group"> 
+            <button type="button" class="btn btn-default dropdown-toggle navbar-btn rounded" data-toggle="dropdown" id="censusDropdownButton">
+              <span id="currentServiceSelection">
+                Select Census Category...
+              </span>
+                <span class="caret"></span>
+            </button>
+            <!-- <ul class="dropdown-menu" role="menu" id="filterDropdownList"></ul> -->
+            <ul class="dropdown-menu dropdown-toggle" role="menu" id="censusDropdownList"></ul>
+           </div> 
+          <!-- <div class="btn-group">  -->
+            <button type="button" class="btn btn-default navbar-btn" id="allCensusButton" style="display:none;">
+              <span class="glyphicon glyphicon-remove text-danger"></span>
+            </button> 
+          <!-- </div> -->
+        </div>
+        
         <div class="dropdown-menu" id="mapSettingsPanel" style="opacity: 0;">
           <div class="row titleRow">
             <div class="col-md-6" style="text-align:left;">
@@ -90,10 +104,8 @@
             </div>
             <div class="col-md-6" style="text-align:right;">
               <button type="button" class="btn btn-sm btn-danger" id="resetMaps">
-                Reset Maps
-                <span class="glyphicon glyphicon-refresh">
-
-                </span>
+                Reset Map
+                <span class="glyphicon glyphicon-refresh"></span>
               </button>
             </div>
           </div>
@@ -101,46 +113,20 @@
 
           </div>
         </div>
-        <!-- <ul class="dropdown-menu" role="menu" id="mapDropdownList">
+      
 
-        </ul> -->
+      <!-- <div class="navbar-right"> -->
 
-
-
-        <!-- <div class="navbar-form navbar-left">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" id="searchInput">
-            <div class="input-group-btn">
-              <button class="btn btn-default" type="submit" id="searchButton">
-                <i class="glyphicon glyphicon-search">
-
-                </i>
-              </button>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- <button type="button" class="btn btn-info navbar-btn" data-toggle="modal" data-target="#locationModal">
-          <span class="glyphicon glyphicon-arrow-right"></span>
-          <span class="glyphicon glyphicon-map-marker"></span>
-          Enter a Location
-        </button> -->
-
-
-      </div>
-
-      <div class="navbar-right">
-
-        <button type="button" class="btn btn-success navbar-btn" id="newRectSelector">
+        <!-- Disable until selection code is fully implemented, then remove -->
+        <button type="button" class="btn btn-success navbar-btn" id="newRectSelector" style="display:none">
           <span class="glyphicon glyphicon-plus"></span>
           <span class="glyphicon glyphicon-stop"></span>
            Selection
         </button>
 
         <button class="btn btn-success navbar-btn" id="toggleHideChartsButton">
-          <span class="glyphicon glyphicon-eye-open">
-          </span>
-          Chart List
+          <span class="glyphicon glyphicon-eye-close"></span>
+          <span id="chartListButtonText">Hide Chart List</span>
           <!-- <span class="badge" id="chartCount">10</span> -->
 
         </button>
@@ -149,11 +135,29 @@
           <p class="title label-info">
             Chart List
           </p>
+          <div class="row" id="selectionButtonGroup">
+             <!-- <div class="btn-group btn-group-justified" id="selectionButtonGroup">  -->
+               <div class="btn-group col-md-6"> 
+                <button type="button" class="btn btn-default btn-block" data-toggle="tooltip" title="Click and drag to select an area" id="rectSelector1">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Select Map Area 1
+                </button>
+               </div> 
+               <!-- <div class="col-md-2"></div> -->
+               <div class="btn-group col-md-6"> 
+                <button type="button" class="btn btn-default btn-block" data-toggle="tooltip" title="Click and drag to select an area" id="rectSelector2">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Select Map Area 2
+                 </button> 
+               </div> 
+            <!-- </div> -->
+          </div>
           <div class="" id="chartList">
 
           </div>
+          
         </div>
-
+        <div id="legend"></div>
       </div>
 
 
@@ -163,7 +167,7 @@
 
       </div>
 
-    </div>
+    <!-- </div> -->
   </nav>
 
   <div class="container-fluid appContent">
@@ -181,11 +185,12 @@
 
     </div>
   </div>
-
+  
+  <!--
   <div id="locationModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
-      <!-- Modal content-->
+      <!-\- Modal content-\->
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -215,7 +220,7 @@
 
     </div>
   </div>
-
+  -->
 </body>
 
 </html>

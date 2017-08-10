@@ -140,10 +140,10 @@ let FilterDropdownController = function() {
 
         secondaryDropdown.append("li").attr("class", "divider");
 
-        secondaryDropdown.selectAll(".serviceSubtype")
+        secondaryDropdown.selectAll(".secondaryCategory")
           .data(tier2Categories)
           .enter().append("li")
-          .attr("class", "serviceSubtype")
+          .attr("class", "secondaryCategory serviceSubtype")
           .append("a")
           .datum(function(c2) {
             return {

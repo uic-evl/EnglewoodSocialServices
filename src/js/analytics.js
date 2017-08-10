@@ -4,16 +4,24 @@ var App = App || {};
 
 let documentPromise = new Promise(function(resolve, reject) {
   $(document).ready(function() {
+    console.log("$(document).ready done");
+    resolve();
+  });
+});
+
+let windowPromise = new Promise(function(resolve, reject) {
+  $(window).on("load", function() {
+    console.log("$(window).on('load') done");
     resolve();
   });
 });
 
 // make sure both the document and CSS are loaded
-Promise.all([documentPromise, less.pageLoadFinished])
+Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   .then(function() {
     setTimeout(function() {
       App.init();
-    }, 0);
+    }, 500);
   })
   .catch(function(err) {
     console.log(err);
@@ -38,13 +46,16 @@ Promise.all([documentPromise, less.pageLoadFinished])
   // App.controllers.locationButton = new LocationButtonController();
   App.controllers.search = new SearchController();
 
-  App.init = function() {
+  App.init = function () {
+    $('[data-toggle="tooltip"]').tooltip(); //needed for button tooltips
     console.log("Loading Analytics");
     App.views.map = new MapView("serviceMap");
+    App.views.map.drawEnglewoodOutline();
     App.views.chartList = new ChartListView("#chartList");
     App.views.chartList.makeCollapsing("#toggleHideChartsButton", "#chartListWrapper");
 
-    App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
+    // App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
+    App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList", "#filterDropdownButton");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
 
     // App.controllers.mapData.setDataDropdown("#mapSettingsPanel");
@@ -59,9 +70,13 @@ Promise.all([documentPromise, less.pageLoadFinished])
 
     App.controllers.rectSelector = new RectSelectorController("#newRectSelector");
     App.controllers.rectSelector.attachDragLayer("#serviceMap");
+    App.controllers.rectSelector.attachSpecificSelector("#rectSelector1", "1");
+    App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
+
+    App.controllers.mapData.setCensusClearButton();
 
     // load other data sources when asked to plot
 
