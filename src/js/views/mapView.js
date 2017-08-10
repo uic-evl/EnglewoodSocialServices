@@ -257,7 +257,7 @@ let MapView = function (div) {
   }
 
   function removeRect(rect) {
-    self.map.removeLayer(self.rects[rect]);
+    self.rectLayer.removeLayer(self.rects[rect]);
     self.rectColors.push(self.rects[rect].options.color);
 
     delete self.rects[rect];
@@ -337,7 +337,11 @@ let MapView = function (div) {
           return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this location:</b> ${layer.feature.properties.data.toFixed(2)}`;
         }).addTo(self.choroplethLayer);
 
-      self.rectLayer.eachLayer(rect => rect.bringToFront());
+      self.rectLayer.eachLayer(rect => {
+        if(rect) {
+          rect.bringToFront();
+        }
+      });
     }
 
   }
