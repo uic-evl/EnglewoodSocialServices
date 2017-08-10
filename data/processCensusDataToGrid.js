@@ -41,7 +41,7 @@ let extent = {
     min: -87.6796718667824,
     max: -87.62824698158252
   }
-}
+};
 
 blockBoundaries = JSON.parse(fs.readFileSync('EnglewoodCensusBlockBoundaries.geojson').toString());
 censusData = JSON.parse(fs.readFileSync('EnglewoodCensusDataFull.json').toString());
