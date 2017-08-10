@@ -77,14 +77,16 @@ let MapView = function (div) {
   function drawEnglewoodOutline() {
     //add outline of Englewood
     d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function (error, d) {
-      L.geoJSON(d).addTo(self.map).setStyle({
-        fillColor: 'transparent',
-        weight: 3,
-        opacity: .5,
-        color: 'black', //Outline color
-        fillOpacity: 0.7,
-        className: "geoJSON-englewoodOutline"
-      });
+      L.geoJSON(d, {
+        style: {
+          fillColor: 'transparent',
+          weight: 3,
+          opacity: .5,
+          color: 'black', //Outline color
+          fillOpacity: 0.7,
+          className: "geoJSON-englewoodOutline"
+        }
+      }).addTo(self.map);
     });
   }
 
@@ -294,7 +296,9 @@ let MapView = function (div) {
           // console.log(layer.feature.properties.data);
           let data = layer.feature.properties.data;
           let description = layer.feature.properties.description;
-          let mainTypeTitle = description.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
+          let mainTypeTitle = description.mainType.split("_").map((d) => {
+            return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`;
+          }).join(" ");
           let subTypeTitle = `${description.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
           // return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
           return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this location:</b> ${layer.feature.properties.data.toFixed(2)}`;
@@ -337,7 +341,7 @@ let MapView = function (div) {
         Number(layer.options.data.X) &&
         Number(layer.options.data.Y) &&
         _.includes(layer.options.data.Address, "Illinois")) {
-          markerArray.push(layer);
+        markerArray.push(layer);
       }
     });
 
