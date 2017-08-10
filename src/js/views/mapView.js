@@ -280,8 +280,9 @@ let MapView = function (div) {
     if (data) {
       self.englewoodOutline.setStyle({fillOpacity: 0});
 
+      // take ceiling when taking extent so as not to have values equal to 0
       let colorScale = d3.scaleLinear()
-        .domain(d3.extent(data.features, f => f.properties.data))
+        .domain(d3.extent(data.features, f => Math.ceil(f.properties.data*100)/100))
         .range(['#9ebcda', '#6e016b']);
 
       console.log(colorScale.domain(), colorScale.range());
@@ -298,6 +299,7 @@ let MapView = function (div) {
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
         .orient('horizontal')
+        .labelFormat(d3.format(".02f"))
         .cells(5)
         .scale(colorScale);
 
