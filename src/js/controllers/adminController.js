@@ -34,7 +34,7 @@ d3.select("#confirmButton")
 
 function clickedButton() {
   d3.event.preventDefault();
-  document.getElementById("fileName").innerHTML = document.getElementById("exampleInputFile").files[0].name; ;
+  document.getElementById("fileName").innerHTML = document.getElementById("exampleInputFile").files[0].name;
 
 
   getLogFile()

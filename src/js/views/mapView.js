@@ -70,8 +70,6 @@ let MapView = function (div) {
     // setTimeout(function() {
     //   self.map.invalidateSize();
     // }, 0);
-
-
   }
 
   function drawEnglewoodOutline() {
@@ -79,10 +77,10 @@ let MapView = function (div) {
     d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function (error, d) {
       L.geoJSON(d).addTo(self.map).setStyle({
         fillColor: 'transparent',
-        weight: 3,
+        weight: 7,
         opacity: .5,
-        color: 'black', //Outline color
-        fillOpacity: 0.7,
+        color: '#004D23', //Outline color
+        fillOpacity: 0.1,
         className: "geoJSON-englewoodOutline"
       });
     });
