@@ -3,6 +3,18 @@ var auth = require('http-auth');
 var express = require('express');
 let bodyParser = require('body-parser');
 
+var argv = require('yargs')
+  .usage('Usage: $0 -p [integer] -i [string of IP address]')
+  .default("p", 4000)
+  .default("i", '')
+  .alias('p', 'port')
+  .alias('i', 'ip').alias('i', 'ip-address')
+  .describe('p', 'Port to run server on')
+  .describe('i', 'IP Address to run server on')
+  .help('h')
+  .alias('h', 'help')
+  .argv;
+
 var path = require('path');
 var fs = require('fs');
 
@@ -21,9 +33,17 @@ admin.use(auth.connect(basic));
 app.use('/admin', admin);
 app.use(express.static("./"));
 
-app.listen(4000, function () {
-  console.log('Example app listening on port 4000!')
-});
+if(argv.ip.length > 0){
+  app.listen(argv.port,argv.ip, function () {
+    // console.log('Example app listening on port 4000!')
+    console.log("Listening on " + this.address().address + ":" + this.address().port);
+  });
+}else{
+  app.listen(argv.port, function () {
+    // console.log('Example app listening on port 4000!')
+    console.log("Listening on " + this.address().address + ":" + this.address().port);
+  });
+}
 
 admin.get('/log', (req, res) => {
   res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
