@@ -72,10 +72,11 @@ let MapDataController = function () {
       type: "census"
     };
 
-    current_census_properties.subType = (Object.keys(self.filters).length === 1) ? Object.keys(self.filters)[0] : "All";
+    current_census_properties.subType = (Object.keys(self.filters).length === 1) ? Object.keys(self.filters)[0].split("||")[1] : "All";
     
     self.filters = {};
 
+    console.log(self.mainCategoryStates)
     for (let mainCategory of Object.keys(self.mainCategoryStates)) {
       if (self.mainCategoryStates[mainCategory] !== "none") {
         current_census_properties.mainType = mainCategory;
@@ -84,7 +85,9 @@ let MapDataController = function () {
     }
 
     console.log("current_census_properties", current_census_properties);
-    App.views.chartList.removePropertyChart(current_census_properties);
+    console.trace();
+    if(current_census_properties.mainType)
+      App.views.chartList.removePropertyChart(current_census_properties);
 
     removeMap();
 
@@ -97,6 +100,10 @@ let MapDataController = function () {
     self.censusResetButton.selectAll('#currentServiceSelection').text("Clear Selection");
     // self.censusResetButton.attr('disabled',true);
     document.getElementById("allCensusButton").style.display = "none";
+  }
+
+  function getFilterKey(mainType,subType){
+    return `${mainType}||${subType}`; //remove any non-alpha numberic characters except underscores
   }
 
   function populateDropdown(categories) {
@@ -152,28 +159,31 @@ let MapDataController = function () {
                 self.mainCategoryStates[mainCategory] = "none";
               }
             }
+            let filterKey = getFilterKey(d.mainType,d.subType);
+
             self.censusDropdownList.selectAll(".glyphicon")
               .attr("class", "glyphicon glyphicon-unchecked");
             listItem.select("ul").selectAll(".serviceSubtype")
               .each(function (subType) {
-                if (subType !== d.subType) {
-                  self.filters[subType] = false;
+                let curKey = getFilterKey(d.mainType,subType);
+                if (curKey !== filterKey) {
+                  self.filters[curKey] = false;
 
                   updateSubCategoryIcon(d.mainType, subType);
                 }
               });
-            let curSelection = self.filters[d.subType];
+            let curSelection = self.filters[filterKey];
             self.filters = {};
 
             //select current subcategory if previous filters indicate a main category selection
             if (isMainCategorySelection) {
-              self.filters[d.subType] = true;
+              self.filters[filterKey] = true;
             } else {
               // toggle whether or not it is selected
-              self.filters[d.subType] = !curSelection;
+              self.filters[filterKey] = !curSelection;
             }
 
-            if (self.filters[d.subType]) {
+            if (self.filters[filterKey]) {
               var button = d3.select("#censusDropdownButton");
 
               button.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 30})}`);
@@ -272,7 +282,8 @@ let MapDataController = function () {
     let hasUnchecked = false;
 
     for (let subC of subcategories) {
-      if (self.filters[subC]) {
+      let filterKey = getFilterKey(category,subC);
+      if (self.filters[filterKey]) {
         hasChecked = true;
       } else {
         hasUnchecked = true;
@@ -314,7 +325,7 @@ let MapDataController = function () {
     let main_id = "#main_" + convertPropertyToID(mainCategory);
 
     let item = d3.select(self.censusDropdownList.selectAll(main_id).node().parentNode).selectAll(id);
-    let state = self.filters[subCategory];
+    let state = self.filters[getFilterKey(mainCategory,subCategory)];
 
     console.log(...arguments,main_id,id,state);
 
