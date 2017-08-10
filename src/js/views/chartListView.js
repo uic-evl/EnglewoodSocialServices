@@ -126,19 +126,22 @@ let ChartListView = function(listID) {
     }else{
       propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`);
     }
-    let closeButton = heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove text-right')
-      .on('click',function(){
-        if(property_data.type === "census"){
-          // removePropertyChart(property_data);
-          App.controllers.mapData.resetFilters();
-        }else if(property_data.type === "service"){
-          // removeServiceChart(property_data);
-          App.controllers.serviceFilterDropdown.resetFilters();
-        }else{
-          console.log("Unknown chart type",property_data.type);
-          App.controllers.mapData.removeChartFromList(property_data);
-        }
-      });
+    
+    if (!(property_data.mainType.toLowerCase() === "all services" && property_data.subType.toLowerCase() === "total count")){
+      heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove text-right')
+        .on('click',function(){
+          if(property_data.type === "census"){
+            // removePropertyChart(property_data);
+            App.controllers.mapData.resetFilters();
+          }else if(property_data.type === "service"){
+            // removeServiceChart(property_data);
+            App.controllers.serviceFilterDropdown.resetFilters();
+          }else{
+            console.log("Unknown chart type",property_data.type);
+            App.controllers.mapData.removeChartFromList(property_data);
+          }
+        });
+    }
 
     // let area = heading.append("h4").attr("class", "rectArea").html(`Area (mi<sup>2</sup>): ${d.area.toFixed(2)}`);
 
@@ -240,7 +243,7 @@ let ChartListView = function(listID) {
     chart.selectAll('.panel-footer').remove();
 
     chart.append('div').attr("class", 'panel-footer text-left', true)
-      .html("<b>Census Data</b>");
+      .html("<b>Census Count</b>");
   }
 
   function updateServiceChart(chart,service_data){
@@ -262,9 +265,9 @@ let ChartListView = function(listID) {
 
     //check if service is specific
     if (service_data.mainType.toLowerCase() === "all services" && service_data.subType.toLowerCase() === "total count") {
-      footer.html("<b>Service Data</b><br>Select a service category to compare specific service data across the selected areas.")
+      footer.html("<b>Service Count</b><br>Select a service category to compare specific service data across the selected areas.")
     }else{
-      footer.html("<b>Service Data</b>")
+      footer.html("<b>Service Count</b>")
     }
 
     //check selection count

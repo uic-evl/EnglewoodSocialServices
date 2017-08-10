@@ -291,8 +291,13 @@ let MapView = function (div) {
         //   geojson.layer.bringToBack();
         // })
         .bindPopup(function (layer) {
-          console.log(layer.feature.properties.data);
-          return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
+          // console.log(layer.feature.properties.data);
+          let data = layer.feature.properties.data;
+          let description = layer.feature.properties.description;
+          let mainTypeTitle = description.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
+          let subTypeTitle = `${description.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
+          // return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
+          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this location:</b> ${layer.feature.properties.data.toFixed(2)}`;
         }).addTo(self.choroplethLayer);
 
       self.rectLayer.eachLayer(rect => rect.bringToFront());
