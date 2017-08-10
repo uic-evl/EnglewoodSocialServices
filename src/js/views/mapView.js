@@ -75,13 +75,13 @@ let MapView = function (div) {
   function drawEnglewoodOutline() {
     //add outline of Englewood
     d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function (error, d) {
-      L.geoJSON(d, {
+      self.englewoodOutline = L.geoJSON(d, {
         style: {
-          fillColor: 'transparent',
+          color: "#006837",
           weight: 3,
-          opacity: .5,
-          color: 'black', //Outline color
-          fillOpacity: 0.7,
+          opacity: .75,
+          fillColor: '#d9f0a3', //Outline color
+          fillOpacity: 0.35,
           className: "geoJSON-englewoodOutline"
         }
       }).addTo(self.map);
@@ -260,10 +260,14 @@ let MapView = function (div) {
     // remove old choropleth
     if (self.choropleth) {
       self.choroplethLayer.removeLayer(self.choropleth);
+
+      self.englewoodOutline.setStyle({ fillOpacity: 0.35 });
     }
 
     // if data specified, add new choropleth
     if (data) {
+      self.englewoodOutline.setStyle({fillOpacity: 0});
+
       let colorScale = d3.scaleLinear()
         .domain(d3.extent(data.features, f => f.properties.data))
         .range(['#9ebcda', '#6e016b']);
