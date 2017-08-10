@@ -2,7 +2,7 @@
 
 var App = App || {};
 
-let MapView = function(div) {
+let MapView = function (div) {
   let self = {
     map: null,
     serviceLayer: null,
@@ -71,17 +71,17 @@ let MapView = function(div) {
     //   self.map.invalidateSize();
     // }, 0);
 
-    
+
   }
 
-  function drawEnglewoodOutline(){
+  function drawEnglewoodOutline() {
     //add outline of Englewood
-    d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function(error, d){
+    d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function (error, d) {
       L.geoJSON(d).addTo(self.map).setStyle({
         fillColor: 'transparent',
         weight: 3,
         opacity: .5,
-        color: 'black',  //Outline color
+        color: 'black', //Outline color
         fillOpacity: 0.7,
         className: "geoJSON-englewoodOutline"
       });
@@ -122,14 +122,14 @@ let MapView = function(div) {
             // bind data to marker inside options
             data: loc
           }
-        ).bindPopup(function(layer) { // allow for the popup on click with the name of the location
+        ).bindPopup(function (layer) { // allow for the popup on click with the name of the location
           let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
           let match = phoneRegex.exec(loc["Contact Phone Number"]);
           let matches = [];
 
           while (match != null) {
-              matches.push(match.slice(1, 5));
-              match = phoneRegex.exec(loc["Contact Phone Number"]);
+            matches.push(match.slice(1, 5));
+            match = phoneRegex.exec(loc["Contact Phone Number"]);
           }
 
           matches = matches.map((num) => {
@@ -151,14 +151,14 @@ let MapView = function(div) {
               ("<strong><a href='" + loc["Website"] + "'target='_blank'>" +
                 "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
         }).addTo(self.serviceGroup)
-        .on("click", function(e) {
+        .on("click", function (e) {
           if (this.options.data.visible && App.controllers.listToMapLink) {
             App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
           } else {
 
           }
         })
-        .on("mouseover", function(e) {
+        .on("mouseover", function (e) {
           // open popup forcefully
           if (!this._popup._latlng) {
             this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
@@ -166,7 +166,7 @@ let MapView = function(div) {
 
           this._popup.openOn(self.map);
         })
-        .on("mouseout", function(e) {
+        .on("mouseout", function (e) {
           if (!this.options.data.expanded) {
             self.map.closePopup();
           }
@@ -179,7 +179,7 @@ let MapView = function(div) {
   }
 
   function setSelectedService(service) {
-    self.serviceGroup.eachLayer(function(layer) {
+    self.serviceGroup.eachLayer(function (layer) {
       if (service && service["Organization Name"] === layer.options.data["Organization Name"]) {
         layer.setIcon(self.icons["orange"]);
 
@@ -217,10 +217,10 @@ let MapView = function(div) {
 
     let color = self.rectColors.shift();
 
-    if(rectID){
-      if(rectID == 1){
+    if (rectID) {
+      if (rectID == 1) {
         color = "#1f77b4";
-      }else if(rectID == 2){
+      } else if (rectID == 2) {
         color = "#ff7f0e";
       }
     }
@@ -229,7 +229,7 @@ let MapView = function(div) {
         color,
         data: rectID || self.totalRects
       })
-      .bindPopup(function(layer) { // allow for the popup on click with the name of the location
+      .bindPopup(function (layer) { // allow for the popup on click with the name of the location
         return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
       <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
       })
@@ -273,7 +273,7 @@ let MapView = function(div) {
       // TODO: draw color scale for map
 
       self.choropleth = L.geoJSON(data, {
-          style: function(feature) {
+          style: function (feature) {
             return {
               color: colorScale(feature.properties.data),
               opacity: feature.properties.data === 0 ? 0 : 0.1,
@@ -282,7 +282,7 @@ let MapView = function(div) {
             }
           }
         })
-        .on("mouseover", function(geojson) {
+        .on("mouseover", function (geojson) {
           // console.log(layer);
           geojson.layer.bringToFront();
         })
@@ -290,7 +290,7 @@ let MapView = function(div) {
         //   // console.log(layer);
         //   geojson.layer.bringToBack();
         // })
-        .bindPopup(function(layer) {
+        .bindPopup(function (layer) {
           console.log(layer.feature.properties.data);
           return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
         }).addTo(self.choroplethLayer);
@@ -319,21 +319,26 @@ let MapView = function(div) {
     //move map to new poisition
     // self.map.setView([position.lat, position.lng], 16);
 
-    // let lat = Number(position.lat) + (L.Browser.mobile ? 0.003 : 0);
-    // let lng = Number(position.lng) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
-    // self.map.setView([lat, lng], 14);
+    let lat = Number(position.lat) + (L.Browser.mobile ? 0.003 : 0);
+    let lng = Number(position.lng) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
+    self.map.setView([lat, lng], 14);
 
-    var markerArray = []; 
-
-    self.serviceGroup.eachLayer(function(layer) {
-      markerArray.push(layer); 
-    });
-
-    var group = L.featureGroup(markerArray); 
-            self.map.fitBounds(group.getBounds()); 
   }
 
-  function clearLocation(){
+  function fitMapAroundServices() {
+    var markerArray = [];
+
+    self.serviceGroup.eachLayer(function (layer) {
+      if (Number(layer.options.data.X) && Number(layer.options.data.Y)) {
+        markerArray.push(layer);
+      }
+    });
+
+    var group = L.featureGroup(markerArray);
+    self.map.fitBounds(group.getBounds());
+  }
+
+  function clearLocation() {
     if (self.currentLocationMarker != undefined)
       self.map.removeLayer(self.currentLocationMarker);
 
@@ -355,7 +360,8 @@ let MapView = function(div) {
     drawEnglewoodOutline,
 
     jumpToLocation,
+    jumpToLocationNoMarker,
     clearLocation,
-    jumpToLocationNoMarker
+    fitMapAroundServices
   };
 };
