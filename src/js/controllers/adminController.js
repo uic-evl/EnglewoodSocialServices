@@ -142,33 +142,3 @@ function restoreFile(d){
   xhr.send(JSON.stringify(d));
   location.reload();
 }
-
-/*
-To send request to change used file
-
-xhr = new XMLHttpRequest();
-xhr.open("PUT", "/admin/chooseold");
-xhr.setRequestHeader("Content-type", "application/json");
-
-xhr.onload = function () {
-  // LOG file received in this.responseText -- populate log
-  console.log(this.responseText);
-};
-xhr.onerror = function (e) {
-  reject(e);
-};
-
-xhr.send(JSON.stringify({
-  "time": 1502470585985,
-  "name": "EnglewoodLocations.csv"
-}));
-
-d3.select(--button--).datum({
-  "time": 1502470585985,
-  "name": "EnglewoodLocations.csv"
-}).on("click", restoreFile)
-
-function restoreFile(d) {
-
-}
-*/
