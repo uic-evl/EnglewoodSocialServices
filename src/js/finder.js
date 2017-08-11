@@ -85,7 +85,7 @@ window.onresize = function() {
         App.controllers.search.setCount(App.models.socialServices.getData().length);
         App.controllers.modal.setCount(App.models.socialServices.getData().length);
 
-        App.controllers.serviceFilterDropdown.populateDropdown();
+        App.controllers.serviceFilterDropdown.populateDropdown(d3.select('body').node().clientHeight*0.4);
       })
       .catch(function(err) {
         console.log(err);

@@ -106,7 +106,7 @@ let MapDataController = function () {
     return `${mainType}||${subType}`; //remove any non-alpha numberic characters except underscores
   }
 
-  function populateDropdown(categories) {
+  function populateDropdown(categories, max_height) {
     self.data = categories;
     let tier1Categories = Object.keys(categories);
 
@@ -128,7 +128,13 @@ let MapDataController = function () {
         listItem.append("a")
           .attr("tabindex", -1)
           .attr("id", "main_" + convertPropertyToID(c1))
-          .html("<span class='glyphicon glyphicon-unchecked'></span>" + title);
+          .html("<span class='glyphicon glyphicon-unchecked'></span>" + title)
+          .on((L.Browser.mobile ? "click" : "mouseover"), function (d) {
+            d3.event.stopPropagation();
+
+            self.censusDropdownList.selectAll(".serviceType").classed("open", false);
+            d3.select(this).node().parentNode.classList.toggle("open");
+          });
 
 
         // create tab content div for this t1 category
@@ -205,7 +211,10 @@ let MapDataController = function () {
 
       });
 
-
+    if (max_height) {
+      self.censusDropdownList.selectAll('.dropdown-submenu>.dropdown-menu') //set max height of sub-dropdowns
+        .style('max-height', `${max_height}px`).style('overflow-y', 'scroll');
+    }
   }
 
   function convertPropertyToID(propertyName) {
