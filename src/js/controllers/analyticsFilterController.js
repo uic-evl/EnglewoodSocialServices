@@ -52,6 +52,7 @@ let FilterDropdownController = function() {
       .attr("class", "glyphicon glyphicon-unchecked");
 
     self.filterDropdownButton.selectAll('#currentServiceSelection').text("Select Services...");
+    self.filterDropdownButton.selectAll('#service-dropdown-marker').style('color',null);
     self.filterDropdownButton.attr("class", "btn btn-default dropdown-toggle navbar-btn rounded");
 
     self.allServicesButton.style('display','none');
@@ -120,7 +121,7 @@ let FilterDropdownController = function() {
             //update UI for main category selection
             let selected;
             if (self.mainCategoryStates[c1] === "all") {
-              self.mainCategoryStates[c1] = "none";
+              // self.mainCategoryStates[c1] = "none";
               selected = false;
             } else {
               self.mainCategoryStates[c1] = "all";
@@ -129,6 +130,7 @@ let FilterDropdownController = function() {
 
             if (selected) {
               self.filterDropdownButton.selectAll('#currentServiceSelection').text(`${c1}`);
+              self.filterDropdownButton.selectAll('#service-dropdown-marker').style('color', 'white');
               self.filterDropdownButton.attr("class", "btn btn-success dropdown-toggle navbar-btn");
               self.allServicesButton.style('display', null);
             } else {
@@ -208,8 +210,8 @@ let FilterDropdownController = function() {
             }
 
             if (self.filters[d.subType]) {
-              // self.allServicesButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 20})}`);
               self.filterDropdownButton.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType, { length: 30 })}`);
+              self.filterDropdownButton.selectAll('#service-dropdown-marker').style('color', 'white');
               self.filterDropdownButton.attr("class", "btn btn-success dropdown-toggle navbar-btn");
               self.allServicesButton.style('display', null);
 
