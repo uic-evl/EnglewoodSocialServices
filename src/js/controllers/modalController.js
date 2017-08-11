@@ -127,7 +127,11 @@ let modalController = function () {
       console.log("its empty!!");
     } else {
       if (address.length !== 0) {
-        App.controllers.locationButton.getLatLngFromAddress(address);
+        App.controllers.locationButton.getLatLngFromAddress(address, function(pos) {
+          App.views.map.fitMapAroundServices(pos);
+        });
+
+        
       } else if (address.length == 0) {
 
         // var data = App.models.socialServices.getData();

@@ -94,7 +94,7 @@ let LocationButtonController = function() {
     }
   }
 
-  function getLatLngFromAddress(address) {
+  function getLatLngFromAddress(address, callback) {
     // Google Maps Geocoding API:
     //    https://developers.google.com/maps/documentation/geocoding/start#get-a-key
     // API Key: AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI
@@ -112,6 +112,7 @@ let LocationButtonController = function() {
       let pos = d.results[0].geometry.location;
 
       updateCurrentLocation(pos);
+      callback(pos);
       } else {
         alert("Address Not Found");
       }
@@ -123,8 +124,10 @@ let LocationButtonController = function() {
     console.log(pos);
 
     self.currentlyEnteredLocation = pos;
-    App.views.map.jumpToLocation(pos);
+    // App.views.map.jumpToLocation(pos);
     App.views.serviceList.sortLocations(pos);
+
+    return pos;
   }
 
   return {

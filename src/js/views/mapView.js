@@ -375,12 +375,17 @@ let MapView = function (div) {
     self.map.setView([lat, lng], 14);
   }
 
-  function fitMapAroundServices() {
+  function fitMapAroundServices(pos) {
     
     if (self.currentLocationMarker != undefined)
       self.map.removeLayer(self.currentLocationMarker);
-
+    
     var markerArray = [];
+
+    if (pos) {
+      drawLocationMarker(pos);
+      markerArray.push(self.currentLocationMarker);
+    }
 
     self.serviceGroup.eachLayer(function (layer) {
       if (layer.options.data &&
