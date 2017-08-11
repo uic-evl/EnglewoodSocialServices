@@ -79,6 +79,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     App.controllers.mapData.setCensusClearButton();
 
     // load other data sources when asked to plot
+    let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
 
     Promise.all([socialServiceP, serviceTaxonomyP])
       .then(function(values) {
@@ -88,7 +89,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
         // App.views.chartList...
 
-        App.controllers.serviceFilterDropdown.populateDropdown();
+        App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
       })
       .catch(function(err) {
         console.log(err);
@@ -99,7 +100,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         let overlayData = data[0];
         let overlayCategories = data[1];
 
-        App.controllers.mapData.populateDropdown(overlayCategories);
+        App.controllers.mapData.populateDropdown(overlayCategories,max_subdropdown_height);
       });
 
   };

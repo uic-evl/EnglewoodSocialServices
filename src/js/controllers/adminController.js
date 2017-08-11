@@ -1,30 +1,53 @@
 "use strict";
 
+let file, filename;
+let input = document.getElementById("exampleInputFile");
+
 getLogFile()
-    .then(function(data) {
-      var logText = data.split(/\n/);
-      
-      for (var i = 0; i < logText.length-1; i++) {
-      	var entry = logText[i].split(',');
-      	var rows = "";
-      	rows += "<tr><td>" + entry[0] + "</td><td>" + entry[1] + "</td></tr>";
-        $(rows).appendTo("#list tbody");
+  .then(function (data) {
+    console.log(data);
+
+    var logText = data.split(/\n/);
+
+    for (var i = logText.length - 1 ; i > -1; i--) {
+      var entry = logText[i].split(',');
+      var rows = "";
+      console.log(entry[2]);
+      var r= $('<input type="button" value="new button"/>');
+
+      if(entry[2] === 'false'){
+        rows += "<tr><td>" + new Date(+entry[0]).toUTCString() + "</td><td>" + entry[1] + "</td><td>" + '<input type="button" class="restoreButton" value="Restore" id="button_' + i + '"/>' +"</td></tr>";
       }
-    });
+      else
+        rows += "<tr><td>" + new Date(+entry[0]).toUTCString() + "</td><td>" + entry[1] + "</td><td>" + "Current version" +"</td></tr>";
+
+      $(rows).appendTo("#list tbody");
+      d3.select('#button_' + i)
+          .datum({
+            "time": entry[0],
+            "name": entry[1]
+          })
+          .on('click', restoreFile);
+
+
+      
+    }
+
+  });
+
 
 d3.select("#exampleInputFile")
-	.on('change', function(){
-		var testing = document.getElementById("exampleInputFile").value;
+  .on('change', function () {
+    var testing = document.getElementById("exampleInputFile").value;
 
-		if(testing.length !== 0){
-			console.log("File selected!");
-			document.getElementById("submitButton").disabled = false;
-		}
-		else{
-			console.log("No file!");
-			document.getElementById("submitButton").disabled = true;
-		}
-	});
+    if (testing.length !== 0) {
+      console.log("File selected!");
+      document.getElementById("submitButton").disabled = false;
+    } else {
+      console.log("No file!");
+      document.getElementById("submitButton").disabled = true;
+    }
+  });
 
 d3.select("#submitButton")
   .on("click", clickedButton);
@@ -34,26 +57,8 @@ d3.select("#confirmButton")
 
 function clickedButton() {
   d3.event.preventDefault();
-  document.getElementById("fileName").innerHTML = document.getElementById("exampleInputFile").files[0].name;
-
-
-  getLogFile()
-    .then(function(data) {
-      console.log("Log:", data);
-    });
-}
-
-function confirmClicked() {
-  if (typeof window.FileReader !== 'function') {
-    alert("The file API isn't supported on this browser yet.");
-    return;
-  }
-
-  let input = document.getElementById("exampleInputFile");
-  let file, fr;
-
   if (!input) {
-    alert("Um, couldn't find the imgfile element.");
+    alert("Um, couldn't find the file element.");
   } else if (!input.files) {
     alert("This browser doesn't seem to support the `files` property of file inputs.");
   } else if (!input.files[0]) {
@@ -62,47 +67,78 @@ function confirmClicked() {
     file = input.files[0];
     filename = file.name;
 
-    fr = new FileReader();
-    fr.onload = sendCSV;
-    fr.readAsText(file);
-    alert("The file has been updated!");
-
+    document.getElementById("fileName").innerHTML = filename;
   }
 }
 
+function confirmClicked() {
+  if (typeof window.FileReader !== 'function') {
+    alert("The file API isn't supported on this browser yet.");
+    return;
+  }
+
+
+  let fr;
+
+  fr = new FileReader();
+  fr.onload = sendCSV;
+  fr.readAsText(file);
+  alert("The file has been updated!");
+}
+
 function getLogFile() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     let xhr = new XMLHttpRequest();
 
-    xhr.onload = function() {
+    xhr.onload = function () {
       resolve(this.responseText);
     };
-    xhr.onerror = function(e) {
+    xhr.onerror = function (e) {
       reject(e);
     };
 
-    xhr.open("GET", "/admin/log");
+    xhr.open("GET", "/admin/getlog");
     xhr.send();
   });
 }
 
 function sendCSV(e) {
   let xhr = new XMLHttpRequest();
-  xhr.open("PUT", "/admin/csv");
+  xhr.open("PUT", "/admin/savenew");
   xhr.setRequestHeader("Content-type", "application/json");
 
   console.log(e);
 
-  xhr.onload = function() {
+  xhr.onload = function () {
     // LOG file received in this.responseText -- populate log 
     console.log(this.responseText);
   };
-  xhr.onerror = function(e) {
+  xhr.onerror = function (e) {
     reject(e);
   };
 
-  xhr.send(JSON.stringify({"data": e.target.result, "name": filename}));
+  xhr.send(JSON.stringify({
+    "data": e.target.result,
+    "name": filename
+  }));
 
-	location.reload();
+  location.reload();
+}
 
+function restoreFile(d){
+  console.log("WE IN");
+  let xhr = new XMLHttpRequest();
+  xhr.open("PUT", "/admin/chooseold");
+  xhr.setRequestHeader("Content-type", "application/json");
+
+  xhr.onload = function () {
+    // LOG file received in this.responseText -- populate log
+    console.log(this.responseText);
+  };
+  xhr.onerror = function (e) {
+    reject(e);
+  };
+
+  xhr.send(JSON.stringify(d));
+  location.reload();
 }

@@ -16,7 +16,7 @@ var argv = require('yargs')
   .argv;
 
 var path = require('path');
-var fs = require('fs');
+var fs = require('fs-extra');
 
 var basic = auth.basic({
       file: path.join(__dirname, "admin-data", "users.htpasswd") // englewood-admin | helpthesekids
@@ -45,24 +45,58 @@ if(argv.ip.length > 0){
   });
 }
 
-admin.get('/log', (req, res) => {
+admin.get('/getlog', (req, res) => {
   res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
 });
 
-admin.put('/csv', (req, res) => {
-  fs.writeFileSync(path.join(__dirname, "admin-data", "TestWrite.csv"), req.body.data);
-
-  addToLog(req.body.name, res);
+admin.put('/savenew', (req, res) => {
+  addNewFile(req.body.data, req.body.name, res);
 });
 
-// Setup route.
-admin.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
+admin.put('/chooseold', (req, res) => {
+
+  changeUsedFile(req.body.time, req.body.name, res);
 });
 
-function addToLog(fileName, res) {
-  let time = new Date().toString();
-  fs.appendFileSync(path.join(__dirname, "admin-data", "LOG.csv"), `${time},${fileName}\n`);
+function addNewFile(data, fileName, res) {
+  let time = Date.now();
+  // write as new file to use
+  fs.writeFileSync(path.join(__dirname, "admin-data", "EnglewoodLocations.csv"), data);
 
+  // write archiving version, also
+  fs.writeFileSync(path.join(__dirname, "admin-data", "archive-data", (time + fileName)), data);
+
+  // parse CSV
+  let log = (fs.readFileSync(path.join(__dirname, "admin-data", "LOG.csv")).toString()).split("\n").map(entry => entry.split(","));
+  // set existing entries to false
+  log.forEach((entry) => { entry[2] = false });
+  // join log entries together
+  let clearedLog = log.map((entry) => entry.join(","));
+  // add new entry
+  clearedLog.push(`${time},${fileName},true`);
+  
+  // join back into csv string
+  let logString = clearedLog.join("\n");
+
+  // write updated log
+  fs.writeFileSync(path.join(__dirname, "admin-data", "LOG.csv"), logString);
+  // send updated log as response
+  res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
+}
+
+function changeUsedFile(timestamp, fileName, res) {
+  let time = new Date(+timestamp).getTime();
+
+  // parse CSV
+  let log = (fs.readFileSync(path.join(__dirname, "admin-data", "LOG.csv")).toString()).split("\n").map(entry => entry.split(","));
+  // update entries to reflect choice
+  log.forEach((entry) => { entry[2] = (entry[0] == timestamp && entry[1] == fileName); });
+
+  // copy subversion over to active data directory
+  fs.copySync(path.join(__dirname, "admin-data", "archive-data", (timestamp + fileName)), path.join(__dirname, "admin-data", "EnglewoodLocations.csv"));
+
+  // write updated log file
+  fs.writeFileSync(path.join(__dirname, "admin-data", "LOG.csv"), log.map(entry => entry.join(',')).join("\n"));
+  // send updated log as response
   res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
 }
