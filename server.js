@@ -77,11 +77,10 @@ function addNewFile(data, fileName, res) {
   
   // join back into csv string
   let logString = clearedLog.join("\n");
-  console.log(logString);
 
   // write updated log
   fs.writeFileSync(path.join(__dirname, "admin-data", "LOG.csv"), logString);
-
+  // send updated log as response
   res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
 }
 
@@ -90,12 +89,14 @@ function changeUsedFile(timestamp, fileName, res) {
 
   // parse CSV
   let log = (fs.readFileSync(path.join(__dirname, "admin-data", "LOG.csv")).toString()).split("\n").map(entry => entry.split(","));
-  // set existing entries to false
-  console.log("Choose", time, fileName);
+  // update entries to reflect choice
   log.forEach((entry) => { entry[2] = (entry[0] == timestamp && entry[1] == fileName); });
 
+  // copy subversion over to active data directory
   fs.copySync(path.join(__dirname, "admin-data", "archive-data", (timestamp + fileName)), path.join(__dirname, "admin-data", "EnglewoodLocations.csv"));
 
+  // write updated log file
   fs.writeFileSync(path.join(__dirname, "admin-data", "LOG.csv"), log.map(entry => entry.join(',')).join("\n"));
+  // send updated log as response
   res.sendFile(path.join(__dirname, "admin-data", "LOG.csv"));
 }
