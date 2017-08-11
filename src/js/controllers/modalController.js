@@ -49,8 +49,7 @@ let modalController = function () {
         App.controllers.serviceFilterDropdown.resetFilters();
         self.orgSearchInput.node().value = "";
         self.addressInput.node().value = "";
-        document.getElementById("addressclear").style.display = "none";
-        document.getElementById("searchclear").style.display = "none";
+        changeButtonState();
         onInput();
 
       });
@@ -60,8 +59,7 @@ let modalController = function () {
         App.controllers.serviceFilterDropdown.resetFilters();
         self.orgSearchInput.node().value = "";
         self.addressInput.node().value = "";
-        document.getElementById("addressclear").style.display = "none";
-        document.getElementById("searchclear").style.display = "none";
+        changeButtonState();
         onInput();
 
       });
