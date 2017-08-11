@@ -9,13 +9,32 @@ getLogFile()
 
     var logText = data.split(/\n/);
 
-    for (var i = 0; i < logText.length; i++) {
+    for (var i = logText.length - 1 ; i > -1; i--) {
       var entry = logText[i].split(',');
       var rows = "";
-      rows += "<tr><td>" + new Date(+entry[0]).toUTCString() + "</td><td>" + entry[1] + "</td></tr>";
+      console.log(entry[2]);
+      var r= $('<input type="button" value="new button"/>');
+
+      if(entry[2] === 'false'){
+        rows += "<tr><td>" + new Date(+entry[0]).toUTCString() + "</td><td>" + entry[1] + "</td><td>" + '<input type="button" class="restoreButton" value="Restore" id="button_' + i + '"/>' +"</td></tr>";
+      }
+      else
+        rows += "<tr><td>" + new Date(+entry[0]).toUTCString() + "</td><td>" + entry[1] + "</td><td>" + "Current version" +"</td></tr>";
+
       $(rows).appendTo("#list tbody");
+      d3.select('#button_' + i)
+          .datum({
+            "time": entry[0],
+            "name": entry[1]
+          })
+          .on('click', restoreFile);
+
+
+      
     }
+
   });
+
 
 d3.select("#exampleInputFile")
   .on('change', function () {
@@ -103,6 +122,24 @@ function sendCSV(e) {
     "name": filename
   }));
 
+  location.reload();
+}
+
+function restoreFile(d){
+  console.log("WE IN");
+  let xhr = new XMLHttpRequest();
+  xhr.open("PUT", "/admin/chooseold");
+  xhr.setRequestHeader("Content-type", "application/json");
+
+  xhr.onload = function () {
+    // LOG file received in this.responseText -- populate log
+    console.log(this.responseText);
+  };
+  xhr.onerror = function (e) {
+    reject(e);
+  };
+
+  xhr.send(JSON.stringify(d));
   location.reload();
 }
 
