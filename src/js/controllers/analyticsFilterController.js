@@ -121,7 +121,7 @@ let FilterDropdownController = function() {
             //update UI for main category selection
             let selected;
             if (self.mainCategoryStates[c1] === "all") {
-              self.mainCategoryStates[c1] = "none";
+              // self.mainCategoryStates[c1] = "none";
               selected = false;
             } else {
               self.mainCategoryStates[c1] = "all";
