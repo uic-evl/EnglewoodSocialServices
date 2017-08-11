@@ -376,10 +376,6 @@ let MapView = function (div) {
   }
 
   function fitMapAroundServices() {
-    
-    if (self.currentLocationMarker != undefined)
-      self.map.removeLayer(self.currentLocationMarker);
-
     var markerArray = [];
 
     self.serviceGroup.eachLayer(function (layer) {
