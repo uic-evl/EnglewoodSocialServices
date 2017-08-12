@@ -175,6 +175,7 @@ let ChartListView = function(listID) {
     let boundsX = [0, +graph.background.attr('width')];
     let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
 
+    let barThickness = 50; //50 pixel thickness
     let barWidth = xScale.range()[1] / selectionKeys.length;
     let data = [];
     for (let s of selectionKeys) {
@@ -206,10 +207,10 @@ let ChartListView = function(listID) {
       graph.content.selectAll('.bar').data(data)
         .enter().append('rect').each(function (data_entry, index) {
           let height = (data_entry.value != 0) ? yScale(yMax - data_entry.value) : 0;
-          let x = xOffset + xScale(index), y = yOffset + yScale(data_entry.value);
+          let x = xOffset + xScale(index) + (barWidth-barThickness)/2, y = yOffset + yScale(data_entry.value);
           d3.select(this).classed('bar', true)
             .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
-            .attr('width', barWidth).attr('height', height)
+            .attr('width', barThickness).attr('height', height)
             .style('fill', data_entry.color).attr('id', 'selection-graph-bar')
             .on('click', function () {
               App.views.map.centerAroundRect(self.selections[selectionKeys[index]]);
@@ -217,7 +218,7 @@ let ChartListView = function(listID) {
 
           let textSize = 14;
           let textOffsetY = boundsY[0] + yOffset * 1.5 + textSize * 1.15;
-          let textOffsetX = (barWidth / 2) - textSize / 2;
+          let textOffsetX = (barWidth / 2);
 
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
@@ -229,7 +230,7 @@ let ChartListView = function(listID) {
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
 
-      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(data.length);
+      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(1);
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
     } else {
@@ -257,6 +258,7 @@ let ChartListView = function(listID) {
     let boundsX = [0, +graph.background.attr('width')];
     let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
     
+    let barThickness = 50; //50 pixel thickness
     let barWidth = xScale.range()[1] / selectionKeys.length;
     let data = [];
 
@@ -288,7 +290,7 @@ let ChartListView = function(listID) {
         let showAll = service_data.mainType.toLowerCase() === "all services" && service_data.subType.toLowerCase() === "total count";
         try {
           // propertyValue = curSelection.data.census[property_data.mainType][property_data.subType];
-          if (!showAll) {
+          if (!showAll) { //showing specific property
             let filters = service_data.subFilters || [service_data.subType];
             let services = curSelection.data.service;
             let filteredServices = services.filter((s) => {
@@ -325,10 +327,10 @@ let ChartListView = function(listID) {
       graph.content.selectAll('.bar').data(data)
         .enter().append('rect').each(function (data_entry, index) {
           let height = (data_entry.value != 0) ? yScale(yMax - data_entry.value) : 0;
-          let x = xOffset + xScale(index), y = yOffset + yScale(data_entry.value);
+          let x = xOffset + xScale(index) + (barWidth-barThickness)/2, y = yOffset + yScale(data_entry.value);
           d3.select(this).classed('bar', true)
             .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
-            .attr('width', barWidth).attr('height', height)
+            .attr('width', barThickness).attr('height', height)
             .style('fill', data_entry.color).attr('id', 'selection-graph-bar')
             .on('click', function () {
               console.log(data_entry.value);
@@ -337,7 +339,7 @@ let ChartListView = function(listID) {
 
           let textSize = 14;
           let textOffsetY = boundsY[0] + yOffset * 1.5 + textSize * 1.15;
-          let textOffsetX = (barWidth / 2) - textSize / 2;
+          let textOffsetX = (barWidth / 2);
 
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
