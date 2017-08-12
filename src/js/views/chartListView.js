@@ -7,9 +7,9 @@ let ChartListView = function(listID) {
     chartHeight: 200,
     chartMargins: {
       top: 10,
-      right: 0,
+      right: 10,
       bottom: 25,
-      left: 35
+      left: 40
     },
     chartList: null,
     selections: {},
@@ -73,7 +73,7 @@ let ChartListView = function(listID) {
     self.wrapper = d3.select(listWrapperID)
       .style("pointer-events", mobile ? "none" : "all")
       .style("opacity", mobile ? 0 : 1)
-      .style("height", window.innerHeight - $(d3.select(".navbar").node()).height() + "px");
+      .style("height", (window.innerHeight - $(d3.select(".navbar").node()).height()) + "px");
 
     self.toggleButton = d3.select(buttonID).classed("open", !mobile)
       .on("click", function(d) {
@@ -351,7 +351,7 @@ let ChartListView = function(listID) {
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
 
-      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(data.length);
+      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(1);
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
     }
