@@ -73,7 +73,7 @@ let ChartListView = function(listID) {
     self.wrapper = d3.select(listWrapperID)
       .style("pointer-events", mobile ? "none" : "all")
       .style("opacity", mobile ? 0 : 1)
-      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+      .style("height", window.innerHeight - $(d3.select(".navbar").node()).height() + "px");
 
     self.toggleButton = d3.select(buttonID).classed("open", !mobile)
       .on("click", function(d) {
@@ -98,7 +98,7 @@ let ChartListView = function(listID) {
     let mobile = window.innerWidth < 769;
 
     self.wrapper
-      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+      .style("height", window.innerHeight - $(d3.select(".navbar").node()).height() + "px");
   }
 
   function createChart(property_data) {
@@ -147,15 +147,17 @@ let ChartListView = function(listID) {
 
     let body = panel.append("div").attr("class", "panel-body");
 
-    let chart = body.append("svg");
+    let chart = body.append("svg")
+
+    console.log($(chart.node()).height());
 
     let graph = chart.append('g').classed('graph-group',true);
 
     graph.background = graph.append("rect")
       .attr("x", self.chartMargins.left)
       .attr("y", self.chartMargins.top)
-      .attr("width", chart.node().clientWidth - self.chartMargins.left - self.chartMargins.right)
-      .attr("height", chart.node().clientHeight - self.chartMargins.top - self.chartMargins.bottom)
+      .attr("width", $(chart.node()).width() - self.chartMargins.left - self.chartMargins.right)
+      .attr("height", $(chart.node()).height() - self.chartMargins.top - self.chartMargins.bottom)
       .classed('graph-background',true).attr('property-data', JSON.stringify(property_data))
       .style('stroke','none');
     graph.content = graph.append('g').classed('graph-content',true);
