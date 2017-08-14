@@ -7,10 +7,11 @@ let ChartListView = function(listID) {
     chartHeight: 200,
     chartMargins: {
       top: 10,
-      right: 10,
+      right: 20,
       bottom: 25,
       left: 40
     },
+    barThickness: 100,
     chartList: null,
     selections: {},
     propertyScales: null,
@@ -175,7 +176,7 @@ let ChartListView = function(listID) {
     let boundsX = [0, +graph.background.attr('width')];
     let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
 
-    let barThickness = 50; //50 pixel thickness
+    let barThickness = self.barThickness;
     let barWidth = xScale.range()[1] / selectionKeys.length;
     let data = [];
     for (let s of selectionKeys) {
@@ -258,7 +259,7 @@ let ChartListView = function(listID) {
     let boundsX = [0, +graph.background.attr('width')];
     let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
     
-    let barThickness = 50; //50 pixel thickness
+    let barThickness = self.barThickness;
     let barWidth = xScale.range()[1] / selectionKeys.length;
     let data = [];
 
