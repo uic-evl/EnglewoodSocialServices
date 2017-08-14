@@ -12,10 +12,12 @@ getLogFile()
     for (var i = logText.length - 1 ; i > -1; i--) {
       var entry = logText[i].split(',');
       var rows = "";
-      console.log(entry[2]);
+      entry[2] = entry[2].replace(/\s/g, "");
+      console.log(JSON.stringify(entry[2]));
+      // console.log("equals false?",entry[2].toString() == 'false');
       var r= $('<input type="button" value="new button"/>');
 
-      if(entry[2] === 'false'){
+      if(entry[2] == 'false'){
         rows += "<tr><td>" + new Date(+entry[0]).toUTCString() + "</td><td>" + entry[1] + "</td><td>" + '<input type="button" class="restoreButton" value="Restore" id="button_' + i + '"/>' +"</td></tr>";
       }
       else
