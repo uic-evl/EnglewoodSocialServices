@@ -237,7 +237,7 @@ let ChartListView = function(listID) {
     } else {
       let text_element = graph.content.append('text')
         .attr('text-anchor','middle')
-        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2)
+        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2 + self.chartMargins.right / 2)
         .attr("y", +graph.background.attr('height') / 2)
         // .attr("x", self.chartMargins.left + 5)
         // .attr("y", self.chartMargins.top + 15)
@@ -279,7 +279,7 @@ let ChartListView = function(listID) {
     if(selectionKeys.length < 2){
       let text_element = graph.content.append('text')
         .attr('text-anchor', 'middle')
-        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2)
+        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2 + self.chartMargins.right / 2)
         .attr("y", +graph.background.attr('height') / 2)
       addMultilineText(text_element, [`Select ${2 - selectionKeys.length} more ${2 - selectionKeys.length === 1 ? "area" : "areas"} where you'd`, `like to compare data`]);
       return;
