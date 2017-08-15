@@ -7,10 +7,11 @@ let ChartListView = function(listID) {
     chartHeight: 200,
     chartMargins: {
       top: 10,
-      right: 0,
+      right: 20,
       bottom: 25,
-      left: 35
+      left: 40
     },
+    barThickness: 100,
     chartList: null,
     selections: {},
     propertyScales: null,
@@ -73,7 +74,7 @@ let ChartListView = function(listID) {
     self.wrapper = d3.select(listWrapperID)
       .style("pointer-events", mobile ? "none" : "all")
       .style("opacity", mobile ? 0 : 1)
-      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+      .style("height", (window.innerHeight - $(d3.select(".navbar").node()).height()) + "px");
 
     self.toggleButton = d3.select(buttonID).classed("open", !mobile)
       .on("click", function(d) {
@@ -98,7 +99,7 @@ let ChartListView = function(listID) {
     let mobile = window.innerWidth < 769;
 
     self.wrapper
-      .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
+      .style("height", window.innerHeight - $(d3.select(".navbar").node()).height() + "px");
   }
 
   function createChart(property_data) {
@@ -147,15 +148,17 @@ let ChartListView = function(listID) {
 
     let body = panel.append("div").attr("class", "panel-body");
 
-    let chart = body.append("svg");
+    let chart = body.append("svg")
+
+    console.log($(chart.node()).height());
 
     let graph = chart.append('g').classed('graph-group',true);
 
     graph.background = graph.append("rect")
       .attr("x", self.chartMargins.left)
       .attr("y", self.chartMargins.top)
-      .attr("width", chart.node().clientWidth - self.chartMargins.left - self.chartMargins.right)
-      .attr("height", chart.node().clientHeight - self.chartMargins.top - self.chartMargins.bottom)
+      .attr("width", $(chart.node()).width() - self.chartMargins.left - self.chartMargins.right)
+      .attr("height", $(chart.node()).height() - self.chartMargins.top - self.chartMargins.bottom)
       .classed('graph-background',true).attr('property-data', JSON.stringify(property_data))
       .style('stroke','none');
     graph.content = graph.append('g').classed('graph-content',true);
@@ -173,6 +176,7 @@ let ChartListView = function(listID) {
     let boundsX = [0, +graph.background.attr('width')];
     let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
 
+    let barThickness = self.barThickness;
     let barWidth = xScale.range()[1] / selectionKeys.length;
     let data = [];
     for (let s of selectionKeys) {
@@ -204,10 +208,10 @@ let ChartListView = function(listID) {
       graph.content.selectAll('.bar').data(data)
         .enter().append('rect').each(function (data_entry, index) {
           let height = (data_entry.value != 0) ? yScale(yMax - data_entry.value) : 0;
-          let x = xOffset + xScale(index), y = yOffset + yScale(data_entry.value);
+          let x = xOffset + xScale(index) + (barWidth-barThickness)/2, y = yOffset + yScale(data_entry.value);
           d3.select(this).classed('bar', true)
             .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
-            .attr('width', barWidth).attr('height', height)
+            .attr('width', barThickness).attr('height', height)
             .style('fill', data_entry.color).attr('id', 'selection-graph-bar')
             .on('click', function () {
               App.views.map.centerAroundRect(self.selections[selectionKeys[index]]);
@@ -215,7 +219,7 @@ let ChartListView = function(listID) {
 
           let textSize = 14;
           let textOffsetY = boundsY[0] + yOffset * 1.5 + textSize * 1.15;
-          let textOffsetX = (barWidth / 2) - textSize / 2;
+          let textOffsetX = (barWidth / 2);
 
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
@@ -227,13 +231,13 @@ let ChartListView = function(listID) {
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
 
-      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(data.length);
+      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(1);
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
     } else {
       let text_element = graph.content.append('text')
         .attr('text-anchor','middle')
-        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2)
+        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2 + self.chartMargins.right / 2)
         .attr("y", +graph.background.attr('height') / 2)
         // .attr("x", self.chartMargins.left + 5)
         // .attr("y", self.chartMargins.top + 15)
@@ -255,6 +259,7 @@ let ChartListView = function(listID) {
     let boundsX = [0, +graph.background.attr('width')];
     let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
     
+    let barThickness = self.barThickness;
     let barWidth = xScale.range()[1] / selectionKeys.length;
     let data = [];
 
@@ -274,7 +279,7 @@ let ChartListView = function(listID) {
     if(selectionKeys.length < 2){
       let text_element = graph.content.append('text')
         .attr('text-anchor', 'middle')
-        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2)
+        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2 + self.chartMargins.right / 2)
         .attr("y", +graph.background.attr('height') / 2)
       addMultilineText(text_element, [`Select ${2 - selectionKeys.length} more ${2 - selectionKeys.length === 1 ? "area" : "areas"} where you'd`, `like to compare data`]);
       return;
@@ -286,7 +291,7 @@ let ChartListView = function(listID) {
         let showAll = service_data.mainType.toLowerCase() === "all services" && service_data.subType.toLowerCase() === "total count";
         try {
           // propertyValue = curSelection.data.census[property_data.mainType][property_data.subType];
-          if (!showAll) {
+          if (!showAll) { //showing specific property
             let filters = service_data.subFilters || [service_data.subType];
             let services = curSelection.data.service;
             let filteredServices = services.filter((s) => {
@@ -323,10 +328,10 @@ let ChartListView = function(listID) {
       graph.content.selectAll('.bar').data(data)
         .enter().append('rect').each(function (data_entry, index) {
           let height = (data_entry.value != 0) ? yScale(yMax - data_entry.value) : 0;
-          let x = xOffset + xScale(index), y = yOffset + yScale(data_entry.value);
+          let x = xOffset + xScale(index) + (barWidth-barThickness)/2, y = yOffset + yScale(data_entry.value);
           d3.select(this).classed('bar', true)
             .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
-            .attr('width', barWidth).attr('height', height)
+            .attr('width', barThickness).attr('height', height)
             .style('fill', data_entry.color).attr('id', 'selection-graph-bar')
             .on('click', function () {
               console.log(data_entry.value);
@@ -335,7 +340,7 @@ let ChartListView = function(listID) {
 
           let textSize = 14;
           let textOffsetY = boundsY[0] + yOffset * 1.5 + textSize * 1.15;
-          let textOffsetX = (barWidth / 2) - textSize / 2;
+          let textOffsetX = (barWidth / 2);
 
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
@@ -347,7 +352,7 @@ let ChartListView = function(listID) {
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
 
-      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(data.length);
+      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(1);
       graph.content.append('g').classed('axis', true)
         .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
     }
