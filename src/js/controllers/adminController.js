@@ -114,6 +114,7 @@ function sendCSV(e) {
   xhr.onload = function () {
     // LOG file received in this.responseText -- populate log 
     console.log(this.responseText);
+    location.reload();
   };
   xhr.onerror = function (e) {
     reject(e);
@@ -123,8 +124,6 @@ function sendCSV(e) {
     "data": e.target.result,
     "name": filename
   }));
-
-  location.reload();
 }
 
 function restoreFile(d){
@@ -136,11 +135,11 @@ function restoreFile(d){
   xhr.onload = function () {
     // LOG file received in this.responseText -- populate log
     console.log(this.responseText);
+    location.reload();
   };
   xhr.onerror = function (e) {
     reject(e);
   };
 
   xhr.send(JSON.stringify(d));
-  location.reload();
 }
