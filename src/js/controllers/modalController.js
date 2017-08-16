@@ -120,7 +120,9 @@ let modalController = function () {
 
     var address = self.addressInput.node().value;
 
-    var service = document.getElementById("currentServiceSelection").innerHTML;
+    var service = d3.select("#currentServiceSelection").text();
+
+    // var service = document.getElementById("currentServiceSelection").innerHTML;
     //make sure at least one option is chosen
     console.log(service);
     if (searchTerm.length == 0 && address.length == 0 && service.includes("Select Services...")) {
@@ -156,15 +158,12 @@ let modalController = function () {
       }
 
       App.views.map.updateServicesWithFilter(searchData);
-      App.views.serviceList.populateList(searchData);
+      App.views.serviceList.populateList(searchData, {search: searchTerm, address, service});
 
       App.controllers.search.countChanged(searchData);
       $('#landing-page').modal('hide');
 
     }
-
-
-
 
   }
 
