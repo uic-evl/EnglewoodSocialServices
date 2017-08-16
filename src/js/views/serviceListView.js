@@ -54,7 +54,28 @@ let ServiceListView = function(listID) {
       .style("height", window.innerHeight - d3.select(".navbar").node().clientHeight + "px");
   }
 
-  function populateList(englewoodLocations) {
+  function populateList(englewoodLocations, options) {
+    console.log(options);
+
+    if(options) {
+      let html = "Services";
+
+      if (options.service && !options.service.includes("Select Services...")) {
+        html += ` of type <span class='bread-crumb'>'${options.service}'</span>`;
+      }
+
+      if (options.address) {
+        html += ` around <span class='bread-crumb'>'${options.address}'</span>`;
+      }
+
+      if (options.search) {
+        html += ` named <span class='bread-crumb'>'${options.search}'</span>`;
+      }
+
+      html += ":";
+
+      self.wrapper.select(".title").html(html);
+    }
 
     let knownNames = englewoodLocations.map((d) => { return d["Organization Name"]; });
     // console.log(knownNames);
