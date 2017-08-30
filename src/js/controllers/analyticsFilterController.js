@@ -318,6 +318,10 @@ let FilterDropdownController = function() {
 
     App.views.map.updateServicesWithFilter(dataSubset);
 
+    //show/hide buttons based on previous configuration
+    let visibilityState = App.controllers.serviceMarkerView.markersAreVisible();
+    App.controllers.serviceMarkerView.setVisibilityState(visibilityState);
+
     console.log();
   }
 

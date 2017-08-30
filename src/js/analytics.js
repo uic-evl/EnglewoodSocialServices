@@ -57,6 +57,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     // App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList", "#filterDropdownButton");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
+    
+    App.controllers.serviceMarkerView = new ServiceMarkerViewController("#toggleServiceView");
 
     // App.controllers.mapData.setDataDropdown("#mapSettingsPanel");
     App.controllers.mapData.setupDataPanel("#mapPanelToggle", "#mapSettingsPanel");
@@ -90,6 +92,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         // App.views.chartList...
 
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
+
+        App.controllers.serviceMarkerView.setVisibilityState(false); //start off with markers hidden
       })
       .catch(function(err) {
         console.log(err);

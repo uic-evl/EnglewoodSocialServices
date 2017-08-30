@@ -26,6 +26,8 @@ let MapView = function (div) {
     rectColors: d3.schemeCategory10.slice(0),
     totalRects: 0,
 
+    markerVisibilityCheck: () => { return true; }, //markers always visible by default
+
     choroplethLayer: null,
     choropleth: null
   };
@@ -96,7 +98,7 @@ let MapView = function (div) {
           opacity: .75,
           fillColor: '#d9f0a3', //Outline color
           fillOpacity: 0.35,
-          className: "geoJSON-englewoodOutline"
+          className: "geoJSON-englewoodOutline",
         }
       }).addTo(self.map);
     });
@@ -119,6 +121,7 @@ let MapView = function (div) {
 
   function plotServices(englewoodLocations) {
     self.serviceGroup.clearLayers();
+    let serviceMarkers = [];
 
     // iterate through the social services location file
     for (let loc of englewoodLocations) {
@@ -130,7 +133,7 @@ let MapView = function (div) {
 
 
       // create a marker for each social services location
-      L.marker(
+      let curService = L.marker(
           L.latLng(lat, lng), {
             icon: self.icons[self.iconColorNames[0]],
             riseOnHover: true, // moves the marker to the front on mouseover
@@ -167,25 +170,37 @@ let MapView = function (div) {
                 "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
         }).addTo(self.serviceGroup)
         .on("click", function (e) {
-          if (this.options.data.visible && App.controllers.listToMapLink) {
+          if (self.markerVisibilityCheck() && this.options.data.visible && App.controllers.listToMapLink) {
             App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
           } else {
 
           }
         })
         .on("mouseover", function (e) {
-          // open popup forcefully
-          if (!this._popup._latlng) {
-            this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
-          }
+          if(self.markerVisibilityCheck()){
 
-          this._popup.openOn(self.map);
+            // open popup forcefully
+            if (!this._popup._latlng) {
+              this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
+            }
+            
+            this._popup.openOn(self.map);
+          }
         })
         .on("mouseout", function (e) {
           if (!this.options.data.expanded) {
             self.map.closePopup();
           }
         });
+      
+        serviceMarkers.push(curService);
+    }
+
+    //pass new list to service marker view controller
+    if(App.controllers.serviceMarkerView){
+      let serviceMarkersSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive');
+      App.controllers.serviceMarkerView.attachServiceMarkers(serviceMarkers,serviceMarkersSelection);
+      self.markerVisibilityCheck = App.controllers.serviceMarkerView.markersAreVisible;
     }
   }
 
