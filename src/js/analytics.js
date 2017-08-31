@@ -36,6 +36,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   App.models.socialServices = new SocialServiceModel();
   App.models.serviceTaxonomy = new ServiceTaxonomyModel();
   App.models.censusData = new CensusDataModel();
+  App.models.boundaryData = new BoundaryDataModel();
 
   // views
 
@@ -77,13 +78,14 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
+    let boundaryDataP = App.models.boundaryData.loadData();
 
     App.controllers.mapData.setCensusClearButton();
 
     // load other data sources when asked to plot
     let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
 
-    Promise.all([socialServiceP, serviceTaxonomyP])
+    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP])
       .then(function(values) {
         // App.views.map.createMap();
 

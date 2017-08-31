@@ -178,7 +178,8 @@ let MapView = function (div) {
         })
         .on("mouseover", function (e) {
           if(self.markerVisibilityCheck()){
-
+            // let point = new L.latLng(this.options.data.Y, this.options.data.X);
+            // console.log(App.models.boundaryData.isInWestEnglewood(point), App.models.boundaryData.isInEnglewood(point));
             // open popup forcefully
             if (!this._popup._latlng) {
               this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
