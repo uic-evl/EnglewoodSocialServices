@@ -52,7 +52,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
     
     console.log("Loading Analytics");
-    App.views.loadingMessage.showLoadingMessage("Loading Map");
+    App.views.loadingMessage.startLoading("Loading Map");
     App.views.map = new MapView("serviceMap");
     App.views.map.drawEnglewoodOutline();
 
@@ -147,8 +147,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.views.chartList.addSelection(selectionData.westEnglewood);
         App.views.chartList.addSelection(selectionData.englewood);
 
-        App.views.loadingMessage.updateAndRaise("Done");
-        App.views.loadingMessage.hideLoadingMessage();
+        App.views.loadingMessage.finishLoading();
       })
       .catch(function(err) {
         console.log(err);

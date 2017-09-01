@@ -58,7 +58,7 @@ window.onresize = function() {
     App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
 
     console.log("Loading Finder");
-    App.views.loadingMessage.showLoadingMessage("Loading Map");
+    App.views.loadingMessage.startLoading("Loading Map");
     App.views.map = new MapView("serviceMap");
     App.views.serviceList = new ServiceListView("#serviceList");
     App.views.serviceList.makeCollapsing("#toggleHideServicesButton", "#serviceListWrapper");
@@ -93,8 +93,7 @@ window.onresize = function() {
         let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
 
-        App.views.loadingMessage.updateAndRaise("Done");
-        App.views.loadingMessage.hideLoadingMessage();
+        App.views.loadingMessage.finishLoading();
       })
       .catch(function(err) {
         console.log(err);

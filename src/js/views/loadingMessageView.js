@@ -15,6 +15,19 @@ let LoadingMessageView = function (loadingContainerDiv) {
         self.statusText = self.loadingContainer.selectAll("#loading-message");
     }
 
+    function startLoading(msg){
+        showLoadingMessage(msg);
+    }
+
+    function finishLoading(){
+        updateAndRaise("Done!");
+        
+        self.loadingContainer
+            .transition().duration(1000)
+            .style('opacity',0)
+            .on('end',hideLoadingMessage);
+    }
+
     function updateAndRaise(msg){
         updateMessage(msg);
         self.loadingContainer.raise();
@@ -39,6 +52,8 @@ let LoadingMessageView = function (loadingContainerDiv) {
         updateMessage,
         showLoadingMessage,
         hideLoadingMessage,
-        updateAndRaise
+        updateAndRaise,
+        startLoading,
+        finishLoading
     };
 };
