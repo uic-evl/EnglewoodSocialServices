@@ -52,10 +52,20 @@ let BoundaryDataModel = function () {
     return isInEnglewood(point) || isInWestEnglewood(point);
   }
 
+  function getWestEnglewoodPolygon(){
+    return self.westEnglewoodPoly;
+  }
+
+  function getEnglewoodPolygon(){
+    return self.englewoodPoly;
+  }
+
   return {
     loadData,
     isInWestEnglewood,
     isInEnglewood,
     isInEitherEnglewood,
+    getWestEnglewoodPolygon,
+    getEnglewoodPolygon
   };
 };

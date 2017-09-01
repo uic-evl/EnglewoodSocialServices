@@ -74,24 +74,15 @@ let CensusDataModel = function() {
     return subset;
   }
 
-  function getDataWithinBounds(bounds) {
+  function getDataWithinPolygon(boundsPolygon){
     let boundData = {};
-
-    let boundsPolygon = turf.polygon([[
-      [bounds[0].lng, bounds[0].lat],
-      [bounds[0].lng, bounds[1].lat],
-      [bounds[1].lng, bounds[1].lat],
-      [bounds[1].lng, bounds[0].lat],
-      [bounds[0].lng, bounds[0].lat]
-    ]]);
-
     let bbox = turf.bbox(boundsPolygon);
 
     let intersectingFeatures = self.tree.search({
-        minX: bbox[0],
-        minY: bbox[1],
-        maxX: bbox[2],
-        maxY: bbox[3]
+      minX: bbox[0],
+      minY: bbox[1],
+      maxX: bbox[2],
+      maxY: bbox[3]
     });
 
     for (let property of Object.keys(self.mapTypeNames)) {
@@ -107,7 +98,7 @@ let CensusDataModel = function() {
       let intersectPoly = turf.intersect(boundsPolygon, feature);
 
       if (intersectPoly) {
-        let areaRatio = turf.area(intersectPoly)/turf.area(feature);
+        let areaRatio = turf.area(intersectPoly) / turf.area(feature);
 
         for (let property of Object.keys(self.mapTypeNames)) {
           for (let subproperty of self.mapTypeNames[property]) {
@@ -123,9 +114,23 @@ let CensusDataModel = function() {
     };
   }
 
+  function getDataWithinBounds(bounds) {
+
+    let boundsPolygon = turf.polygon([[
+      [bounds[0].lng, bounds[0].lat],
+      [bounds[0].lng, bounds[1].lat],
+      [bounds[1].lng, bounds[1].lat],
+      [bounds[1].lng, bounds[0].lat],
+      [bounds[0].lng, bounds[0].lat]
+    ]]);
+
+    return getDataWithinPolygon(boundsPolygon);
+  }
+
   return {
     loadData,
     getSubsetGeoJSON,
-    getDataWithinBounds
+    getDataWithinBounds,
+    getDataWithinPolygon
   };
 };

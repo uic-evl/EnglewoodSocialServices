@@ -31,11 +31,11 @@ let ChartListView = function(listID) {
     }
 
     //default entry
-    addServiceChart({
-      mainType: "All Services",
-      subType: "Total Count",
-      type: "service"
-    });
+    // addServiceChart({
+    //   mainType: "All Services",
+    //   subType: "Total Count",
+    //   type: "service"
+    // });
     checkSelections();
   }
 
@@ -51,18 +51,18 @@ let ChartListView = function(listID) {
     let neededSelections = 2 - Object.keys(self.selections).length;
     console.log("neededSelections", neededSelections);
     let censusCharts = self.chartList.selectAll(".census");
-    let serviceCharts = self.chartList.selectAll(".service");
+    // let serviceCharts = self.chartList.selectAll(".service");
     self.chartList.selectAll('#error-selection-chart').remove();
-    if(censusCharts.empty() || serviceCharts.empty()){
-      if(neededSelections > 0 && serviceCharts.empty() && censusCharts.empty()){ //show selection message if no charts are currently showing
+    if(censusCharts.empty() /*|| serviceCharts.empty()*/){
+      if(neededSelections > 0 && /*serviceCharts.empty() &&*/ censusCharts.empty()){ //show selection message if no charts are currently showing
           addErrorChart(`Select ${neededSelections} ${neededSelections === 1 ? "area" : "areas"} where you'd like to compare data`);
       }else{
         if(censusCharts.empty()){
           addErrorChart("Select a census category to compare census data across the selected areas.");
         }
-        if(serviceCharts.empty()){
-          addErrorChart("Select a service category to compare service data across the selected areas.");
-        }
+        // if(serviceCharts.empty()){
+        //   addErrorChart("Select a service category to compare service data across the selected areas.");
+        // }
       }
     }
     return neededSelections;
@@ -224,7 +224,7 @@ let ChartListView = function(listID) {
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
             .attr('text-anchor','middle').style('font-size',textSize)
-            .text(`Map Area ${self.selections[selectionKeys[index]].id}`);
+            .text(`${self.selections[selectionKeys[index]].id}`);
         });
 
       let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
@@ -345,7 +345,7 @@ let ChartListView = function(listID) {
           graph.content.append('text')
             .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
             .attr('text-anchor', 'middle').style('font-size', textSize)
-            .text(`Map Area ${self.selections[selectionKeys[index]].id}`);
+            .text(`${self.selections[selectionKeys[index]].id}`);
         });
 
       let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
@@ -407,7 +407,7 @@ let ChartListView = function(listID) {
       //         .text(d);
       //     });
       }else if (property_data.type === "service"){
-        updateServiceChart(chart,property_data);
+        // updateServiceChart(chart,property_data);
       }else{
         graph.content.append('text')
           .attr("x", self.chartMargins.left + 5)
@@ -462,7 +462,7 @@ let ChartListView = function(listID) {
   function removeServiceChart(service_data) {
     removeChart(createPropertyID(service_data));
 
-    if (self.chartList.selectAll(`.service`).empty()) {
+    if (/*self.chartList.selectAll(`.service`).empty()*/ false) {
       addServiceChart({ //show all services by default
         mainType: "All Services",
         subType: "Total Count",

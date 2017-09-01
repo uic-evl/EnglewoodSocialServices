@@ -71,21 +71,28 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
     App.controllers.search.attachDOMElements("#searchInput", "#searchButton");
 
-    App.controllers.rectSelector = new RectSelectorController("#newRectSelector");
-    App.controllers.rectSelector.attachDragLayer("#serviceMap");
-    App.controllers.rectSelector.attachSpecificSelector("#rectSelector1", "1");
-    App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
+    // App.controllers.rectSelector = new RectSelectorController("#newRectSelector");
+    // App.controllers.rectSelector.attachDragLayer("#serviceMap");
+    // App.controllers.rectSelector.attachSpecificSelector("#rectSelector1", "1");
+    // App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
 
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
     let boundaryDataP = App.models.boundaryData.loadData();
+    let censusDataP = App.models.censusData.loadData()
+      .then(function (data) {
+        let overlayData = data[0];
+        let overlayCategories = data[1];
+
+        App.controllers.mapData.populateDropdown(overlayCategories, max_subdropdown_height);
+      });
 
     App.controllers.mapData.setCensusClearButton();
 
     // load other data sources when asked to plot
     let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
 
-    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP])
+    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP, censusDataP])
       .then(function(values) {
         // App.views.map.createMap();
 
@@ -96,19 +103,45 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
 
         App.controllers.serviceMarkerView.setVisibilityState(false); //start off with markers hidden
+
+        //set two selections to be west englewood and englewood
+        let westEnglewoodPoly = App.models.boundaryData.getWestEnglewoodPolygon();
+        let englewoodPoly = App.models.boundaryData.getEnglewoodPolygon();
+        let selectionData = {
+          westEnglewood: {
+            data: {
+              census: App.models.censusData.getDataWithinPolygon(westEnglewoodPoly).dataTotals,
+              // service: App.models.socialServices.getDataByFilter((service) => {
+              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
+              //   return App.models.boundaryData.isInWestEnglewood(point);
+              // }),
+            },
+            area: turf.area(westEnglewoodPoly),
+            color: "#1f77b4",
+            id: "West Englewood"
+          },
+          englewood: {
+            data: {
+              census: App.models.censusData.getDataWithinPolygon(englewoodPoly).dataTotals,
+              // service: App.models.socialServices.getDataByFilter((service) => {
+              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
+              //   return App.models.boundaryData.isInEnglewood(point);
+              // }),
+            },
+            area: turf.area(englewoodPoly),
+            color: "#ff7f0e",
+            id: "Englewood"
+          }
+        };
+
+        console.log(selectionData);
+
+        App.views.chartList.addSelection(selectionData.westEnglewood);
+        App.views.chartList.addSelection(selectionData.englewood);
       })
       .catch(function(err) {
         console.log(err);
       });
-
-    App.models.censusData.loadData()
-      .then(function(data) {
-        let overlayData = data[0];
-        let overlayCategories = data[1];
-
-        App.controllers.mapData.populateDropdown(overlayCategories,max_subdropdown_height);
-      });
-
   };
 
 })();

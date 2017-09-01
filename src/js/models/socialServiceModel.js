@@ -79,11 +79,18 @@ let SocialServiceModel = function() {
 
   }
 
+  function getDataByFilter(filterFn){
+    return _.filter(self.data,filterFn);
+  }
+
   function getDataWithinBounds(bounds) {
     let lat = d3.extent(bounds, b => b.lat);
     let lng = d3.extent(bounds, b => b.lng);
 
-    return _.filter(self.data, service => service.Y >= lat[0] && service.Y < lat[1] && service.X >= lng[0] && service.X < lng[1]);
+    // return _.filter(self.data, service => service.Y >= lat[0] && service.Y < lat[1] && service.X >= lng[0] && service.X < lng[1]);
+    return getDataByFilter((service) => {
+      return service.Y >= lat[0] && service.Y < lat[1] && service.X >= lng[0] && service.X < lng[1];
+    });
   }
 
   return {
@@ -91,6 +98,7 @@ let SocialServiceModel = function() {
     getData,
     getFilteredData,
     getSearchedData,
-    getDataWithinBounds
+    getDataWithinBounds,
+    getDataByFilter
   };
 };

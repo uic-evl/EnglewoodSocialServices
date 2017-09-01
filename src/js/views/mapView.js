@@ -260,10 +260,10 @@ let MapView = function (div) {
         color,
         data: rectID || self.totalRects
       })
-      .bindPopup(function (layer) { // allow for the popup on click with the name of the location
-        return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
-      <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
-      })
+      // .bindPopup(function (layer) { // allow for the popup on click with the name of the location
+      //   return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
+      // <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
+      // })
       // .setZIndex(200)
       .addTo(self.rectLayer);
 
