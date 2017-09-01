@@ -49,9 +49,14 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
   App.init = function () {
     $('[data-toggle="tooltip"]').tooltip(); //needed for button tooltips
+    App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
+    
     console.log("Loading Analytics");
+    App.views.loadingMessage.showLoadingMessage("Loading Map");
     App.views.map = new MapView("serviceMap");
     App.views.map.drawEnglewoodOutline();
+
+    App.views.loadingMessage.updateAndRaise("Initializing buttons and interface elements");
     App.views.chartList = new ChartListView("#chartList");
     App.views.chartList.makeCollapsing("#toggleHideChartsButton", "#chartListWrapper");
 
@@ -76,6 +81,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     // App.controllers.rectSelector.attachSpecificSelector("#rectSelector1", "1");
     // App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
 
+    App.views.loadingMessage.updateAndRaise("Loading location, service, and census data");
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
     let boundaryDataP = App.models.boundaryData.loadData();
@@ -96,6 +102,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
       .then(function(values) {
         // App.views.map.createMap();
 
+        App.views.loadingMessage.updateAndRaise("Plotting services");
         App.views.map.plotServices(App.models.socialServices.getData());
 
         // App.views.chartList...
@@ -105,6 +112,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.controllers.serviceMarkerView.setVisibilityState(false); //start off with markers hidden
 
         //set two selections to be west englewood and englewood
+        App.views.loadingMessage.updateAndRaise("Filtering data for West Englewood and Englewood");
         let westEnglewoodPoly = App.models.boundaryData.getWestEnglewoodPolygon();
         let englewoodPoly = App.models.boundaryData.getEnglewoodPolygon();
         let selectionData = {
@@ -138,6 +146,9 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
         App.views.chartList.addSelection(selectionData.westEnglewood);
         App.views.chartList.addSelection(selectionData.englewood);
+
+        App.views.loadingMessage.updateAndRaise("Done");
+        App.views.loadingMessage.hideLoadingMessage();
       })
       .catch(function(err) {
         console.log(err);

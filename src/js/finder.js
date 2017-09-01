@@ -55,12 +55,15 @@ window.onresize = function() {
 
   App.init = function() {
     $('[data-toggle="popover"]').popover(); //needed for tooltip on landing page
+    App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
 
     console.log("Loading Finder");
+    App.views.loadingMessage.showLoadingMessage("Loading Map");
     App.views.map = new MapView("serviceMap");
     App.views.serviceList = new ServiceListView("#serviceList");
     App.views.serviceList.makeCollapsing("#toggleHideServicesButton", "#serviceListWrapper");
 
+    App.views.loadingMessage.updateAndRaise("Initializing buttons and interface elements");
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList", "#filterDropdownButton");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
 
@@ -70,6 +73,7 @@ window.onresize = function() {
 
     App.controllers.search.attachDOMElements("#searchInput", "#searchCount", "#searchButton");
 
+    App.views.loadingMessage.updateAndRaise("Loading location and service data");
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
 
@@ -79,6 +83,7 @@ window.onresize = function() {
       .then(function(values) {
         // App.views.map.createMap();
 
+        App.views.loadingMessage.updateAndRaise("Plotting services");
         App.views.map.plotServices(App.models.socialServices.getData());
         App.views.serviceList.populateList(App.models.socialServices.getData());
 
@@ -87,6 +92,9 @@ window.onresize = function() {
 
         let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
+
+        App.views.loadingMessage.updateAndRaise("Done");
+        App.views.loadingMessage.hideLoadingMessage();
       })
       .catch(function(err) {
         console.log(err);
