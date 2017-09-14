@@ -37,6 +37,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   App.models.serviceTaxonomy = new ServiceTaxonomyModel();
   App.models.censusData = new CensusDataModel();
   App.models.boundaryData = new BoundaryDataModel();
+  App.models.landInventory = new LandInventoryModel();
+  App.models.crimeData = new CrimeDataModel();
 
   // views
 
@@ -83,14 +85,39 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
     App.views.loadingMessage.updateAndRaise("Loading location, service, and census data");
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
-    let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
-    let boundaryDataP = App.models.boundaryData.loadData();
+      .then((data) => {
+        console.log("Loaded Social Services");
+        return data;
+      });
+    let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json")
+      .then((data) => {
+        console.log("Loaded Service Taxonomy");
+        return data;
+      });
+    let boundaryDataP = App.models.boundaryData.loadData()
+      .then((data) => {
+        console.log("Loaded Boundary Data");
+        return data;
+      });
     let censusDataP = App.models.censusData.loadData()
       .then(function (data) {
         let overlayData = data[0];
         let overlayCategories = data[1];
 
         App.controllers.mapData.populateDropdown(overlayCategories, max_subdropdown_height);
+
+        console.log("Loaded Census Data");
+        return data;
+      });
+    let landInventoryP = App.models.landInventory.loadData()
+      .then((data) => {
+        console.log("Loaded Land Inventory Data");
+        return data;
+      });
+    let crimeDataP = App.models.crimeData.loadData()
+      .then((data) => {
+        console.log("Loaded Crime Data");
+        return data;
       });
 
     App.controllers.mapData.setCensusClearButton();
@@ -98,7 +125,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     // load other data sources when asked to plot
     let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
 
-    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP, censusDataP])
+    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP, censusDataP, landInventoryP, crimeDataP])
       .then(function(values) {
         // App.views.map.createMap();
 
