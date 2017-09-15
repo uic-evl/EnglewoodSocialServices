@@ -66,7 +66,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList", "#filterDropdownButton");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
     
-    App.controllers.serviceMarkerView = new ServiceMarkerViewController("#toggleServiceView");
+    App.controllers.serviceMarkerView = new LeafletMarkerViewController("#toggleServiceView","#serviceViewText", "Service");
+    App.controllers.landMarkerView = new LeafletMarkerViewController("#toggleLotView", "#lotViewText", "Vacant Lot");
 
     // App.controllers.mapData.setDataDropdown("#mapSettingsPanel");
     App.controllers.mapData.setupDataPanel("#mapPanelToggle", "#mapSettingsPanel");
@@ -129,14 +130,17 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
       .then(function(values) {
         // App.views.map.createMap();
 
-        App.views.loadingMessage.updateAndRaise("Plotting services");
+        App.views.loadingMessage.updateAndRaise("Plotting services and lots");
         App.views.map.plotServices(App.models.socialServices.getData());
+        App.views.map.plotLandInventory(App.models.landInventory.getDataByFilter());
 
         // App.views.chartList...
 
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
 
-        App.controllers.serviceMarkerView.setVisibilityState(false); //start off with markers hidden
+        //start off with markers hidden
+        App.controllers.serviceMarkerView.setVisibilityState(false); 
+        App.controllers.landMarkerView.setVisibilityState(false); 
 
         //set two selections to be west englewood and englewood
         App.views.loadingMessage.updateAndRaise("Filtering data for West Englewood and Englewood");

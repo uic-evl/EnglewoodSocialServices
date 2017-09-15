@@ -27,6 +27,7 @@ let MapView = function (div) {
     totalRects: 0,
 
     markerVisibilityCheck: () => { return true; }, //markers always visible by default
+    lotMarkerVisCheck: () => { return true; }, //markers always visible by default
 
     choroplethLayer: null,
     choropleth: null
@@ -80,6 +81,7 @@ let MapView = function (div) {
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
     self.rectLayer = L.layerGroup([]).addTo(self.map);
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
+    self.landInventoryGroup = L.layerGroup([]).addTo(self.map);
     self.map.zoomControl.setPosition('bottomright');
 
     // causes map to recalculate size... (I shouldn't need to do this)
@@ -117,6 +119,52 @@ let MapView = function (div) {
       });
     }
 
+  }
+
+  function plotLandInventory(landInventoryData){
+    self.landInventoryGroup.clearLayers();
+
+    let landMarkers = [];
+
+    // iterate through land inventory data
+    for(let lot of landInventoryData){
+      lot.visible = true;
+
+      // create a marker for each lot location
+      let curLot = L.marker(
+        L.latLng(+lot.Latitude, +lot.Longitude), {
+          icon: self.icons[self.iconColorNames[5]],
+          riseOnHover: true,
+          data: lot
+        }
+      ).bindPopup(function(layer) {
+        return `<strong>${lot.Location}</strong>`;
+      }).addTo(self.landInventoryGroup)
+      .on("mouseover", function (e) {
+        if (self.lotMarkerVisCheck()) {
+          //open popup forcefully
+          if (!this._popup._latlng) {
+            this._popup.setLatLng(new L.latLng(this.options.data.Latitude, this.options.data.Longitude));
+          }
+
+          this._popup.openOn(self.map);
+        }
+      })
+      .on("mouseout", function (e) {
+        if (!this.options.data.expanded) {
+          self.map.closePopup();
+        }
+      });
+
+      landMarkers.push(curLot);
+    }
+
+    //pass new list to marker view controller
+    if(App.controllers.landMarkerView){
+      let landMarkersSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive');
+      App.controllers.landMarkerView.attachMarkers(landMarkers, landMarkersSelection);
+      self.lotMarkerVisCheck = App.controllers.landMarkerView.markersAreVisible;
+    }
   }
 
   function plotServices(englewoodLocations) {
@@ -200,7 +248,7 @@ let MapView = function (div) {
     //pass new list to service marker view controller
     if(App.controllers.serviceMarkerView){
       let serviceMarkersSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive');
-      App.controllers.serviceMarkerView.attachServiceMarkers(serviceMarkers,serviceMarkersSelection);
+      App.controllers.serviceMarkerView.attachMarkers(serviceMarkers,serviceMarkersSelection);
       self.markerVisibilityCheck = App.controllers.serviceMarkerView.markersAreVisible;
     }
   }
@@ -426,6 +474,7 @@ let MapView = function (div) {
 
   return {
     createMap,
+    plotLandInventory,
     plotServices,
     updateServicesWithFilter,
     setSelectedService,

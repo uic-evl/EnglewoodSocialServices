@@ -70,6 +70,7 @@ let LandInventoryModel = function () {
   }
 
   function getDataByFilter(filterFn) {
+    if(!filterFn) return self.data;
     return _.filter(self.data, filterFn);
   }
 

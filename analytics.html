@@ -51,7 +51,7 @@
   <!-- <script src="./src/js/controllers/locationButtonController.js"></script> -->
   <script src="./src/js/controllers/searchController.js"></script>
   <script src="./src/js/controllers/rectSelectorController.js"></script>
-  <script src="./src/js/controllers/serviceMarkerViewController.js"></script>
+  <script src="./src/js/controllers/leafletMarkerViewController.js"></script>
 
   <!-- Main Script -->
   <script src="./src/js/analytics.js"></script>
@@ -140,6 +140,11 @@
         <button class="btn btn-success navbar-btn" id="toggleServiceView">
           <span class="glyphicon glyphicon-eye-close"></span>
           <span id="serviceViewText">Hide Service Markers</span>
+        </button>
+
+        <button class="btn btn-success navbar-btn" id="toggleLotView">
+          <span class="glyphicon glyphicon-eye-close"></span>
+          <span id="lotViewText">Hide Vacant Lot Markers</span>
         </button>
 
         <div class="dropdown-menu" role="menu" id="chartListWrapper">
