@@ -81,7 +81,11 @@ let MapView = function (div) {
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
     self.rectLayer = L.layerGroup([]).addTo(self.map);
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
-    self.landInventoryGroup = L.layerGroup([]).addTo(self.map);
+    if (L.markerClusterGroup){
+      self.landInventoryGroup = L.markerClusterGroup([]).addTo(self.map);
+    }else{
+      self.landInventoryGroup = L.layerGroup([]).addTo(self.map);
+    }
     self.map.zoomControl.setPosition('bottomright');
 
     // causes map to recalculate size... (I shouldn't need to do this)

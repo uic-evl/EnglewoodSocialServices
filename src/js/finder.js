@@ -98,8 +98,6 @@ window.onresize = function() {
       .catch(function(err) {
         console.log(err);
       });
-
-
   };
 
 })();

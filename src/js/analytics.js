@@ -140,7 +140,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
         //start off with markers hidden
         App.controllers.serviceMarkerView.setVisibilityState(false); 
-        App.controllers.landMarkerView.setVisibilityState(false); 
+        // App.controllers.landMarkerView.setVisibilityState(false); 
 
         //set two selections to be west englewood and englewood
         App.views.loadingMessage.updateAndRaise("Filtering data for West Englewood and Englewood");
