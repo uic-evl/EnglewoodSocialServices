@@ -115,18 +115,18 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         console.log("Loaded Land Inventory Data");
         return data;
       });
-    let crimeDataP = App.models.crimeData.loadData()
-      .then((data) => {
-        console.log("Loaded Crime Data");
-        return data;
-      });
+    // let crimeDataP = App.models.crimeData.loadData()
+    //   .then((data) => {
+    //     console.log("Loaded Crime Data");
+    //     return data;
+    //   });
 
     App.controllers.mapData.setCensusClearButton();
 
     // load other data sources when asked to plot
     let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
 
-    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP, censusDataP, landInventoryP, crimeDataP])
+    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP, censusDataP, landInventoryP, /*crimeDataP*/])
       .then(function(values) {
         // App.views.map.createMap();
 
