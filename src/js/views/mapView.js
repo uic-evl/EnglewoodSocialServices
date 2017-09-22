@@ -82,7 +82,9 @@ let MapView = function (div) {
     self.rectLayer = L.layerGroup([]).addTo(self.map);
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
     if (L.markerClusterGroup){
-      self.landInventoryGroup = L.markerClusterGroup([]).addTo(self.map);
+      self.landInventoryGroup = L.markerClusterGroup({
+        showCoverageOnHover: false
+      }).addTo(self.map);
     }else{
       self.landInventoryGroup = L.layerGroup([]).addTo(self.map);
     }
@@ -225,7 +227,7 @@ let MapView = function (div) {
           if (self.markerVisibilityCheck() && this.options.data.visible && App.controllers.listToMapLink) {
             App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
           } else {
-
+            self.map.closePopup();
           }
         })
         .on("mouseover", function (e) {
