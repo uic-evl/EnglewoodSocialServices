@@ -70,7 +70,7 @@ let MapView = function (div) {
     // use mapbox map
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 18,
+      maxZoom: 19,
       id: 'mapbox.streets',
       accessToken: 'pk.eyJ1IjoiYW5kcmV3dGJ1cmtzIiwiYSI6ImNpdnNmcHQ0ejA0azYydHBrc3drYWRwcTgifQ.pCA_a_l6sPcMo8oGzg5stQ'
     }).addTo(self.map);
@@ -83,7 +83,8 @@ let MapView = function (div) {
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
     if (L.markerClusterGroup){
       self.landInventoryGroup = L.markerClusterGroup({
-        showCoverageOnHover: false
+        showCoverageOnHover: false,
+        disableClusteringAtZoom: 19
       }).addTo(self.map);
     }else{
       self.landInventoryGroup = L.layerGroup([]).addTo(self.map);
@@ -167,7 +168,25 @@ let MapView = function (div) {
 
     //pass new list to marker view controller
     if(App.controllers.landMarkerView){
-      let landMarkersSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive');
+      let landMarkersSelection = function () {
+        // used to set the classes of both selections
+        let classed = function (className, state) {
+          console.log(className, state);
+          let clusterMarkerSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.marker-cluster');
+          clusterMarkerSelection.classed(className, state);
+          
+          let lotMarkerSelection = $(".leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive[src*=violet]");
+          if(state){
+            lotMarkerSelection.addClass(className);
+          }else{
+            lotMarkerSelection.removeClass(className);
+          }
+        };
+
+        return {
+          classed
+        };
+      };
       App.controllers.landMarkerView.attachMarkers(landMarkers, landMarkersSelection);
       self.lotMarkerVisCheck = App.controllers.landMarkerView.markersAreVisible;
     }
@@ -254,7 +273,7 @@ let MapView = function (div) {
     //pass new list to service marker view controller
     if(App.controllers.serviceMarkerView){
       let serviceMarkersSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive');
-      App.controllers.serviceMarkerView.attachMarkers(serviceMarkers,serviceMarkersSelection);
+      App.controllers.serviceMarkerView.attachMarkers(serviceMarkers, serviceMarkersSelection);
       self.markerVisibilityCheck = App.controllers.serviceMarkerView.markersAreVisible;
     }
   }

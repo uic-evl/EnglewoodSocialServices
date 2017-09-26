@@ -54,7 +54,13 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
             m.closePopup();
         }
 
-        self.markerD3Selection.classed('disabled-marker', !bool);
+        if (typeof self.markerD3Selection !== "function"){
+            console.trace("Entered normal toggle", self);
+            self.markerD3Selection.classed('disabled-marker', !bool);
+        }else { //used in cases where markers are constantly added and removed
+            let tempSelection = self.markerD3Selection();
+            tempSelection.classed('disabled-marker', !bool);
+        }
 
     }
 
