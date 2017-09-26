@@ -170,8 +170,8 @@ let MapView = function (div) {
     if(App.controllers.landMarkerView){
       let landMarkersSelection = function () {
         // used to set the classes of both selections
+        // return makes it so that usage is <selection>.classed("classname",true||false);
         let classed = function (className, state) {
-          console.log(className, state);
           let clusterMarkerSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.marker-cluster');
           clusterMarkerSelection.classed(className, state);
           
@@ -189,6 +189,10 @@ let MapView = function (div) {
       };
       App.controllers.landMarkerView.attachMarkers(landMarkers, landMarkersSelection);
       self.lotMarkerVisCheck = App.controllers.landMarkerView.markersAreVisible;
+
+      self.map.on("zoomend", (e) => {
+        App.controllers.landMarkerView.setVisibilityState(self.lotMarkerVisCheck());
+      });
     }
   }
 

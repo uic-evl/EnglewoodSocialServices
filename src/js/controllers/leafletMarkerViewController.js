@@ -47,7 +47,7 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
     //toggle markers directly
     function setMarkerVisibility(bool) {
         self.visibleMarkers = (bool == true); //true = visible, false = invisible
-        let opacity = bool ? 1 : 0;
+        let opacity = (bool == true) ? 1 : 0; //true = visible, false = invisible
 
         for (let m of self.markerArray) {
             m.setOpacity(opacity);
@@ -55,7 +55,6 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
         }
 
         if (typeof self.markerD3Selection !== "function"){
-            console.trace("Entered normal toggle", self);
             self.markerD3Selection.classed('disabled-marker', !bool);
         }else { //used in cases where markers are constantly added and removed
             let tempSelection = self.markerD3Selection();
