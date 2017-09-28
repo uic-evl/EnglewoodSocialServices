@@ -86,6 +86,7 @@ let MapView = function (div) {
         showCoverageOnHover: false,
         disableClusteringAtZoom: 19
       }).addTo(self.map);
+      self.toggleableLotMarkerGroup = L.featureGroup.subGroup(self.landInventoryGroup).addTo(self.map);
     }else{
       self.landInventoryGroup = L.layerGroup([]).addTo(self.map);
     }
@@ -146,7 +147,7 @@ let MapView = function (div) {
         }
       ).bindPopup(function(layer) {
         return `<strong>${lot.Location}</strong>`;
-      }).addTo(self.landInventoryGroup)
+      }).addTo(self.toggleableLotMarkerGroup)
       .on("mouseover", function (e) {
         if (self.lotMarkerVisCheck()) {
           //open popup forcefully
@@ -170,7 +171,7 @@ let MapView = function (div) {
     if(App.controllers.landMarkerView){
       let landMarkersSelection = function () {
         // used to set the classes of both selections
-        // return makes it so that usage is <selection>.classed("classname",true||false);
+        // return makes it so that usage is <selection>.classed("classname",true||false) as if it was a d3 selection
         let classed = function (className, state) {
           let clusterMarkerSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.marker-cluster');
           clusterMarkerSelection.classed(className, state);
@@ -190,8 +191,13 @@ let MapView = function (div) {
       App.controllers.landMarkerView.attachMarkers(landMarkers, landMarkersSelection);
       self.lotMarkerVisCheck = App.controllers.landMarkerView.markersAreVisible;
 
-      self.map.on("zoomend", (e) => {
-        App.controllers.landMarkerView.setVisibilityState(self.lotMarkerVisCheck());
+      // add/remove layer subgroup on toggle
+      App.controllers.landMarkerView.setCustomToggleFunction((state,markerArray,d3Selection) => {
+        if(state){
+          self.map.addLayer(self.toggleableLotMarkerGroup);
+        }else{
+          self.map.removeLayer(self.toggleableLotMarkerGroup);
+        }
       });
     }
   }

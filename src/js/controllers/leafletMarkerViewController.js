@@ -8,7 +8,8 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
 
         visibleMarkers: true,
         markerArray: null,
-        markerD3Selection: null
+        markerD3Selection: null,
+        customToggleFunc: null
     };
 
     init();
@@ -16,7 +17,6 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
     function init() {
         self.button = d3.select(buttonID)
             .on("click", handleButtonClick);
-
     }
 
     //markerArray is an array of L.marker() objects from the mapView.plotServices function (or similar plot functions)
@@ -30,6 +30,10 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
         setVisibilityState(!self.visibleMarkers); //toggle visibility
     }
 
+    function setCustomToggleFunction(customToggleFunc){
+        self.customToggleFunc = customToggleFunc;
+    }
+
     //toggle markers and update button text accordingly
     function setVisibilityState(bool) {
         setMarkerVisibility(bool == true); //enforce true or false
@@ -41,6 +45,10 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
             buttonText.text(`Hide ${markerName} Markers`);
         } else {
             buttonText.text(`Show ${markerName} Markers`);
+        }
+
+        if(typeof self.customToggleFunc === "function"){
+            self.customToggleFunc(bool,self.markerArray,self.markerD3Selection);
         }
     }
 
@@ -70,6 +78,7 @@ let LeafletMarkerViewController = function (buttonID, buttonTextID, markerName) 
     return {
         markersAreVisible,
         attachMarkers,
-        setVisibilityState
+        setVisibilityState,
+        setCustomToggleFunction
     }
 }
