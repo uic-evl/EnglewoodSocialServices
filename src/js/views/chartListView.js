@@ -51,10 +51,10 @@ let ChartListView = function(listID) {
     let neededSelections = 2 - Object.keys(self.selections).length;
     console.log("neededSelections", neededSelections);
     let censusCharts = self.chartList.selectAll(".census");
-    // let serviceCharts = self.chartList.selectAll(".service");
+    let lotCharts = self.chartList.selectAll(".vacantLotChart");
     self.chartList.selectAll('#error-selection-chart').remove();
-    if(censusCharts.empty() /*|| serviceCharts.empty()*/){
-      if(neededSelections > 0 && /*serviceCharts.empty() &&*/ censusCharts.empty()){ //show selection message if no charts are currently showing
+    if(censusCharts.empty() || lotCharts.empty()){
+      if(neededSelections > 0 && lotCharts.empty() && censusCharts.empty()){ //show selection message if no charts are currently showing
           // addErrorChart(`Select ${neededSelections} ${neededSelections === 1 ? "area" : "areas"} where you'd like to compare data`);
           addErrorChart("Please wait until data has finished loading");
       }else{
@@ -124,12 +124,12 @@ let ChartListView = function(listID) {
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
     let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle text-left');
     if(property_data.type !== "service"){
-      propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" ? " (per sq. mi.)" : ""}`);
+      propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" && property_data.type !== "lot" ? " (per sq. mi.)" : ""}`);
     }else{
       propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`);
     }
     
-    if (!(property_data.mainType.toLowerCase() === "all services" && property_data.subType.toLowerCase() === "total count")){
+    if (!((property_data.mainType.toLowerCase() === "all services" && property_data.subType.toLowerCase() === "total count") || property_data.type === "lot")){
       heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove text-right')
         .on('click',function(){
           if(property_data.type === "census"){
@@ -168,17 +168,91 @@ let ChartListView = function(listID) {
     checkSelections();
   }
 
-  function updateCensusChart(chart, property_data){
-    chart = chart || self.chartList.select(".census"); //only one census property at a single time
-    let graph = chart.select('.graph-group');
-    graph.background = graph.select('.graph-background');
-    graph.content = graph.append('g').classed('graph-content', true);
+  function drawGraphBars(graph,data){
     let selectionKeys = Object.keys(self.selections);
     let boundsX = [0, +graph.background.attr('width')];
     let xScale = d3.scaleLinear().domain([0, selectionKeys.length]).range(boundsX);
 
     let barThickness = self.barThickness;
     let barWidth = xScale.range()[1] / selectionKeys.length;
+    let boundsY = [+graph.background.attr('height'), 0];
+    let yScale = d3.scaleLinear().domain([0, d3.max(data, (d) => { return d.value; })]).range(boundsY);
+    let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
+    let yMax = yScale.domain()[1];
+    graph.content.selectAll('.bar').data(data)
+      .enter().append('rect').each(function (data_entry, index) {
+        let height = (data_entry.value != 0) ? yScale(yMax - data_entry.value) : 0;
+        let x = xOffset + xScale(index) + (barWidth - barThickness) / 2, y = yOffset + yScale(data_entry.value);
+        d3.select(this).classed('bar', true)
+          .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
+          .attr('width', barThickness).attr('height', height)
+          .style('fill', data_entry.color).attr('id', 'selection-graph-bar')
+          .on('click', function () {
+            App.views.map.centerAroundRect(self.selections[selectionKeys[index]]);
+          });
+
+        let textSize = 14;
+        let textOffsetY = boundsY[0] + yOffset * 1.5 + textSize * 1.15;
+        let textOffsetX = (barWidth / 2);
+
+        graph.content.append('text')
+          .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
+          .attr('text-anchor', 'middle').style('font-size', textSize)
+          .text(`${self.selections[selectionKeys[index]].id}`);
+      });
+
+    let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
+    graph.content.append('g').classed('axis', true)
+      .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
+
+    let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(1);
+    graph.content.append('g').classed('axis', true)
+      .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
+  }
+
+  function updateLotChart(chart, property_data){
+    chart = chart || self.chartList.select(".vacantLotChart"); //only one lot chart at a single time
+    let graph = chart.select('.graph-group');
+    graph.background = graph.select('.graph-background');
+    graph.content = graph.append('g').classed('graph-content', true);
+
+    let selectionKeys = Object.keys(self.selections);
+    let data = [];
+    for(let s of selectionKeys){
+      let curSelection = self.selections[s];
+      let lotArray = curSelection.data.lot || [];
+      data.push({
+        value: lotArray.length,
+        color: curSelection.color
+      });
+    }
+
+    console.log("selection bar data", data);
+
+    //only draw bars when there are 2 selections
+    if (data.length > 1) {
+      drawGraphBars(graph,data);
+    } else {
+      let text_element = graph.content.append('text')
+        .attr('text-anchor', 'middle')
+        .attr("x", +graph.background.attr('width') / 2 + self.chartMargins.left / 2 + self.chartMargins.right / 2)
+        .attr("y", +graph.background.attr('height') / 2)
+        // .attr("x", self.chartMargins.left + 5)
+        // .attr("y", self.chartMargins.top + 15)
+      addMultilineText(text_element, [`Select ${2 - data.length} more ${2 - data.length === 1 ? "area" : "areas"} where you'd`, `like to compare data`]);
+    }
+
+    chart.selectAll('.panel-footer').remove();
+
+  }
+
+  function updateCensusChart(chart, property_data){
+    chart = chart || self.chartList.select(".census"); //only one census property at a single time
+    let graph = chart.select('.graph-group');
+    graph.background = graph.select('.graph-background');
+    graph.content = graph.append('g').classed('graph-content', true);
+    
+    let selectionKeys = Object.keys(self.selections);
     let data = [];
     for (let s of selectionKeys) {
       let curSelection = self.selections[s];
@@ -200,41 +274,9 @@ let ChartListView = function(listID) {
 
     console.log("selection bar data", data);
 
-    //only draw when there are 2 selections
+    //only draw bars when there are 2 selections
     if (data.length > 1) {
-      let boundsY = [+graph.background.attr('height'), 0];
-      let yScale = d3.scaleLinear().domain([0, d3.max(data, (d) => { return d.value; })]).range(boundsY);
-      let xOffset = +graph.background.attr('x'), yOffset = +graph.background.attr('y');
-      let yMax = yScale.domain()[1];
-      graph.content.selectAll('.bar').data(data)
-        .enter().append('rect').each(function (data_entry, index) {
-          let height = (data_entry.value != 0) ? yScale(yMax - data_entry.value) : 0;
-          let x = xOffset + xScale(index) + (barWidth-barThickness)/2, y = yOffset + yScale(data_entry.value);
-          d3.select(this).classed('bar', true)
-            .attr('x', x).attr('y', yOffset + yScale(data_entry.value))
-            .attr('width', barThickness).attr('height', height)
-            .style('fill', data_entry.color).attr('id', 'selection-graph-bar')
-            .on('click', function () {
-              App.views.map.centerAroundRect(self.selections[selectionKeys[index]]);
-            });
-
-          let textSize = 14;
-          let textOffsetY = boundsY[0] + yOffset * 1.5 + textSize * 1.15;
-          let textOffsetX = (barWidth / 2);
-
-          graph.content.append('text')
-            .attr('x', xOffset + barWidth * index + textOffsetX).attr('y', textOffsetY)
-            .attr('text-anchor','middle').style('font-size',textSize)
-            .text(`${self.selections[selectionKeys[index]].id}`);
-        });
-
-      let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
-      graph.content.append('g').classed('axis', true)
-        .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
-
-      let xAxis = d3.axisBottom(xScale).tickFormat(() => { return ""; }).ticks(1);
-      graph.content.append('g').classed('axis', true)
-        .attr('transform', `translate(${xOffset},${boundsY[0] + yOffset})`).call(xAxis);
+      drawGraphBars(graph,data);
     } else {
       let text_element = graph.content.append('text')
         .attr('text-anchor','middle')
@@ -242,7 +284,7 @@ let ChartListView = function(listID) {
         .attr("y", +graph.background.attr('height') / 2)
         // .attr("x", self.chartMargins.left + 5)
         // .attr("y", self.chartMargins.top + 15)
-      addMultilineText(text_element,[`Select ${2 - data.length} more ${2 - data.length === 1 ? "area" : "areas"} where you'd`,`like to compare data`]);
+        addMultilineText(text_element,[`Select ${2 - data.length} more ${2 - data.length === 1 ? "area" : "areas"} where you'd`,`like to compare data`]);
     }
 
     chart.selectAll('.panel-footer').remove();
@@ -394,7 +436,7 @@ let ChartListView = function(listID) {
       let property_data = JSON.parse(graph.background.attr('property-data'));
       if(property_data.type == "census"){
         updateCensusChart(chart,property_data);
-      // }else if(property_data.type === "error"){ //replaced by checkSelections()
+      // }else if(property_data.type === "error"){ //branch replaced by checkSelections()
       //   graph.content.append('text').attr('text-anchor','middle')
       //       // .attr("x", +graph.background.attr('width')/2)//self.chartMargins.left + 5)
       //       .attr("y", +graph.background.attr('height')/2)//self.chartMargins.top + 15)
@@ -409,6 +451,8 @@ let ChartListView = function(listID) {
       //     });
       }else if (property_data.type === "service"){
         // updateServiceChart(chart,property_data);
+      }else if (property_data.type === "lot"){
+        updateLotChart(chart,property_data);
       }else{
         graph.content.append('text')
           .attr("x", self.chartMargins.left + 5)
@@ -448,6 +492,19 @@ let ChartListView = function(listID) {
 
     if (self.chartList.selectAll(`.census`).empty()) {
       checkSelections();
+    }
+  }
+
+  function addLotChart(){
+    if (self.chartList.selectAll(`.vacantLotChart`).empty()) {
+      // self.chartList.selectAll('.vacantLotChart').remove();
+      return createChart({
+        mainType: "Vacant Lots",
+        subType: "Total",
+        type: "lot"
+      });
+    } else {
+      console.log("Already exists");
     }
   }
 
@@ -531,10 +588,11 @@ let ChartListView = function(listID) {
     removeChart,
     addPropertyChart,
     removePropertyChart,
-    addSelection,
-    removeSelection,
     addServiceChart,
     removeServiceChart,
+    addLotChart,
+    addSelection,
+    removeSelection,
     makeCollapsing,
     resize
   };

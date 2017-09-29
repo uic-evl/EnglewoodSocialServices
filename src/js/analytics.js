@@ -135,6 +135,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.views.map.plotLandInventory(App.models.landInventory.getDataByFilter());
 
         // App.views.chartList...
+        App.views.chartList.addLotChart();
 
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
 
@@ -154,6 +155,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
               //   let point = [parseFloat(service.X), parseFloat(service.Y)];
               //   return App.models.boundaryData.isInWestEnglewood(point);
               // }),
+              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
             },
             area: turf.area(westEnglewoodPoly),
             color: "#1f77b4",
@@ -166,6 +168,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
               //   let point = [parseFloat(service.X), parseFloat(service.Y)];
               //   return App.models.boundaryData.isInEnglewood(point);
               // }),
+              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
             },
             area: turf.area(englewoodPoly),
             color: "#ff7f0e",
