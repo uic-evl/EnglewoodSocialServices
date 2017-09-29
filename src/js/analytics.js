@@ -159,7 +159,17 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
             },
             area: turf.area(westEnglewoodPoly),
             color: "#1f77b4",
-            id: "West Englewood"
+            id: "West Englewood",
+            bounds: (function(poly){
+              let coordsArr = poly.geometry.coordinates[0];
+              let latExtent = d3.extent(coordsArr, (d) => { return d[1]; });
+              let lngExtent = d3.extent(coordsArr, (d) => { return d[0]; });
+
+              return [
+                [latExtent[0], lngExtent[0]],
+                [latExtent[1], lngExtent[1]],
+              ];
+            })(westEnglewoodPoly)
           },
           englewood: {
             data: {
@@ -172,7 +182,17 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
             },
             area: turf.area(englewoodPoly),
             color: "#ff7f0e",
-            id: "Englewood"
+            id: "Englewood",
+            bounds: (function (poly) {
+              let coordsArr = poly.geometry.coordinates[0];
+              let latExtent = d3.extent(coordsArr, (d) => { return d[1]; });
+              let lngExtent = d3.extent(coordsArr, (d) => { return d[0]; });
+
+              return [
+                [latExtent[0], lngExtent[0]],
+                [latExtent[1], lngExtent[1]],
+              ];
+            })(englewoodPoly)
           }
         };
 
