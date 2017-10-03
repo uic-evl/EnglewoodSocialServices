@@ -388,23 +388,29 @@ let MapView = function (div) {
         .domain(d3.extent(data.features, f => Math.ceil(f.properties.data*100)/100))
         .range(['#9ebcda', '#6e016b']);
 
+      //create scale for 5 cells with unit ranges
+      let simpleColorScale = d3.scaleLinear()
+        .domain([0,4]).range(colorScale.range())
+      let colorScaleQ = d3.scaleQuantize()
+        .domain(colorScale.domain()).range(d3.range(5).map((i) => simpleColorScale(i)));
+
       console.log(colorScale.domain(), colorScale.range());
 
       // TODO: draw color scale for map
-      let svg = d3.select("#legend").append("svg").attr("width", 200).attr("height", 60)
+      let svg = d3.select("#legend").append("svg").attr("width", 170).attr("height", 150)
         .style('background-color',"rgba(150,150,150,0.75)")
         .attr('id','svgLegend');
 
       svg.append("g")
         .attr("class", "legendLinear")
-        .attr("transform", "translate(20,20)");
+        .attr("transform", "translate(25,20)");
 
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
-        .orient('horizontal')
         .labelFormat(d3.format(".02f"))
-        .cells(5)
-        .scale(colorScale);
+        .title("Census Count")
+        .titleWidth(120)
+        .scale(colorScaleQ);
 
       svg.select(".legendLinear")
         .call(legendLinear);
