@@ -26,6 +26,9 @@ let MapView = function (div) {
     rectColors: d3.schemeCategory10.slice(0),
     totalRects: 0,
 
+    markerVisibilityCheck: () => { return true; }, //markers always visible by default
+    lotMarkerVisCheck: () => { return true; }, //markers always visible by default
+
     choroplethLayer: null,
     choropleth: null
   };
@@ -67,7 +70,7 @@ let MapView = function (div) {
     // use mapbox map
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 18,
+      maxZoom: 19,
       id: 'mapbox.streets',
       accessToken: 'pk.eyJ1IjoiYW5kcmV3dGJ1cmtzIiwiYSI6ImNpdnNmcHQ0ejA0azYydHBrc3drYWRwcTgifQ.pCA_a_l6sPcMo8oGzg5stQ'
     }).addTo(self.map);
@@ -78,6 +81,15 @@ let MapView = function (div) {
     self.choroplethLayer = L.layerGroup([]).addTo(self.map);
     self.rectLayer = L.layerGroup([]).addTo(self.map);
     self.serviceGroup = L.layerGroup([]).addTo(self.map);
+    if (L.markerClusterGroup){
+      self.landInventoryGroup = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        disableClusteringAtZoom: 19
+      }).addTo(self.map);
+      self.toggleableLotMarkerGroup = L.featureGroup.subGroup(self.landInventoryGroup).addTo(self.map);
+    }else{
+      self.landInventoryGroup = L.layerGroup([]).addTo(self.map);
+    }
     self.map.zoomControl.setPosition('bottomright');
 
     // causes map to recalculate size... (I shouldn't need to do this)
@@ -96,7 +108,7 @@ let MapView = function (div) {
           opacity: .75,
           fillColor: '#d9f0a3', //Outline color
           fillOpacity: 0.35,
-          className: "geoJSON-englewoodOutline"
+          className: "geoJSON-englewoodOutline",
         }
       }).addTo(self.map);
     });
@@ -117,8 +129,82 @@ let MapView = function (div) {
 
   }
 
+  function plotLandInventory(landInventoryData){
+    self.landInventoryGroup.clearLayers();
+
+    let landMarkers = [];
+
+    // iterate through land inventory data
+    for(let lot of landInventoryData){
+      lot.visible = true;
+
+      // create a marker for each lot location
+      let curLot = L.marker(
+        L.latLng(+lot.Latitude, +lot.Longitude), {
+          icon: self.icons[self.iconColorNames[5]],
+          riseOnHover: true,
+          data: lot
+        }
+      ).bindPopup(function(layer) {
+        return `<strong>${lot.Location}</strong>`;
+      }).addTo(self.toggleableLotMarkerGroup)
+      .on("mouseover", function (e) {
+        if (self.lotMarkerVisCheck()) {
+          //open popup forcefully
+          if (!this._popup._latlng) {
+            this._popup.setLatLng(new L.latLng(this.options.data.Latitude, this.options.data.Longitude));
+          }
+
+          this._popup.openOn(self.map);
+        }
+      })
+      .on("mouseout", function (e) {
+        if (!this.options.data.expanded) {
+          self.map.closePopup();
+        }
+      });
+
+      landMarkers.push(curLot);
+    }
+
+    //pass new list to marker view controller
+    if(App.controllers.landMarkerView){
+      let landMarkersSelection = function () {
+        // used to set the classes of both selections
+        // return makes it so that usage is <selection>.classed("classname",true||false) as if it was a d3 selection
+        let classed = function (className, state) {
+          let clusterMarkerSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.marker-cluster');
+          clusterMarkerSelection.classed(className, state);
+          
+          let lotMarkerSelection = $(".leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive[src*=violet]");
+          if(state){
+            lotMarkerSelection.addClass(className);
+          }else{
+            lotMarkerSelection.removeClass(className);
+          }
+        };
+
+        return {
+          classed
+        };
+      };
+      App.controllers.landMarkerView.attachMarkers(landMarkers, landMarkersSelection);
+      self.lotMarkerVisCheck = App.controllers.landMarkerView.markersAreVisible;
+
+      // add/remove layer subgroup on toggle
+      App.controllers.landMarkerView.setCustomToggleFunction((state,markerArray,d3Selection) => {
+        if(state){
+          self.map.addLayer(self.toggleableLotMarkerGroup);
+        }else{
+          self.map.removeLayer(self.toggleableLotMarkerGroup);
+        }
+      });
+    }
+  }
+
   function plotServices(englewoodLocations) {
     self.serviceGroup.clearLayers();
+    let serviceMarkers = [];
 
     // iterate through the social services location file
     for (let loc of englewoodLocations) {
@@ -130,7 +216,7 @@ let MapView = function (div) {
 
 
       // create a marker for each social services location
-      L.marker(
+      let curService = L.marker(
           L.latLng(lat, lng), {
             icon: self.icons[self.iconColorNames[0]],
             riseOnHover: true, // moves the marker to the front on mouseover
@@ -167,25 +253,38 @@ let MapView = function (div) {
                 "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
         }).addTo(self.serviceGroup)
         .on("click", function (e) {
-          if (this.options.data.visible && App.controllers.listToMapLink) {
+          if (self.markerVisibilityCheck() && this.options.data.visible && App.controllers.listToMapLink) {
             App.controllers.listToMapLink.mapMarkerSelected(this.options.data);
           } else {
-
+            self.map.closePopup();
           }
         })
         .on("mouseover", function (e) {
-          // open popup forcefully
-          if (!this._popup._latlng) {
-            this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
+          if(self.markerVisibilityCheck()){
+            // let point = new L.latLng(this.options.data.Y, this.options.data.X);
+            // console.log(App.models.boundaryData.isInWestEnglewood(point), App.models.boundaryData.isInEnglewood(point));
+            // open popup forcefully
+            if (!this._popup._latlng) {
+              this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
+            }
+            
+            this._popup.openOn(self.map);
           }
-
-          this._popup.openOn(self.map);
         })
         .on("mouseout", function (e) {
           if (!this.options.data.expanded) {
             self.map.closePopup();
           }
         });
+      
+        serviceMarkers.push(curService);
+    }
+
+    //pass new list to service marker view controller
+    if(App.controllers.serviceMarkerView){
+      let serviceMarkersSelection = d3.select("#" + div).selectAll('.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive');
+      App.controllers.serviceMarkerView.attachMarkers(serviceMarkers, serviceMarkersSelection);
+      self.markerVisibilityCheck = App.controllers.serviceMarkerView.markersAreVisible;
     }
   }
 
@@ -244,10 +343,10 @@ let MapView = function (div) {
         color,
         data: rectID || self.totalRects
       })
-      .bindPopup(function (layer) { // allow for the popup on click with the name of the location
-        return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
-      <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
-      })
+      // .bindPopup(function (layer) { // allow for the popup on click with the name of the location
+      //   return `<button class='btn btn-xs btn-danger' onclick='App.controllers.rectSelector.removeRect(${layer.options.data})'>
+      // <span class='glyphicon glyphicon-remove'></span> Remove</button>`;
+      // })
       // .setZIndex(200)
       .addTo(self.rectLayer);
 
@@ -289,23 +388,29 @@ let MapView = function (div) {
         .domain(d3.extent(data.features, f => Math.ceil(f.properties.data*100)/100))
         .range(['#9ebcda', '#6e016b']);
 
+      //create scale for 5 cells with unit ranges
+      let simpleColorScale = d3.scaleLinear()
+        .domain([0,4]).range(colorScale.range())
+      let colorScaleQ = d3.scaleQuantize()
+        .domain(colorScale.domain()).range(d3.range(5).map((i) => simpleColorScale(i)));
+
       console.log(colorScale.domain(), colorScale.range());
 
       // TODO: draw color scale for map
-      let svg = d3.select("#legend").append("svg").attr("width", 200).attr("height", 60)
+      let svg = d3.select("#legend").append("svg").attr("width", 170).attr("height", 150)
         .style('background-color',"rgba(150,150,150,0.75)")
         .attr('id','svgLegend');
 
       svg.append("g")
         .attr("class", "legendLinear")
-        .attr("transform", "translate(20,20)");
+        .attr("transform", "translate(25,20)");
 
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
-        .orient('horizontal')
         .labelFormat(d3.format(".02f"))
-        .cells(5)
-        .scale(colorScale);
+        .title("Census Count")
+        .titleWidth(120)
+        .scale(colorScaleQ);
 
       svg.select(".legendLinear")
         .call(legendLinear);
@@ -410,6 +515,7 @@ let MapView = function (div) {
 
   return {
     createMap,
+    plotLandInventory,
     plotServices,
     updateServicesWithFilter,
     setSelectedService,

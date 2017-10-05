@@ -46,7 +46,7 @@ let FilterDropdownController = function() {
     }
 
     console.log("current_service_properties",current_service_properties);
-    App.views.chartList.removeServiceChart(current_service_properties);
+    // App.views.chartList.removeServiceChart(current_service_properties);
 
     self.filterDropdownList.selectAll(".glyphicon")
       .attr("class", "glyphicon glyphicon-unchecked");
@@ -155,7 +155,7 @@ let FilterDropdownController = function() {
               });
 
             if(selected){
-              App.views.chartList.addServiceChart(current_service_properties);
+              // App.views.chartList.addServiceChart(current_service_properties);
             }
 
             filtersUpdated();
@@ -215,11 +215,11 @@ let FilterDropdownController = function() {
               self.filterDropdownButton.attr("class", "btn btn-success dropdown-toggle navbar-btn");
               self.allServicesButton.style('display', null);
 
-              App.views.chartList.addServiceChart({
-                mainType: d.mainType,
-                subType: d.subType,
-                type: "service"
-              });
+              // App.views.chartList.addServiceChart({
+              //   mainType: d.mainType,
+              //   subType: d.subType,
+              //   type: "service"
+              // });
             } else {
               resetFilters();
             }
@@ -317,6 +317,10 @@ let FilterDropdownController = function() {
     let dataSubset = App.models.socialServices.getFilteredData(filtersToSend);
 
     App.views.map.updateServicesWithFilter(dataSubset);
+
+    //show/hide buttons based on previous configuration
+    let visibilityState = App.controllers.serviceMarkerView.markersAreVisible();
+    App.controllers.serviceMarkerView.setVisibilityState(visibilityState);
 
     console.log();
   }

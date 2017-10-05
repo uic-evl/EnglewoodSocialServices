@@ -36,6 +36,9 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   App.models.socialServices = new SocialServiceModel();
   App.models.serviceTaxonomy = new ServiceTaxonomyModel();
   App.models.censusData = new CensusDataModel();
+  App.models.boundaryData = new BoundaryDataModel();
+  App.models.landInventory = new LandInventoryModel();
+  App.models.crimeData = new CrimeDataModel();
 
   // views
 
@@ -48,15 +51,23 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
   App.init = function () {
     $('[data-toggle="tooltip"]').tooltip(); //needed for button tooltips
+    App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
+    
     console.log("Loading Analytics");
+    App.views.loadingMessage.startLoading("Loading Map");
     App.views.map = new MapView("serviceMap");
     App.views.map.drawEnglewoodOutline();
+
+    App.views.loadingMessage.updateAndRaise("Initializing buttons and interface elements");
     App.views.chartList = new ChartListView("#chartList");
     App.views.chartList.makeCollapsing("#toggleHideChartsButton", "#chartListWrapper");
 
     // App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList");
     App.controllers.serviceFilterDropdown.setFilterDropdown("#filterDropdownList", "#filterDropdownButton");
     App.controllers.serviceFilterDropdown.attachAllServicesButton("#allServicesButton");
+    
+    App.controllers.serviceMarkerView = new LeafletMarkerViewController("#toggleServiceView","#serviceViewText", "Service");
+    App.controllers.landMarkerView = new LeafletMarkerViewController("#toggleLotView", "#lotViewText", "Vacant Lot");
 
     // App.controllers.mapData.setDataDropdown("#mapSettingsPanel");
     App.controllers.mapData.setupDataPanel("#mapPanelToggle", "#mapSettingsPanel");
@@ -68,41 +79,133 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
     App.controllers.search.attachDOMElements("#searchInput", "#searchButton");
 
-    App.controllers.rectSelector = new RectSelectorController("#newRectSelector");
-    App.controllers.rectSelector.attachDragLayer("#serviceMap");
-    App.controllers.rectSelector.attachSpecificSelector("#rectSelector1", "1");
-    App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
+    // App.controllers.rectSelector = new RectSelectorController("#newRectSelector");
+    // App.controllers.rectSelector.attachDragLayer("#serviceMap");
+    // App.controllers.rectSelector.attachSpecificSelector("#rectSelector1", "1");
+    // App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
 
+    App.views.loadingMessage.updateAndRaise("Loading location, service, and census data");
     let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
-    let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
+      .then((data) => {
+        console.log("Loaded Social Services");
+        return data;
+      });
+    let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json")
+      .then((data) => {
+        console.log("Loaded Service Taxonomy");
+        return data;
+      });
+    let boundaryDataP = App.models.boundaryData.loadData()
+      .then((data) => {
+        console.log("Loaded Boundary Data");
+        return data;
+      });
+    let censusDataP = App.models.censusData.loadData()
+      .then(function (data) {
+        let overlayData = data[0];
+        let overlayCategories = data[1];
+
+        App.controllers.mapData.populateDropdown(overlayCategories, max_subdropdown_height);
+
+        console.log("Loaded Census Data");
+        return data;
+      });
+    let landInventoryP = App.models.landInventory.loadData()
+      .then((data) => {
+        console.log("Loaded Land Inventory Data");
+        return data;
+      });
+    // let crimeDataP = App.models.crimeData.loadData()
+    //   .then((data) => {
+    //     console.log("Loaded Crime Data");
+    //     return data;
+    //   });
 
     App.controllers.mapData.setCensusClearButton();
 
     // load other data sources when asked to plot
     let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
 
-    Promise.all([socialServiceP, serviceTaxonomyP])
+    Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP, censusDataP, landInventoryP, /*crimeDataP*/])
       .then(function(values) {
         // App.views.map.createMap();
 
+        App.views.loadingMessage.updateAndRaise("Plotting services and lots");
         App.views.map.plotServices(App.models.socialServices.getData());
+        App.views.map.plotLandInventory(App.models.landInventory.getDataByFilter());
 
         // App.views.chartList...
+        App.views.chartList.addLotChart();
 
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
+
+        //start off with markers hidden
+        App.controllers.serviceMarkerView.setVisibilityState(false); 
+        App.controllers.landMarkerView.setVisibilityState(false); 
+
+        //set two selections to be west englewood and englewood
+        App.views.loadingMessage.updateAndRaise("Filtering data for West Englewood and Englewood");
+        let westEnglewoodPoly = App.models.boundaryData.getWestEnglewoodPolygon();
+        let englewoodPoly = App.models.boundaryData.getEnglewoodPolygon();
+        let selectionData = {
+          westEnglewood: {
+            data: {
+              census: App.models.censusData.getDataWithinPolygon(westEnglewoodPoly).dataTotals,
+              // service: App.models.socialServices.getDataByFilter((service) => {
+              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
+              //   return App.models.boundaryData.isInWestEnglewood(point);
+              // }),
+              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
+            },
+            area: turf.area(westEnglewoodPoly),
+            color: "#1f77b4",
+            id: "West Englewood",
+            bounds: (function(poly){
+              let coordsArr = poly.geometry.coordinates[0];
+              let latExtent = d3.extent(coordsArr, (d) => { return d[1]; });
+              let lngExtent = d3.extent(coordsArr, (d) => { return d[0]; });
+
+              return [
+                [latExtent[0], lngExtent[0]],
+                [latExtent[1], lngExtent[1]],
+              ];
+            })(westEnglewoodPoly)
+          },
+          englewood: {
+            data: {
+              census: App.models.censusData.getDataWithinPolygon(englewoodPoly).dataTotals,
+              // service: App.models.socialServices.getDataByFilter((service) => {
+              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
+              //   return App.models.boundaryData.isInEnglewood(point);
+              // }),
+              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
+            },
+            area: turf.area(englewoodPoly),
+            color: "#ff7f0e",
+            id: "Englewood",
+            bounds: (function (poly) {
+              let coordsArr = poly.geometry.coordinates[0];
+              let latExtent = d3.extent(coordsArr, (d) => { return d[1]; });
+              let lngExtent = d3.extent(coordsArr, (d) => { return d[0]; });
+
+              return [
+                [latExtent[0], lngExtent[0]],
+                [latExtent[1], lngExtent[1]],
+              ];
+            })(englewoodPoly)
+          }
+        };
+
+        console.log(selectionData);
+
+        App.views.chartList.addSelection(selectionData.westEnglewood);
+        App.views.chartList.addSelection(selectionData.englewood);
+
+        App.views.loadingMessage.finishLoading();
       })
       .catch(function(err) {
         console.log(err);
       });
-
-    App.models.censusData.loadData()
-      .then(function(data) {
-        let overlayData = data[0];
-        let overlayCategories = data[1];
-
-        App.controllers.mapData.populateDropdown(overlayCategories,max_subdropdown_height);
-      });
-
   };
 
 })();
