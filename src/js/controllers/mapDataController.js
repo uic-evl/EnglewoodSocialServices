@@ -129,11 +129,30 @@ let MapDataController = function () {
           .attr("tabindex", -1)
           .attr("id", "main_" + convertPropertyToID(c1))
           .html("<span class='glyphicon glyphicon-unchecked'></span>" + title)
-          .on((L.Browser.mobile ? "click" : "mouseover"), function (d) {
-            d3.event.stopPropagation();
+          // .on((L.Browser.mobile ? "click" : "mouseover"), function (d) {
+          //   d3.event.stopPropagation();
 
-            self.censusDropdownList.selectAll(".serviceType").classed("open", false);
-            d3.select(this).node().parentNode.classList.toggle("open");
+          //   self.censusDropdownList.selectAll(".serviceType").classed("open", false);
+          //   d3.select(this).node().parentNode.classList.toggle("open");
+          // });
+          .on("mouseover", function (d) {
+            d3.event.stopPropagation();
+            d3.event.preventDefault();
+            self.censusDropdownList.selectAll(".serviceType").each(function(d){
+              let curElem = d3.select(this);
+              curElem.selectAll(".dropdown-menu").classed("hidden", !curElem.classed("open"));
+            });
+          }).on("click",function(d){
+            d3.event.stopPropagation();
+            d3.event.preventDefault();
+
+            let parent = d3.select(d3.select(this).node().parentNode);
+            let parentState = parent.classed("open");
+
+            self.censusDropdownList.selectAll(".serviceType").classed("open", false)
+              .selectAll(".dropdown-menu").classed("hidden",true);
+            parent.classed("open", !parentState);
+            parent.selectAll(".dropdown-menu").classed("hidden",!parent.classed("open"));
           });
 
 
