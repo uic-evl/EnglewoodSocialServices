@@ -75,6 +75,7 @@ let CensusDataModel = function() {
   }
 
   function getDataWithinPolygon(boundsPolygon){
+    console.time("getDataWithinPolygon");
     let boundData = {};
     let bbox = turf.bbox(boundsPolygon);
 
@@ -107,6 +108,8 @@ let CensusDataModel = function() {
         }
       }
     }
+
+    console.timeEnd("getDataWithinPolygon");
 
     return {
       area: turf.area(boundsPolygon),
