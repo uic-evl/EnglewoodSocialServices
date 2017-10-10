@@ -4,7 +4,11 @@ var App = App || {};
 
 let LandInventoryModel = function () {
   let self = {
-    data: null
+    data: null,
+    splitData: {
+      englewood: [],
+      westEnglewood: []
+    }
   };
 
   function loadCSV(path) {
@@ -63,10 +67,16 @@ let LandInventoryModel = function () {
 
     return Promise.all([ePromise, wePromise])
       .then(() => {
+        self.splitData.englewood = englewoodData;
+        self.splitData.westEnglewood = westEnglewoodData;
         self.data = englewoodData.concat(westEnglewoodData);
         console.log("Done loading land inventory data");
         console.log(self);
       });
+  }
+
+  function splitDataByEnglewood_WestEnglewood(){
+    return self.splitData;
   }
 
   function getDataByFilter(filterFn) {
@@ -79,6 +89,7 @@ let LandInventoryModel = function () {
 
   return {
     loadData,
-    getDataByFilter
+    getDataByFilter,
+    splitDataByEnglewood_WestEnglewood
   };
 };

@@ -159,6 +159,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.views.loadingMessage.updateAndRaise("Filtering data for West Englewood and Englewood");
         let westEnglewoodPoly = App.models.boundaryData.getWestEnglewoodPolygon();
         let englewoodPoly = App.models.boundaryData.getEnglewoodPolygon();
+        let splitLotData = App.models.landInventory.splitDataByEnglewood_WestEnglewood();
         let selectionData = {
           westEnglewood: {
             data: {
@@ -167,7 +168,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
               //   let point = [parseFloat(service.X), parseFloat(service.Y)];
               //   return App.models.boundaryData.isInWestEnglewood(point);
               // }),
-              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
+              // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
+              lot: splitLotData.westEnglewood
             },
             area: turf.area(westEnglewoodPoly),
             color: "#1f77b4",
@@ -193,7 +195,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
               //   let point = [parseFloat(service.X), parseFloat(service.Y)];
               //   return App.models.boundaryData.isInEnglewood(point);
               // }),
-              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
+              // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
+              lot: splitLotData.englewood
             },
             area: turf.area(englewoodPoly),
             color: "#ff7f0e",
