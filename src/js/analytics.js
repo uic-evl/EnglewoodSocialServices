@@ -225,7 +225,13 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.views.loadingMessage.finishLoading();
       })
       .catch(function(err) {
-        console.log(err);
+        console.error(err);
+        try{
+          App.views.loadingMessage.updateAndRaise("Encountered an error.<br>Please try reloading or contact technical support.");
+        }catch(loadingError){
+          console.log("Error showing loading message:",loadingError);
+        }
+        
       });
   };
 
