@@ -477,6 +477,7 @@ text.delete-button-symbol {
 #censusDropdownList{
   // text-transform: lowercase;
   text-transform: capitalize;  
+  min-width: 250px;
 }
 
 #censusDropdownButton{
@@ -577,3 +578,73 @@ text.delete-button-symbol {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+#censusDropdownList {
+  padding-right: 4px;
+
+  .btn-group {
+    margin-left: 4px;
+    width: 100%;
+    border-bottom: 1px solid rgba(211, 211, 211, 0.76);
+
+    .glyphicon {
+      margin-right: 6px;
+      margin-left: 4px;
+    }
+
+    .btn-item {
+      background: none;
+      color: #333;
+      text-align: left;
+      margin-right: -4px;
+      text-transform: capitalize;
+
+      // .glyphicon-unchecked {
+      //   color: transparent;
+      // }
+
+      &:hover, &:focus {
+        color: #262626;
+        text-decoration: none;
+        background-color: #f5f5f5;
+      }
+    }
+
+    .btn-dropdown {
+      right: 4px;
+      position: absolute;
+      text-align: center;
+      border-left: 1px solid rgba(211, 211, 211, 0.34);
+      span.caret {
+        transform: rotate(-90deg);
+      }
+    }
+
+    .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: -6px;
+      border-radius: 6px 0 6px 6px;
+      max-height: 490px;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      .glyphicon-checked {
+        color:gray;
+      }
+    }
+  }
+
+  .btn-group.open {
+    button {
+      color: #262626;
+      text-decoration: none;
+      background-color: rgb(225, 225, 225);
+
+      &:hover{
+        background-color: #f5f5f5;
+      }
+    }
+  }
+}
+

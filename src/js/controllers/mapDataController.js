@@ -124,44 +124,114 @@ let MapDataController = function () {
         title = title.replace(/_/g, ' ');
 
         let listItem = d3.select(this);
+        let btnGroup = listItem.append("div").classed("btn-group row", true);
+        
         // create link within tab
-        listItem.append("a")
+        let totalBtn = btnGroup.append("button").classed("btn btn-item col-md-10", true)
           .attr("tabindex", -1)
           .attr("id", "main_" + convertPropertyToID(c1))
-          .html("<span class='glyphicon glyphicon-unchecked'></span>" + title)
+          .html("<span class='glyphicon glyphicon-unchecked'></span>" + title);
           // .on((L.Browser.mobile ? "click" : "mouseover"), function (d) {
           //   d3.event.stopPropagation();
 
           //   self.censusDropdownList.selectAll(".serviceType").classed("open", false);
           //   d3.select(this).node().parentNode.classList.toggle("open");
           // });
+
+        btnGroup.append("button").classed("btn btn-item btn-dropdown col-md-2",true)
+          .html("<span class='caret'></span>")
           .on("mouseover", function (d) {
             d3.event.stopPropagation();
             d3.event.preventDefault();
-            self.censusDropdownList.selectAll(".serviceType").each(function(d){
-              let curElem = d3.select(this);
-              curElem.selectAll(".dropdown-menu").classed("hidden", !curElem.classed("open"));
-            });
+            if(!d3.select(this).classed("disabled")){
+              self.censusDropdownList.selectAll(".serviceType").each(function(d){
+                let curGroup = d3.select(this).select(".btn-group");
+                curGroup.selectAll(".dropdown-menu").classed("hidden", !curGroup.classed("open"));
+              });
+            }
           }).on("click",function(d){
             d3.event.stopPropagation();
             d3.event.preventDefault();
+            if (d3.select(this).classed("disabled")) {
+              return;
+            }
 
-            let parent = d3.select(d3.select(this).node().parentNode);
+            let parent = btnGroup;
             let parentState = parent.classed("open");
 
-            self.censusDropdownList.selectAll(".serviceType").classed("open", false)
+            self.censusDropdownList.selectAll(".serviceType").selectAll(".btn-group").classed("open", false)
               .selectAll(".dropdown-menu").classed("hidden",true);
             parent.classed("open", !parentState);
             parent.selectAll(".dropdown-menu").classed("hidden",!parent.classed("open"));
+          })
+          .classed("disabled", categories[c1].length < 2);
+
+        //set total button; data should be at zero index
+        totalBtn.datum({
+              mainType: c1,
+              subType: categories[c1][0],
+              type: "census"
+          })
+          .on("click", function(d){
+            console.log(d);
+            // set other filters to allow for only one sub category selection at a time
+            let isMainCategorySelection = Object.keys(self.filters).length > 1;
+            for (let mainCategory of Object.keys(self.mainCategoryStates)) {
+              if (mainCategory !== d.mainType) {
+                self.mainCategoryStates[mainCategory] = "none";
+              }
+            }
+            let filterKey = getFilterKey(d.mainType, d.subType);
+
+            self.censusDropdownList.selectAll(".glyphicon")
+              .attr("class", "glyphicon glyphicon-unchecked");
+            listItem.select("ul").selectAll(".serviceSubtype") 
+              .each(function (subType) {
+                let curKey = getFilterKey(d.mainType, subType);
+
+                //check all sub groups
+                self.filters[curKey] = true;
+                updateSubCategoryIcon(d.mainType, subType);
+              });
+            let curSelection = self.filters[filterKey];
+            self.filters = {};
+
+            //select current subcategory if previous filters indicate a main category selection
+            if (isMainCategorySelection) {
+              self.filters[filterKey] = true;
+            } else {
+              // toggle whether or not it is selected
+              self.filters[filterKey] = !curSelection;
+            }
+
+            if (self.filters[filterKey]) {
+              var button = d3.select("#censusDropdownButton");
+
+              button.selectAll('#currentServiceSelection').text(`Total: ${_.truncate(_.capitalize(title),{length: 30})}`);
+              button.attr("class", "btn btn-success navbar-btn dropdown-toggle");
+
+              document.getElementById("allCensusButton").style.display = "";
+
+              addMap(d);
+            } else {
+              resetFilters();
+            }
+
+
+            updateSubCategoryIcon(d.mainType, d.subType);
+            updateMainCategoryOnSubUpdate(d.mainType);
+
+            chartButtonClick(d);
+
           });
 
-
         // create tab content div for this t1 category
-        let secondaryDropdown = listItem.append("ul")
+        let secondaryDropdown = btnGroup.append("ul")
           .attr("class", "dropdown-menu");
 
+
         secondaryDropdown.selectAll(".secondaryCategory")
-          .data(categories[c1])
+          .data(categories[c1].slice(1))
           .enter().append("li")
           .attr("class", "secondaryCategory serviceSubtype")
           .append("a")
@@ -211,7 +281,7 @@ let MapDataController = function () {
             if (self.filters[filterKey]) {
               var button = d3.select("#censusDropdownButton");
 
-              button.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType,{length: 30})}`);
+              button.selectAll('#currentServiceSelection').text(`${_.truncate(d.subType, { length: 30 })}`);
               button.attr("class", "btn btn-success navbar-btn dropdown-toggle");
 
               document.getElementById("allCensusButton").style.display = "";
@@ -308,19 +378,25 @@ let MapDataController = function () {
     let subcategories = self.data[category];
     let hasChecked = false;
     let hasUnchecked = false;
+    let isTotal = false;
 
     for (let subC of subcategories) {
       let filterKey = getFilterKey(category,subC);
       if (self.filters[filterKey]) {
+        if (subC.toLowerCase().indexOf("total") > -1) {
+          isTotal = true;
+        }
         hasChecked = true;
       } else {
         hasUnchecked = true;
       }
     }
 
-    if (hasChecked && hasUnchecked) {
+    console.log(self.filters);
+
+    if (hasChecked && hasUnchecked && !isTotal) {
       self.mainCategoryStates[category] = "some";
-    } else if (hasChecked) {
+    } else if (hasChecked || isTotal) {
       self.mainCategoryStates[category] = "all";
     } else {
       self.mainCategoryStates[category] = "none";
@@ -332,8 +408,8 @@ let MapDataController = function () {
   function updateMainCategoryIcon(category) {
     let id = "#main_" + convertPropertyToID(category);
 
-    let item = self.censusDropdownList.selectAll(".serviceType>" + id);
-    let selectAllButton = self.censusDropdownList.selectAll(".serviceSubtype>" + id);
+    let item = self.censusDropdownList.selectAll(".serviceType " + id);
+    let selectAllButton = self.censusDropdownList.selectAll(".serviceSubtype " + id);
     let state = self.mainCategoryStates[category];
 
     item.select(".glyphicon")
