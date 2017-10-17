@@ -133,6 +133,7 @@ let MapView = function (div) {
     self.landInventoryGroup.clearLayers();
 
     let landMarkers = [];
+    let lastHovered = undefined;
 
     // iterate through land inventory data
     for(let lot of landInventoryData){
@@ -146,10 +147,10 @@ let MapView = function (div) {
           data: lot
         }
       ).bindPopup(function(layer) {
-        return `<strong>${lot.Location}</strong>`;
+        return `<strong>${lot.Location}</strong><br><b>Size: </b> ${lot["Sq. Ft."]} sq. ft.`;
       }).addTo(self.toggleableLotMarkerGroup)
       .on("mouseover", function (e) {
-        if (self.lotMarkerVisCheck()) {
+        if (!lastHovered && self.lotMarkerVisCheck()) {
           //open popup forcefully
           if (!this._popup._latlng) {
             this._popup.setLatLng(new L.latLng(this.options.data.Latitude, this.options.data.Longitude));
@@ -159,8 +160,23 @@ let MapView = function (div) {
         }
       })
       .on("mouseout", function (e) {
-        if (!this.options.data.expanded) {
+        if (!lastHovered && !this.options.data.expanded) {
           self.map.closePopup();
+        }
+      }).on("click",function(e){
+        if(e.originalEvent.target === lastHovered){
+          lastHovered = undefined;
+        }else{
+          lastHovered = e.originalEvent.target;
+        }
+
+        if (self.lotMarkerVisCheck()) {
+          //open popup forcefully
+          if (!this._popup._latlng) {
+            this._popup.setLatLng(new L.latLng(this.options.data.Latitude, this.options.data.Longitude));
+          }
+
+          this._popup.openOn(self.map);
         }
       });
 
