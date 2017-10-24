@@ -163,8 +163,7 @@ let MapDataController = function () {
               .selectAll(".dropdown-menu").classed("hidden",true);
             parent.classed("open", !parentState);
             parent.selectAll(".dropdown-menu").classed("hidden",!parent.classed("open"));
-          })
-          .classed("disabled", categories[c1].length < 2);
+          }).classed("disabled", categories[c1].length < 2);
 
         //set total button; data should be at zero index
         totalBtn.datum({

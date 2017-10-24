@@ -74,54 +74,74 @@ let FilterDropdownController = function() {
 
     self.filterDropdownList.selectAll(".mainType")
       .data(tier1Categories)
-    .enter().append("li")
+      .enter().append("li")
       .attr("class", "dropdown-submenu serviceType")
       .each(function(c1) {
         let listItem = d3.select(this);
         let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1);
+        let btnGroup = listItem.append("div").classed("btn-group row", true);
 
         // create link within tab
-        listItem.append("a")
+        let totalBtn = btnGroup.append("button").classed("btn btn-item col-md-10", true)
           .attr("tabindex", -1)
           .attr("id", "main_" + convertPropertyToID(c1))
-          .html("<span class='glyphicon glyphicon-unchecked'></span>" + c1)
+          .html("<span class='glyphicon glyphicon-unchecked'></span>" + c1);
           // .on((L.Browser.mobile ? "click" : "mouseover"), function (d) {
           //   d3.event.stopPropagation();
 
           //   self.filterDropdownList.selectAll(".serviceType").classed("open", false);
           //   d3.select(this).node().parentNode.classList.toggle("open");
           // });
+          // .on("mouseover", function (d) {
+          //   d3.event.stopPropagation();
+          //   d3.event.preventDefault();
+          //   self.filterDropdownList.selectAll(".serviceType").each(function (d) {
+          //     let curElem = d3.select(this);
+          //     curElem.selectAll(".dropdown-menu").classed("hidden", !curElem.classed("open"));
+          //   });
+          // }).on("click", function (d) {
+          //   d3.event.stopPropagation();
+          //   d3.event.preventDefault();
+
+          //   let parent = d3.select(d3.select(this).node().parentNode);
+          //   let parentState = parent.classed("open");
+
+          //   self.filterDropdownList.selectAll(".serviceType").classed("open", false)
+          //     .selectAll(".dropdown-menu").classed("hidden", true);
+          //   parent.classed("open", !parentState);
+          //   parent.selectAll(".dropdown-menu").classed("hidden", !parent.classed("open"));
+          // });
+        
+        btnGroup.append("button").classed("btn btn-item btn-dropdown col-md-2", true)
+          .html("<span class='caret'></span>")
           .on("mouseover", function (d) {
             d3.event.stopPropagation();
             d3.event.preventDefault();
-            self.filterDropdownList.selectAll(".serviceType").each(function (d) {
-              let curElem = d3.select(this);
-              curElem.selectAll(".dropdown-menu").classed("hidden", !curElem.classed("open"));
-            });
+            if (!d3.select(this).classed("disabled")) {
+              self.filterDropdownList.selectAll(".serviceType").each(function (d) {
+                let curGroup = d3.select(this).select(".btn-group");
+                curGroup.selectAll(".dropdown-menu").classed("hidden", !curGroup.classed("open"));
+              });
+            }
           }).on("click", function (d) {
             d3.event.stopPropagation();
             d3.event.preventDefault();
+            if (d3.select(this).classed("disabled")) {
+              return;
+            }
 
-            let parent = d3.select(d3.select(this).node().parentNode);
+            let parent = btnGroup;
             let parentState = parent.classed("open");
 
-            self.filterDropdownList.selectAll(".serviceType").classed("open", false)
+            self.filterDropdownList.selectAll(".serviceType").selectAll(".btn-group").classed("open", false)
               .selectAll(".dropdown-menu").classed("hidden", true);
             parent.classed("open", !parentState);
             parent.selectAll(".dropdown-menu").classed("hidden", !parent.classed("open"));
-          });
+          })//.classed("disabled", categories[c1].length < 2);
 
-        // create tab content div for this t1 category
-        let secondaryDropdown = listItem.append("ul")
-          .attr("class", "dropdown-menu");
-
-
-        secondaryDropdown.append("li")
-          .attr("class", "serviceSubtype")
-          .append("a")
-          .datum(c1)
-          .attr("id", "main_" + convertPropertyToID(c1))
-          .html("<span class='glyphicon glyphicon-unchecked'></span>Select All")
+        
+        //set total button
+        totalBtn.datum(c1)
           .on("click", function (c1) {
             // d3.event.stopPropagation(); // prevent menu close on link click
             self.filterDropdownList.selectAll(".serviceType").classed("open", false);
@@ -173,14 +193,19 @@ let FilterDropdownController = function() {
                 updateSubCategoryIcon(d);
               });
 
-            if(selected){
+            if (selected) {
               // App.views.chartList.addServiceChart(current_service_properties);
             }
 
             filtersUpdated();
           });
 
-        secondaryDropdown.append("li").attr("class", "divider");
+
+        // create tab content div for this t1 category
+        let secondaryDropdown = btnGroup.append("ul")
+          .attr("class", "dropdown-menu");
+
+        // secondaryDropdown.append("li").attr("class", "divider");
 
         secondaryDropdown.selectAll(".secondaryCategory ")
           .data(tier2Categories)
@@ -287,27 +312,11 @@ let FilterDropdownController = function() {
   function updateMainCategoryIcon(category) {
     let id = "#main_" + convertPropertyToID(category);
 
-    /*
-    let item = self.filterDropdownList.select(id);
+    let item = self.filterDropdownList.selectAll(".serviceType " + id);
     let state = self.mainCategoryStates[category];
 
     item.select(".glyphicon")
       .attr("class", "glyphicon " + self.mainStateToIcon[state]);
-      */
-    let item = self.filterDropdownList.selectAll(".serviceType>" + id);
-    let selectAllButton = self.filterDropdownList.selectAll(".serviceSubtype>" + id);
-    let state = self.mainCategoryStates[category];
-
-    item.select(".glyphicon")
-      .attr("class", "glyphicon " + self.mainStateToIcon[state]);
-
-    if (state === "some") {
-      selectAllButton.select(".glyphicon")
-        .attr("class", "glyphicon glyphicon-unchecked");
-    } else {
-      selectAllButton.select(".glyphicon")
-        .attr("class", "glyphicon " + self.mainStateToIcon[state]);
-    }
   }
 
   function updateSubCategoryIcon(category) {
