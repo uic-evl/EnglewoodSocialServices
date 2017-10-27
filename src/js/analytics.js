@@ -86,7 +86,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
     App.views.loadingMessage.updateAndRaise("Loading location, service, and census data");
     let numFinished = 0;
-    let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
+    let socialServiceP = App.models.socialServices.loadData("./admin-data/EnglewoodLocations.csv")
       .then((data) => {
         console.log("Loaded Social Services", ++numFinished);
         return data;

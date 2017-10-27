@@ -74,7 +74,7 @@ window.onresize = function() {
     App.controllers.search.attachDOMElements("#searchInput", "#searchCount", "#searchButton");
 
     App.views.loadingMessage.updateAndRaise("Loading location and service data");
-    let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
+    let socialServiceP = App.models.socialServices.loadData("./admin-data/EnglewoodLocations.csv")
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json");
 
     App.controllers.modal = new modalController();

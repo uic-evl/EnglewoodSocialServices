@@ -221,12 +221,17 @@ let MapView = function (div) {
   function plotServices(englewoodLocations) {
     self.serviceGroup.clearLayers();
     let serviceMarkers = [];
+    console.log(englewoodLocations);
 
     // iterate through the social services location file
     for (let loc of englewoodLocations) {
       // convert the X and Y values to lat and lng for clarity
-      let lat = loc.Y,
-        lng = loc.X;
+      let lat = +loc.Latitude,
+        lng = +loc.Longitude;
+      if(isNaN(lat) || isNaN(lng)){
+        console.log("Coordinate error with ",loc);
+        continue;
+      }
 
       loc.visible = true;
 
