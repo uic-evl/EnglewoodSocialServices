@@ -1,0 +1,81 @@
+[
+    "Academic counseling", // ED
+    "Address", // x
+    "Adoption services", // FS
+    "After School Programs", // YE
+    "Anger management counseling", // HW
+    "Arts & crafts", // YE and ED
+    "Arts/language programs", // YE and ED
+    "Behavioral/self-management programs/workshops", // HW
+    "Cessation programs", // HW
+    "City", // x
+    "College/career prep", // ED
+    "Contact Phone Number", // x
+    "Dance", // YE and ED
+    "Description of Services Provided in Englewood", // x
+    "Domestice violence support/counseling", // HW
+    "ES Age", // ~ ?
+    "Early childhood", // MI ~ Header?
+    "Economic", // MI ~ old Header?
+    "Education", // MI - Header?
+    "Engage youth to prevent gang participation", // VP and YE ~ meant to be in 2?
+    "Enrichment field trips", // ED
+    "Family & child counseling", // HW
+    "Family Stability", // MI ~ Header?
+    "Family planning", // HW
+    "Family support", // FS
+    "Field Trips", // ED ~ Not on doc?
+    "Foster care", // FS
+    "HIV/AIDS programs", // HW
+    "HS Age to 21", // ~ ?
+    "Headstart/EHS", // EC
+    "Health", // MI ~ Header?
+    "High School/GED Completion", // ED
+    "Home visiting", // EC
+    "In School Performance", // ED ~ unlisted?
+    "Job placement (long-term)", // - EM
+    "Job training", // - EM
+    "Leadership/ character development programs (through mentoring)", // ED and YE - meant to be in 2?
+    "Location services provided", // ~ ?
+    "Management of chronic conditions", // HW
+    "Media Arts", // YE and ED ~ correct section?
+    "Mental health counseling (general)", // HW
+    "Music", // ED and YE
+    "Nutrition & Wellness programs/counseling", //HW
+    "Org Age Category", // ~ ?
+    "Organization Name", // x
+    "Other Services", // MI
+    "OtherDiscipline", // ~ ?
+    "Parenting classes/workshops", // EC
+    "Physical activity/sports", // HW
+    "Preventive health visits (includes prenatal, dental/vision)", // HW
+    "Professional development", //EM ~ correct section?
+    "Provision of Food/clothing", // BN
+    "Proximity to Englewood", // x
+    "Public Safety", // MI ~ old Header?
+    "Residency", // ~ ?
+    "Resources", // ~ ?
+    "Safe Place to Live", // ~ ?
+    "Service learning", // ED and YE
+    "Sexual assault counseling", // HW
+    "Size of org", // x
+    "State", // x
+    "Street", // x
+    "Student clubs or curriculum enhancement (not tutoring)", // ED and YE
+    "Substance abuse/addiction treatment", // HW
+    "Theater", // ED and YE ~ correct section?
+    "Tutoring/homework help", // ED
+    "Type of Comm Org", // x
+    "Type of Organization", // x
+    "Type of School", // x
+    "Vaccinations", // HW
+    "Visual Arts", // ED and YE
+    "Website", // x
+    "Workshops focused on violence prevention", // VP
+    "Writing/poetry", // ED and YE
+    "X", // x
+    "Y", // x
+    "Young children", // ~ ?
+    "Zip", // x
+    "youth employment (internships)" // EM
+]

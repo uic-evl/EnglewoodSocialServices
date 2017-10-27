@@ -397,12 +397,18 @@ let MapView = function (div) {
 
     // if data specified, add new choropleth
     if (data) {
+      console.log(data);
       self.englewoodOutline.setStyle({fillOpacity: 0});
+      let description;
 
       // take ceiling when taking extent so as not to have values equal to 0
       let colorScale = d3.scaleLinear()
-        .domain(d3.extent(data.features, f => Math.ceil(f.properties.data*100)/100))
-        .range(['#9ebcda', '#6e016b']);
+        .domain(d3.extent(data.features, f => {
+          description = description || (f.properties.description.mainType + ": " + f.properties.description.subType.replace(":",""))
+          return Math.ceil(f.properties.data*100)/100;
+        })).range(['#9ebcda', '#6e016b']);
+
+      console.log(description);
 
       //create scale for 5 cells with unit ranges
       let simpleColorScale = d3.scaleLinear()
@@ -410,7 +416,7 @@ let MapView = function (div) {
       let colorScaleQ = d3.scaleQuantize()
         .domain(colorScale.domain()).range(d3.range(5).map((i) => simpleColorScale(i)));
 
-      console.log(colorScale.domain(), colorScale.range());
+      // console.log(colorScale.domain(), colorScale.range());
 
       // TODO: draw color scale for map
       let svg = d3.select("#legend").append("svg").attr("width", 170).attr("height", 150)

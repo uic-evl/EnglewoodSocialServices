@@ -86,31 +86,6 @@ let FilterDropdownController = function() {
           .attr("tabindex", -1)
           .attr("id", "main_" + convertPropertyToID(c1))
           .html("<span class='glyphicon glyphicon-unchecked'></span>" + c1);
-          // .on((L.Browser.mobile ? "click" : "mouseover"), function (d) {
-          //   d3.event.stopPropagation();
-
-          //   self.filterDropdownList.selectAll(".serviceType").classed("open", false);
-          //   d3.select(this).node().parentNode.classList.toggle("open");
-          // });
-          // .on("mouseover", function (d) {
-          //   d3.event.stopPropagation();
-          //   d3.event.preventDefault();
-          //   self.filterDropdownList.selectAll(".serviceType").each(function (d) {
-          //     let curElem = d3.select(this);
-          //     curElem.selectAll(".dropdown-menu").classed("hidden", !curElem.classed("open"));
-          //   });
-          // }).on("click", function (d) {
-          //   d3.event.stopPropagation();
-          //   d3.event.preventDefault();
-
-          //   let parent = d3.select(d3.select(this).node().parentNode);
-          //   let parentState = parent.classed("open");
-
-          //   self.filterDropdownList.selectAll(".serviceType").classed("open", false)
-          //     .selectAll(".dropdown-menu").classed("hidden", true);
-          //   parent.classed("open", !parentState);
-          //   parent.selectAll(".dropdown-menu").classed("hidden", !parent.classed("open"));
-          // });
         
         btnGroup.append("button").classed("btn btn-item btn-dropdown col-md-2", true)
           .html("<span class='caret'></span>")
@@ -137,7 +112,7 @@ let FilterDropdownController = function() {
               .selectAll(".dropdown-menu").classed("hidden", true);
             parent.classed("open", !parentState);
             parent.selectAll(".dropdown-menu").classed("hidden", !parent.classed("open"));
-          })//.classed("disabled", categories[c1].length < 2);
+          }).classed("disabled", tier2Categories.length < 1);
 
         
         //set total button
@@ -190,7 +165,7 @@ let FilterDropdownController = function() {
                 self.filters[d] = selected;
                 current_service_properties.subFilters.push(d);
 
-                updateSubCategoryIcon(d);
+                updateSubCategoryIcon(d,c1);
               });
 
             if (selected) {
@@ -239,7 +214,7 @@ let FilterDropdownController = function() {
                 if (subType !== d.subType) {
                   self.filters[subType] = false;
 
-                  updateSubCategoryIcon(subType);
+                  updateSubCategoryIcon(subType,c1);
                 }
               });
             let curSelection = self.filters[d.subType];
@@ -268,7 +243,7 @@ let FilterDropdownController = function() {
               resetFilters();
             }
 
-            updateSubCategoryIcon(d.subType);
+            updateSubCategoryIcon(d.subType,d.mainType);
             updateMainCategoryOnSubUpdate(d.mainType);
 
             filtersUpdated();
@@ -319,10 +294,16 @@ let FilterDropdownController = function() {
       .attr("class", "glyphicon " + self.mainStateToIcon[state]);
   }
 
-  function updateSubCategoryIcon(category) {
+  function updateSubCategoryIcon(category, main) {
     let id = "#sub_" + convertPropertyToID(category);
 
     let item = self.filterDropdownList.select(id);
+    if(main){
+      console.log(main,category);
+      item = self.filterDropdownList.selectAll(".serviceType #main_" + convertPropertyToID(main)).select(function(){ return this.parentNode; }).select(id);
+    }else{
+      item = self.filterDropdownList.select(id);
+    }
     let state = self.filters[category];
 
     item.select(".glyphicon")
