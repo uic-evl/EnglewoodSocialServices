@@ -2,116 +2,135 @@
     "BN": {
         "description": "Basic Needs",
         "children": [
-            "Provision of Food/clothing"
+            "Clothing ",
+            "Financial assistance",
+            "Food",
+            "Emergency shelter",
+            "Housing/Shelter",
+            "Safe space",
+            "Youth drop-in centers"
         ]
     },
     "EC": {
         "description": "Early Childhood & Parenting",
         "children": [
-            "Headstart/EHS",
-            "Home visiting",
-            "Parenting classes/workshops"
+            "Child care/Day care ",
+            "Fatherhood programs",
+            "Head Start/Early Head Start, preschool",
+            "Home visiting for pregnant/parenting teens",
+            "Pregnant/parenting classes, counseling, support groups"
         ]
     },
     "ED": {
         "description": "Education",
         "children": [
             "Academic counseling",
-            "Arts & crafts",
-            "Arts/language programs",
-            "College/career prep",
-            "Dance",
+            "Arts (music, dance, writing, spoken word, language)",
+            "Behavioral/self-management programs/workshops",
+            "Civic engagement",
+            "College readiness, counseling, career prep",
+            "Computer literacy/training",
             "Enrichment field trips",
-            "Field Trips",
-            "High School/GED Completion",
-            "In School Performance",
-            "Leadership/ character development programs (through mentoring)",
-            "Media Arts",
-            "Music",
+            "Financial literacy",
+            "High school/GED completion",
+            "Homework help",
+            "Leadership/character development ",
+            "Out of school, chronically truant youth counseling, re-engagement",
+            "Reading, literacy",
             "Service learning",
-            "Student clubs or curriculum enhancement (not tutoring)",
-            "Theater",
-            "Tutoring/homework help",
-            "Visual Arts",
-            "Writing/poetry"
+            "STEM/STEAM (science, technology, engineering, math, arts)",
+            "Tutoring ",
+            "Vocational skills"
         ]
     },
     "EM": {
         "description": "Employment",
         "children": [
             "Job placement (long-term)",
-            "Job training",
-            "Professional development",
-            "youth employment (internships)"
+            "Job training/Workforce preparation",
+            "Youth workforce preparation, employment"
         ]
     },
     "FS": {
         "description": "Family Stability",
         "children": [
-            "Adoption services",
+            "Adoption services, support",
+            "Domestic violence support, counseling",
             "Family support",
-            "Foster care"
+            "Foster care services, support",
+            "Re-entry support programs for ex-offenders"
         ]
     },
     "HW": {
         "description": "Health & Wellness",
         "children": [
             "Anger management counseling",
-            "Behavioral/self-management programs/workshops",
+            "At-risk youth counseling",
+            "Behavioral/mental health counseling, services",
+            "Behavior self-management programs",
             "Cessation programs",
-            "Domestice violence support/counseling",
-            "Family & child counseling",
-            "Family planning",
-            "HIV/AIDS programs",
+            "Dental care",
+            "Domestic violence support, counseling",
+            "Family and child counseling",
+            "Family planning, birth control",
+            "Health clinics (primary care, family medicine, federally-qualified health centers)",
+            "Health literacy; connect to health services.",
+            "HIV/AIDS testing, treatment",
+            "Immunizations/Vaccinations",
             "Management of chronic conditions",
-            "Mental health counseling (general)",
-            "Nutrition & Wellness programs/counseling",
+            "Men's health services",
+            "Mental health counseling, services",
+            "Nutrition and wellness programs, counseling",
             "Physical activity/sports",
-            "Preventive health visits (includes prenatal, dental/vision)",
+            "Preventive health (includes prenatal, dental, vision, cancer screenings)",
+            "Re-entry support programs for ex-offenders",
+            "School, sports physicals",
             "Sexual assault counseling",
-            "Substance abuse/addiction treatment",
-            "Vaccinations"
+            "Sexually transmitted disease (STD) testing",
+            "Substance abuse/addiction counseling, treatment",
+            "Vision care",
+            "Women's health services"
         ]
     },
     "HH": {
-        "description": "Helplines/Hotlines",
-        "children": []
+        "description": "Hotlines/Helplines",
+        "children": [
+            "Child abuse reporting",
+            "Crisis",
+            "Domestic violence",
+            "HIV/STI/STD Hotline",
+            "Rape",
+            "Trauma"
+        ]
     },
     "VP": {
         "description": "Violence Prevention",
         "children": [
+            "At-risk youth counseling",
+            "Domestic violence support, counseling",
             "Engage youth to prevent gang participation",
-            "Workshops focused on violence prevention"
+            "Out of school/chronically truant youth counseling, re-engagement",
+            "Re-entry support programs for ex-offenders",
+            "Safe space",
+            "Violence prevention workshop, peace circles"
         ]
     },
     "YE": {
         "description": "Youth Engagement",
         "children": [
-            "After School Programs",
-            "Arts & crafts",
-            "Arts/language programs",
-            "Dance",
+            "After school programs",
+            "Arts (music, dance, writing, spoken word, language)",
+            "Civic engagement",
             "Engage youth to prevent gang participation",
-            "Leadership/ character development programs (through mentoring)",
-            "Media Arts",
-            "Music",
+            "Enrichment field trips",
+            "Leadership, character development",
+            "Mentoring ",
+            "Out of school, chronically truant youth counseling, re-engagement",
             "Service learning",
-            "Student clubs or curriculum enhancement (not tutoring)",
-            "Theater",
-            "Visual Arts",
-            "Writing/poetry"
-        ]
-    },
-    "MI": {
-        "description": "Miscellaneous",
-        "children": [
-            "Early childhood",
-            "Economic",
-            "Education",
-            "Family Stability",
-            "Health",
-            "Other Services",
-            "Public Safety"
+            "Sports, recreation",
+            "Summer programs, camp",
+            "Volunteer opportunities",
+            "Youth clubs"
         ]
     }
 }
