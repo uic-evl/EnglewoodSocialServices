@@ -264,7 +264,7 @@ let MapView = function (div) {
           });
 
           return "<strong>" + loc["Organization Name"] + "</strong><br>" +
-            loc["Description of Services Provided in Englewood"] + "<br><br>" +
+            loc["Description of Services"] + "<br><br>" +
             "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
             "<span class='glyphicon glyphicon-share-alt'></span> " + loc["Address"] + "</a></strong><br>" +
             (matches.length ?
@@ -314,13 +314,14 @@ let MapView = function (div) {
   }
 
   function setSelectedService(service) {
+    console.log(service);
     self.serviceGroup.eachLayer(function (layer) {
       if (service && service["Organization Name"] === layer.options.data["Organization Name"]) {
         layer.setIcon(self.icons["orange"]);
 
         // open popup forcefully
         if (!layer._popup._latlng) {
-          layer._popup.setLatLng(new L.latLng(layer.options.data.Y, layer.options.data.X));
+          layer._popup.setLatLng(new L.latLng(+layer.options.data.Latitude, +layer.options.data.Longitude));
         }
 
         layer._popup.openOn(self.map);
@@ -331,8 +332,8 @@ let MapView = function (div) {
     });
 
     if (service) {
-      let lat = Number(service.Y) + (L.Browser.mobile ? 0.003 : 0);
-      let lng = Number(service.X) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
+      let lat = Number(service.Latitude) + (L.Browser.mobile ? 0.003 : 0);
+      let lng = Number(service.Longitude) - ((window.innerWidth > 768) && +d3.select("#serviceListWrapper").style("opacity") ? 0.005 : 0);
       self.map.setView([lat, lng], 16);
     }
   }

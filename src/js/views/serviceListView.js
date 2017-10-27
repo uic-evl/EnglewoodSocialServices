@@ -147,7 +147,7 @@ let ServiceListView = function(listID) {
           panelBody.append("p")
             .attr("class", "description")
             .text(function (d) {
-              return d["Description of Services Provided in Englewood"];
+              return d["Description of Services"];
             });
 
           panelBody.append("p")
@@ -163,23 +163,28 @@ let ServiceListView = function(listID) {
           //   });
 
           // add link to address in footer
-          panelFooter.append("a")
-            .attr("href", "http://maps.google.com/?q=" + d["Address"])
-            .attr("target", "_blank")
-            .html(function (d) {
-              return "<span class='glyphicon glyphicon-share-alt'></span> " +
-                d["Address"];
-            });
+          if(d["Address"]){
+            panelFooter.append("a")
+              .attr("href", "http://maps.google.com/?q=" + d["Address"])
+              .attr("target", "_blank")
+              .html(function (d) {
+                return "<span class='glyphicon glyphicon-share-alt'></span> " +
+                  d["Address"];
+              });
+          }else{
+            panelFooter.append("span")
+              .html("<span class='glyphicon glyphicon-share-alt'></span> No Address Specified");
+          }
 
           // phone number
-          if (d["Contact Phone Number"]) {
+          if (d["Phone Number"]) {
             let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
-            let match = phoneRegex.exec(d["Contact Phone Number"]);
+            let match = phoneRegex.exec(d["Phone Number"]);
             let matches = [];
 
             while (match != null) {
               matches.push(match.slice(1, 5));
-              match = phoneRegex.exec(d["Contact Phone Number"]);
+              match = phoneRegex.exec(d["Phone Number"]);
             }
 
             if (matches.length) {
@@ -189,7 +194,7 @@ let ServiceListView = function(listID) {
                   return "<span class='glyphicon glyphicon-earphone'></span> " +
                     numbers.join(" or ");
                 });
-              d["Contact Phone Number"] = numbers;
+              d["Phone Number"] = numbers;
             }
           }
 
@@ -199,8 +204,8 @@ let ServiceListView = function(listID) {
               .attr("href", d["Website"])
               .attr("target", "_blank")
               .html(function (d) {
-                return "<span class='glyphicon glyphicon-home'></span> " +
-                  d["Website"];
+                return "<span class='glyphicon glyphicon-home'></span> <span>" +
+                  d["Website"] + "</span>";
                 // _.truncate(d["Website"], 20);
               });
           }
