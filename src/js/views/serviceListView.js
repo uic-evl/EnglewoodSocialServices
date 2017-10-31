@@ -163,7 +163,7 @@ let ServiceListView = function(listID) {
           //   });
 
           // add link to address in footer
-          if(d["Address"] && d["Address"].length > 0){
+          if(d["Address"] && d["Address"].length > 0 && d.Latitude.length > 0 && d.Longitude.length > 0){
             let address = `${d.Address}, ${d.City}, ${d.State}, ${d.Zip}`;
             panelFooter.append("a")
               .attr("href", "http://maps.google.com/?q=" + address)
@@ -172,6 +172,9 @@ let ServiceListView = function(listID) {
                 return "<span class='glyphicon glyphicon-share-alt'></span> " +
                   address;
               });
+          }else{
+            panelFooter.append("p")
+              .html("<span class='glyphicon glyphicon-share-alt'></span> No physical location");
           }
 
           // phone number

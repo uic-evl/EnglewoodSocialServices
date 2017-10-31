@@ -30,7 +30,8 @@ let ListToMapLinkingController = function() {
   }
 
   function listServiceSelected(data) {
-    App.views.map.setSelectedService(data);
+    if (data.Latitude.length > 0 && data.Longitude.length > 0)
+      App.views.map.setSelectedService(data);
   }
 
 
