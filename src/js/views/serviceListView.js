@@ -163,17 +163,15 @@ let ServiceListView = function(listID) {
           //   });
 
           // add link to address in footer
-          if(d["Address"]){
+          if(d["Address"] && d["Address"].length > 0){
+            let address = `${d.Address}, ${d.City}, ${d.State}, ${d.Zip}`;
             panelFooter.append("a")
-              .attr("href", "http://maps.google.com/?q=" + d["Address"])
+              .attr("href", "http://maps.google.com/?q=" + address)
               .attr("target", "_blank")
               .html(function (d) {
                 return "<span class='glyphicon glyphicon-share-alt'></span> " +
-                  d["Address"];
+                  address;
               });
-          }else{
-            panelFooter.append("span")
-              .html("<span class='glyphicon glyphicon-share-alt'></span> No Address Specified");
           }
 
           // phone number
@@ -195,11 +193,13 @@ let ServiceListView = function(listID) {
                     numbers.join(" or ");
                 });
               d["Phone Number"] = numbers;
+            }else{
+              console.log(d["Phone Number"]);
             }
           }
 
           // website
-          if (d["Website"]) {
+          if (d["Website"] && d["Website"].toLowerCase().trim() !== "no website") {
             panelFooter.append("a")
               .attr("href", d["Website"])
               .attr("target", "_blank")
@@ -252,12 +252,12 @@ let ServiceListView = function(listID) {
       self.serviceList.selectAll(".serviceEntry")
         .sort(function(a, b) {
           let locA = {
-            lat: a.Y,
-            lng: a.X
+            lat: +a.Latitude,
+            lng: +a.Longitude
           };
           let locB = {
-            lat: b.Y,
-            lng: b.X
+            lat: +b.Latitude,
+            lng: +b.Longitude
           };
 
           let distA = calculateDistance(locA, currentLocation);
@@ -269,8 +269,8 @@ let ServiceListView = function(listID) {
         .selectAll(".serviceDistance")
         .html(function(d) {
           let loc = {
-            lat: d.Y,
-            lng: d.X
+            lat: +d.Latitude,
+            lng: +d.Longitude
           };
 
           return "<br>" + calculateDistance(loc, currentLocation).toFixed(2) + " mi.";

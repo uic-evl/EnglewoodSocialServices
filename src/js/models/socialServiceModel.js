@@ -22,6 +22,17 @@ let SocialServiceModel = function() {
         if (err) reject(err);
 
         self.data = data;
+        
+        //filter out empty entries
+        self.data = data.filter((d) => {
+          let isNotEmpty = false;
+          for(let property in d){
+            if(typeof d[property] === "string" && d[property].length > 0){
+              isNotEmpty = true;
+            }
+          }
+          return isNotEmpty;
+        });
         resolve();
       })
     });
@@ -89,7 +100,8 @@ let SocialServiceModel = function() {
 
     // return _.filter(self.data, service => service.Y >= lat[0] && service.Y < lat[1] && service.X >= lng[0] && service.X < lng[1]);
     return getDataByFilter((service) => {
-      return service.Y >= lat[0] && service.Y < lat[1] && service.X >= lng[0] && service.X < lng[1];
+      let serviceLat = +service.Latitude, serviceLng = +service.Longitude;
+      return serviceLat >= lat[0] && serviceLat < lat[1] && serviceLng >= lng[0] && serviceLng < lng[1];
     });
   }
 

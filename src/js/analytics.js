@@ -164,10 +164,6 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
           westEnglewood: {
             data: {
               census: App.models.censusData.getDataWithinPolygon(westEnglewoodPoly).dataTotals,
-              // service: App.models.socialServices.getDataByFilter((service) => {
-              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
-              //   return App.models.boundaryData.isInWestEnglewood(point);
-              // }),
               // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
               lot: splitLotData.westEnglewood
             },
@@ -191,10 +187,6 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
           englewood: {
             data: {
               census: App.models.censusData.getDataWithinPolygon(englewoodPoly).dataTotals,
-              // service: App.models.socialServices.getDataByFilter((service) => {
-              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
-              //   return App.models.boundaryData.isInEnglewood(point);
-              // }),
               // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
               lot: splitLotData.englewood
             },

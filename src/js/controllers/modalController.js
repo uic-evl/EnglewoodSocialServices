@@ -142,7 +142,7 @@ let modalController = function () {
         // App.views.map.clearLocation();
 
         //code to center on first location in list
-        if (searchData && searchData[0] && searchData[0].X != null && searchData[0].Y != null) {
+        if (searchData && searchData[0] && searchData[0].Longitude != null && searchData[0].Latitude != null) {
           // jump to first services
           // App.views.map.jumpToLocationNoMarker({
           //   lat: searchData[0].Y,

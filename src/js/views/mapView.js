@@ -229,7 +229,10 @@ let MapView = function (div) {
       let lat = +loc.Latitude,
         lng = +loc.Longitude;
       if(isNaN(lat) || isNaN(lng)){
-        console.log("Coordinate error with ",loc);
+        console.error("Coordinate error with ",loc);
+        // loc.Latitude = 0;
+        // loc.Longitude = 0;
+        lat = lng = 0;
         continue;
       }
 
@@ -245,31 +248,39 @@ let MapView = function (div) {
             data: loc
           }
         ).bindPopup(function (layer) { // allow for the popup on click with the name of the location
-          let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
-          let match = phoneRegex.exec(loc["Contact Phone Number"]);
-          let matches = [];
+          // let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
+          // let match = phoneRegex.exec(loc["Contact Phone Number"]);
+          // let matches = [];
 
-          while (match != null) {
-            matches.push(match.slice(1, 5));
-            match = phoneRegex.exec(loc["Contact Phone Number"]);
+          // while (match != null) {
+          //   matches.push(match.slice(1, 5));
+          //   match = phoneRegex.exec(loc["Contact Phone Number"]);
+          // }
+
+          // matches = matches.map((num) => {
+          //   let phone = num.slice(0, 3).join("-");
+          //   if (num[3]) {
+          //     return [phone, num[3]].join(" ");
+          //   }
+
+          //   return phone;
+          // });
+
+          
+          let addressLink;
+          if(loc["Address"] && loc["Address"].length > 0){
+            let address = `${loc["Address"]}, ${loc["City"]}, ${loc["State"]}, ${loc["Zip"]}`;
+            addressLink = "<strong>" + `<a href='http://maps.google.com/?q=${address} 'target='_blank'>` +
+              "<span class='glyphicon glyphicon-share-alt'></span> " + address + "</a></strong><br>";
+          }else{
+            addressLink = "";
           }
 
-          matches = matches.map((num) => {
-            let phone = num.slice(0, 3).join("-");
-            if (num[3]) {
-              return [phone, num[3]].join(" ");
-            }
-
-            return phone;
-          });
-
           return "<strong>" + loc["Organization Name"] + "</strong><br>" +
-            loc["Description of Services"] + "<br><br>" +
-            "<strong><a href='http://maps.google.com/?q=" + loc["Address"] + "'target='_blank'>" +
-            "<span class='glyphicon glyphicon-share-alt'></span> " + loc["Address"] + "</a></strong><br>" +
-            (matches.length ?
-              ("<span class='glyphicon glyphicon-earphone'></span> " + matches.join(" or ") + "</a></strong><br>") : "") +
-            (loc["Website"] ?
+            loc["Description of Services"] + "<br><br>" + addressLink +
+            (loc["Phone Number"].length ?
+            ("<span class='glyphicon glyphicon-earphone'></span> " + (loc["Phone Number"].join ? loc["Phone Number"].join(" or ") : loc["Phone Number"]) + "</a></strong><br>") : "") +
+            (loc["Website"] && loc["Website"].toLowerCase().trim() !== "no website" ?
               ("<strong><a href='" + loc["Website"] + "'target='_blank'>" +
                 "<span class='glyphicon glyphicon-home'></span> " + loc["Website"] + "</a></strong><br>") : "");
         }).addTo(self.serviceGroup)
@@ -282,11 +293,9 @@ let MapView = function (div) {
         })
         .on("mouseover", function (e) {
           if(self.markerVisibilityCheck()){
-            // let point = new L.latLng(this.options.data.Y, this.options.data.X);
-            // console.log(App.models.boundaryData.isInWestEnglewood(point), App.models.boundaryData.isInEnglewood(point));
             // open popup forcefully
             if (!this._popup._latlng) {
-              this._popup.setLatLng(new L.latLng(this.options.data.Y, this.options.data.X));
+              this._popup.setLatLng(new L.latLng(+this.options.data.Latitude, +this.options.data.Longitude));
             }
             
             this._popup.openOn(self.map);
@@ -522,15 +531,19 @@ let MapView = function (div) {
 
     self.serviceGroup.eachLayer(function (layer) {
       if (layer.options.data &&
-        Number(layer.options.data.X) &&
-        Number(layer.options.data.Y) &&
-        _.includes(layer.options.data.Address, "Illinois")) {
+        Number(layer.options.data.Latitude) &&
+        Number(layer.options.data.Longitude) &&
+        _.includes(layer.options.data.State, "IL")) {
         markerArray.push(layer);
       }
     });
 
     var group = L.featureGroup(markerArray);
-    self.map.fitBounds(group.getBounds());
+    try{
+      self.map.fitBounds(group.getBounds());
+    }catch(err){
+      console.error(err);
+    }
   }
 
   function clearLocation() {
