@@ -31,13 +31,6 @@ let SocialServiceModel = function() {
               isNotEmpty = true;
             }
           }
-
-          // temporary fix for entry
-          if (d["Organization Name"] === "Bright Star Community Outreach Trauma Counseling Helpline "){
-            console.log("Manually setting entry for Bright Star Entry");
-            d["Latitude"] = "41.8310583";
-            d["Longitude"] = "-87.6200957";
-          }
            
           return isNotEmpty;
         });
