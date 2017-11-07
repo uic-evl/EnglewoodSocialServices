@@ -167,11 +167,10 @@ let MapDataController = function () {
 
         //set total button; data should be at zero index
         totalBtn.datum({
-              mainType: c1,
-              subType: categories[c1][0],
-              type: "census"
-          })
-          .on("click", function(d){
+          mainType: c1,
+          subType: categories[c1][0],
+          type: "census"
+        }).on("click", function(d){
             console.log(d);
             // set other filters to allow for only one sub category selection at a time
             let isMainCategorySelection = Object.keys(self.filters).length > 1;
@@ -235,13 +234,17 @@ let MapDataController = function () {
           .attr("class", "secondaryCategory serviceSubtype")
           .append("a")
           .datum(function (c2) {
-            return {
+            let property_data = {
               mainType: c1,
               subType: c2,
               type: "census"
             };
-          })
-          .attr("id", d => "sub_" + convertPropertyToID(d.subType))
+
+            if (property_data.subType.indexOf("Total") !== 0) {
+              property_data.title = property_data.subType;
+            }
+            return property_data;
+          }).attr("id", d => "sub_" + convertPropertyToID(d.subType))
           .html(function (d) {
             return "<span class='glyphicon glyphicon-unchecked'></span>" + d.subType;
           })
@@ -329,8 +332,12 @@ let MapDataController = function () {
   }
 
   function addMap(d) {
+    console.log("Adding map",d);
     let reducedData = App.models.censusData.getSubsetGeoJSON(d);
-    App.views.map.drawChoropleth(reducedData);
+    let index = 0;
+    App.views.map.drawChoropleth(reducedData, d.title || d.mainType.split('').map((d) => {
+      return index++ === 0 ? d.toUpperCase() : d.toLowerCase()
+    }).join('').replace(/_/g," "));
   }
 
   function removeMap() {
@@ -339,7 +346,12 @@ let MapDataController = function () {
 
   function chartButtonClick(d) {
     console.log("Create chart for", d);
-    App.views.chartList.addPropertyChart(d);
+    if(d.type !== "census"){
+      App.views.chartList.addPropertyChart(d);
+    }else{
+      let title = d.title ? `<b>${d.subType}</b> (per sq. mi.)` : undefined;
+      App.views.chartList.addPropertyChart(d, title);
+    }
   }
 
   function addChart(d) {
@@ -430,7 +442,7 @@ let MapDataController = function () {
     let item = d3.select(self.censusDropdownList.selectAll(main_id).node().parentNode).selectAll(id);
     let state = self.filters[getFilterKey(mainCategory,subCategory)];
 
-    console.log(...arguments,main_id,id,state);
+    // console.log(...arguments,main_id,id,state);
 
     item.select(".glyphicon")
       .attr("class", "glyphicon " + (state ? "glyphicon-check" : "glyphicon-unchecked"));
