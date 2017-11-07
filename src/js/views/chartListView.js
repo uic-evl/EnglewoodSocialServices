@@ -103,7 +103,7 @@ let ChartListView = function(listID) {
       .style("height", window.innerHeight - $(d3.select(".navbar").node()).height() + "px");
   }
 
-  function createChart(property_data) {
+  function createChart(property_data, customTitle) {
     console.log("createChart",property_data);
 
     return self.chartList.append("div")
@@ -112,22 +112,29 @@ let ChartListView = function(listID) {
       .attr("id", createPropertyID(property_data))
       .classed("census", property_data.type === "census")
       .classed("service", property_data.type === "service")
-      .each(setupChart);
+      .each(function(d,i){
+        setupChart(this,d,customTitle);
+      });
   }
 
-  function setupChart(property_data) {
+  function setupChart(target,property_data,customTitle) {
 
-    let panel = d3.select(this);
+    let panel = d3.select(target);
 
     let heading = panel.append("div").attr("class", "panel-heading").append('div').classed('row',true);
 
     let mainTypeTitle = property_data.mainType.split("_").map((d) => { return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`; }).join(" ");
     let propertyTitle = heading.append('h4').attr('class', 'col-md-10 propertyTitle text-left');
-    if(property_data.type !== "service"){
-      propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" && property_data.type !== "lot" ? " (per sq. mi.)" : ""}`);
+    let fullTitle;
+    if(customTitle){
+      fullTitle = customTitle;
+    }else if(property_data.type !== "service"){
+      fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" && property_data.type !== "lot" ? " (per sq. mi.)" : ""}`;
     }else{
-      propertyTitle.html(`<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`);
+      fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
     }
+
+    propertyTitle.html(fullTitle);
     
     if (!((property_data.mainType.toLowerCase() === "all services" && property_data.subType.toLowerCase() === "total count") || property_data.type === "lot")){
       heading.append('h4').append('span').attr('class', 'col-md-2 glyphicon glyphicon-remove text-right')
@@ -149,9 +156,10 @@ let ChartListView = function(listID) {
 
     let body = panel.append("div").attr("class", "panel-body");
 
-    let chart = body.append("svg")
+    let chart = body.append("svg");
 
     console.log($(chart.node()).height());
+    console.log(chart.node(), body.node(), panel.node());
 
     let graph = chart.append('g').classed('graph-group',true);
 
@@ -162,6 +170,7 @@ let ChartListView = function(listID) {
       .attr("height", $(chart.node()).height() - self.chartMargins.top - self.chartMargins.bottom)
       .classed('graph-background',true).attr('property-data', JSON.stringify(property_data))
       .style('stroke','none');
+    console.log(graph.node(), graph.background.node());
     graph.content = graph.append('g').classed('graph-content',true);
 
     updateChart(createPropertyID(property_data));
@@ -428,6 +437,7 @@ let ChartListView = function(listID) {
     let chart = self.chartList.select(`#${chartID}`);
     let graph = chart.select('.graph-group');
     graph.background = graph.select('.graph-background');
+    console.log(graph.background.node());
     try{
       graph.selectAll('.error-text').remove();
       graph.selectAll('g.graph-content').remove();
@@ -478,10 +488,10 @@ let ChartListView = function(listID) {
   }
 
 
-  function addPropertyChart(property_data){
+  function addPropertyChart(property_data, customTitle){
     if (self.chartList.selectAll(`#${createPropertyID(property_data)}`).empty()) {
       self.chartList.selectAll('.census').remove();
-      return createChart(property_data);
+      return createChart(property_data, customTitle);
     } else {
       console.log("Already exists");
     }
@@ -495,23 +505,23 @@ let ChartListView = function(listID) {
     }
   }
 
-  function addLotChart(){
+  function addLotChart(customTitle){
     if (self.chartList.selectAll(`.vacantLotChart`).empty()) {
       // self.chartList.selectAll('.vacantLotChart').remove();
       return createChart({
         mainType: "Vacant Lots",
         subType: "Total",
         type: "lot"
-      });
+      }, customTitle);
     } else {
       console.log("Already exists");
     }
   }
 
-  function addServiceChart(service_data){
+  function addServiceChart(service_data, customTitle){
     if (self.chartList.selectAll(`#${createPropertyID(service_data)}`).empty()) {
       self.chartList.selectAll('.service').remove();
-      return createChart(service_data);
+      return createChart(service_data, customTitle);
     } else {
       console.log("Already exists");
     }
