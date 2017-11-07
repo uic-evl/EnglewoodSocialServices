@@ -437,19 +437,22 @@ let MapView = function (div) {
         .style('background-color',"rgba(150,150,150,0.75)")
         .attr('id','svgLegend');
 
-      svg.append("g")
+      let group = svg.append("g")
         .attr("class", "legendLinear")
         .attr("transform", "translate(25,20)");
 
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
         .labelFormat(d3.format(".02f"))
-        .title("Census Count"/* + ((title) ? ` for ${title}` : "")*/ + " per sq. mi.")
+        .title("Census Count" + ((title) ? ` for ${title}` : "") + " per sq. mi.")
         .titleWidth(120)
         .scale(colorScaleQ);
 
       svg.select(".legendLinear")
         .call(legendLinear);
+
+      //based off of https://stackoverflow.com/questions/7620509/how-does-one-get-the-height-width-of-an-svg-group-element
+      svg.attr("height",+group.node().getBBox().height * 1.1)
 
 
       self.choropleth = L.geoJSON(data, {

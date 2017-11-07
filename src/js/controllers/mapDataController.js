@@ -336,7 +336,6 @@ let MapDataController = function () {
     let reducedData = App.models.censusData.getSubsetGeoJSON(d);
     let index = 0;
     App.views.map.drawChoropleth(reducedData, d.title || d.mainType.split('').map((d) => {
-      console.log(d);
       return index++ === 0 ? d.toUpperCase() : d.toLowerCase()
     }).join('').replace(/_/g," "));
   }
@@ -443,7 +442,7 @@ let MapDataController = function () {
     let item = d3.select(self.censusDropdownList.selectAll(main_id).node().parentNode).selectAll(id);
     let state = self.filters[getFilterKey(mainCategory,subCategory)];
 
-    console.log(...arguments,main_id,id,state);
+    // console.log(...arguments,main_id,id,state);
 
     item.select(".glyphicon")
       .attr("class", "glyphicon " + (state ? "glyphicon-check" : "glyphicon-unchecked"));
