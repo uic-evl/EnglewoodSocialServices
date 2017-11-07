@@ -401,7 +401,7 @@ let MapView = function (div) {
     self.map.fitBounds(rect.bounds);
   }
 
-  function drawChoropleth(data) {
+  function drawChoropleth(data, title) {
     // remove old choropleth
     if (self.choropleth) {
       self.choroplethLayer.removeLayer(self.choropleth);
@@ -433,7 +433,6 @@ let MapView = function (div) {
 
       // console.log(colorScale.domain(), colorScale.range());
 
-      // TODO: draw color scale for map
       let svg = d3.select("#legend").append("svg").attr("width", 170).attr("height", 150)
         .style('background-color',"rgba(150,150,150,0.75)")
         .attr('id','svgLegend');
@@ -445,7 +444,7 @@ let MapView = function (div) {
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
         .labelFormat(d3.format(".02f"))
-        .title("Census Count")
+        .title("Census Count"/* + ((title) ? ` for ${title}` : "")*/ + " per sq. mi.")
         .titleWidth(120)
         .scale(colorScaleQ);
 

@@ -112,12 +112,12 @@ let ChartListView = function(listID) {
       .attr("id", createPropertyID(property_data))
       .classed("census", property_data.type === "census")
       .classed("service", property_data.type === "service")
-      .each(function(d,i){
-        setupChart(this,d,customTitle);
+      .each(function(d,i) {
+        setupChart(this,d,customTitle)
       });
   }
 
-  function setupChart(target,property_data,customTitle) {
+  function setupChart(target, property_data, customTitle) {
 
     let panel = d3.select(target);
 
