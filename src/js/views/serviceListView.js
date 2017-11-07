@@ -147,7 +147,7 @@ let ServiceListView = function(listID) {
           panelBody.append("p")
             .attr("class", "description")
             .text(function (d) {
-              return d["Description of Services Provided in Englewood"];
+              return d["Description of Services"];
             });
 
           panelBody.append("p")
@@ -163,23 +163,29 @@ let ServiceListView = function(listID) {
           //   });
 
           // add link to address in footer
-          panelFooter.append("a")
-            .attr("href", "http://maps.google.com/?q=" + d["Address"])
-            .attr("target", "_blank")
-            .html(function (d) {
-              return "<span class='glyphicon glyphicon-share-alt'></span> " +
-                d["Address"];
-            });
+          if(d["Address"] && d["Address"].length > 0 && d.Latitude.length > 0 && d.Longitude.length > 0){
+            let address = `${d.Address}, ${d.City}, ${d.State}, ${d.Zip}`;
+            panelFooter.append("a")
+              .attr("href", "http://maps.google.com/?q=" + address)
+              .attr("target", "_blank")
+              .html(function (d) {
+                return "<span class='glyphicon glyphicon-share-alt'></span> " +
+                  address;
+              });
+          }else{
+            panelFooter.append("p")
+              .html("<span class='glyphicon glyphicon-share-alt'></span> No physical location");
+          }
 
           // phone number
-          if (d["Contact Phone Number"]) {
+          if (d["Phone Number"]) {
             let phoneRegex = /(\d{3})\D*(\d{3})\D*(\d{4})(x\d+)?/g;
-            let match = phoneRegex.exec(d["Contact Phone Number"]);
+            let match = phoneRegex.exec(d["Phone Number"]);
             let matches = [];
 
             while (match != null) {
               matches.push(match.slice(1, 5));
-              match = phoneRegex.exec(d["Contact Phone Number"]);
+              match = phoneRegex.exec(d["Phone Number"]);
             }
 
             if (matches.length) {
@@ -189,18 +195,20 @@ let ServiceListView = function(listID) {
                   return "<span class='glyphicon glyphicon-earphone'></span> " +
                     numbers.join(" or ");
                 });
-              d["Contact Phone Number"] = numbers;
+              d["Phone Number"] = numbers;
+            }else{
+              console.log(d["Phone Number"]);
             }
           }
 
           // website
-          if (d["Website"]) {
+          if (d["Website"] && d["Website"].toLowerCase().trim() !== "no website") {
             panelFooter.append("a")
               .attr("href", d["Website"])
               .attr("target", "_blank")
               .html(function (d) {
-                return "<span class='glyphicon glyphicon-home'></span> " +
-                  d["Website"];
+                return "<span class='glyphicon glyphicon-home'></span> <span>" +
+                  d["Website"] + "</span>";
                 // _.truncate(d["Website"], 20);
               });
           }
@@ -247,12 +255,12 @@ let ServiceListView = function(listID) {
       self.serviceList.selectAll(".serviceEntry")
         .sort(function(a, b) {
           let locA = {
-            lat: a.Y,
-            lng: a.X
+            lat: +a.Latitude,
+            lng: +a.Longitude
           };
           let locB = {
-            lat: b.Y,
-            lng: b.X
+            lat: +b.Latitude,
+            lng: +b.Longitude
           };
 
           let distA = calculateDistance(locA, currentLocation);
@@ -264,8 +272,8 @@ let ServiceListView = function(listID) {
         .selectAll(".serviceDistance")
         .html(function(d) {
           let loc = {
-            lat: d.Y,
-            lng: d.X
+            lat: +d.Latitude,
+            lng: +d.Longitude
           };
 
           return "<br>" + calculateDistance(loc, currentLocation).toFixed(2) + " mi.";

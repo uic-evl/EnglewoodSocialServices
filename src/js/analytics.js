@@ -85,19 +85,20 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     // App.controllers.rectSelector.attachSpecificSelector("#rectSelector2", "2");
 
     App.views.loadingMessage.updateAndRaise("Loading location, service, and census data");
-    let socialServiceP = App.models.socialServices.loadData("./data/EnglewoodLocations.csv")
+    let numFinished = 0;
+    let socialServiceP = App.models.socialServices.loadData("./admin-data/EnglewoodLocations.csv")
       .then((data) => {
-        console.log("Loaded Social Services");
+        console.log("Loaded Social Services", ++numFinished);
         return data;
       });
     let serviceTaxonomyP = App.models.serviceTaxonomy.loadData("./data/serviceTaxonomy.json")
       .then((data) => {
-        console.log("Loaded Service Taxonomy");
+        console.log("Loaded Service Taxonomy", ++numFinished);
         return data;
       });
     let boundaryDataP = App.models.boundaryData.loadData()
       .then((data) => {
-        console.log("Loaded Boundary Data");
+        console.log("Loaded Boundary Data", ++numFinished);
         return data;
       });
     let censusDataP = App.models.censusData.loadData()
@@ -107,12 +108,12 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
         App.controllers.mapData.populateDropdown(overlayCategories, max_subdropdown_height);
 
-        console.log("Loaded Census Data");
+        console.log("Loaded Census Data", ++numFinished);
         return data;
       });
     let landInventoryP = App.models.landInventory.loadData()
       .then((data) => {
-        console.log("Loaded Land Inventory Data");
+        console.log("Loaded Land Inventory Data", ++numFinished);
         return data;
       });
     // let crimeDataP = App.models.crimeData.loadData()
@@ -126,44 +127,56 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
     // load other data sources when asked to plot
     let max_subdropdown_height = d3.select('body').node().clientHeight * 0.4;
 
+    console.time("load data");
     Promise.all([socialServiceP, serviceTaxonomyP, boundaryDataP, censusDataP, landInventoryP, /*crimeDataP*/])
       .then(function(values) {
         // App.views.map.createMap();
+        console.timeEnd("load data");
 
+        console.time("plotting data");
         App.views.loadingMessage.updateAndRaise("Plotting services and lots");
         App.views.map.plotServices(App.models.socialServices.getData());
         App.views.map.plotLandInventory(App.models.landInventory.getDataByFilter());
 
         // App.views.chartList...
+        console.timeEnd("plotting data");
+        console.time("Adding lot chart");
         App.views.chartList.addLotChart();
+        console.timeEnd("Adding lot chart");
 
+        console.time("populating dropdown");
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
+        console.timeEnd("populating dropdown");
 
         //start off with markers hidden
+        console.time("setting marker visibility");
         App.controllers.serviceMarkerView.setVisibilityState(false); 
         App.controllers.landMarkerView.setVisibilityState(false); 
+        console.timeEnd("setting marker visibility");
 
         //set two selections to be west englewood and englewood
+        console.time("getting selection data");
         App.views.loadingMessage.updateAndRaise("Filtering data for West Englewood and Englewood");
         let westEnglewoodPoly = App.models.boundaryData.getWestEnglewoodPolygon();
         let englewoodPoly = App.models.boundaryData.getEnglewoodPolygon();
+        let splitLotData = App.models.landInventory.splitDataByEnglewood_WestEnglewood();
         let selectionData = {
           westEnglewood: {
             data: {
               census: App.models.censusData.getDataWithinPolygon(westEnglewoodPoly).dataTotals,
-              // service: App.models.socialServices.getDataByFilter((service) => {
-              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
-              //   return App.models.boundaryData.isInWestEnglewood(point);
-              // }),
-              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
+              // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
+              lot: splitLotData.westEnglewood
             },
             area: turf.area(westEnglewoodPoly),
             color: "#1f77b4",
             id: "West Englewood",
             bounds: (function(poly){
+              console.time("bounds get");
               let coordsArr = poly.geometry.coordinates[0];
               let latExtent = d3.extent(coordsArr, (d) => { return d[1]; });
               let lngExtent = d3.extent(coordsArr, (d) => { return d[0]; });
+
+              console.timeEnd("bounds get");
 
               return [
                 [latExtent[0], lngExtent[0]],
@@ -174,20 +187,19 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
           englewood: {
             data: {
               census: App.models.censusData.getDataWithinPolygon(englewoodPoly).dataTotals,
-              // service: App.models.socialServices.getDataByFilter((service) => {
-              //   let point = [parseFloat(service.X), parseFloat(service.Y)];
-              //   return App.models.boundaryData.isInEnglewood(point);
-              // }),
-              lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
+              // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
+              lot: splitLotData.englewood
             },
             area: turf.area(englewoodPoly),
             color: "#ff7f0e",
             id: "Englewood",
             bounds: (function (poly) {
+              console.time("bounds get");
               let coordsArr = poly.geometry.coordinates[0];
               let latExtent = d3.extent(coordsArr, (d) => { return d[1]; });
               let lngExtent = d3.extent(coordsArr, (d) => { return d[0]; });
 
+              console.timeEnd("bounds get");
               return [
                 [latExtent[0], lngExtent[0]],
                 [latExtent[1], lngExtent[1]],
@@ -196,6 +208,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
           }
         };
 
+        console.timeEnd("getting selection data");
         console.log(selectionData);
 
         App.views.chartList.addSelection(selectionData.westEnglewood);
@@ -204,7 +217,13 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.views.loadingMessage.finishLoading();
       })
       .catch(function(err) {
-        console.log(err);
+        console.error(err);
+        try{
+          App.views.loadingMessage.updateAndRaise("Encountered an error.<br>Please try reloading or contact technical support.");
+        }catch(loadingError){
+          console.log("Error showing loading message:",loadingError);
+        }
+        
       });
   };
 
