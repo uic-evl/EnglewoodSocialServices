@@ -2,7 +2,7 @@
 	<meta charset="UTF-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	  <title>About us</title>
+	  <title>About</title>
 
 	  <!-- Fonts -->
 	  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Zilla+Slab" rel="stylesheet">
@@ -52,7 +52,7 @@
 
 </head>
 <body>
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row" >
 			<div class="col-md-12"><br>
 				<button type="button" class="btn btn-default">
@@ -61,25 +61,64 @@
 			</div>
 		</div><br><br>
 		<div class="row" id="test">
-			<div class="col-md-6">
-				<center>
-					<img src="http://lorempixel.com/300/300/nature" class="img-circle img-responsive" id="image">
-				</center>
-			</div>
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<h3>
-					About us
+					About
 				</h3><hr>
-				<p>
-					The <strong>Englewood Data Hub Resource Directory</strong> is a free service provided by the Feinberg Foundation.
+				<p>The <b>Englewood Data Hub</b> (EDH) brings together non-profit organizations providing child and youth services in the greater Englewood community to foster dialogue, collaboration, advocacy and community building. The EDH is supported by The Joseph and Bessie Feinberg Foundation.</p>
+				<p>In 2016, the <b>Englewood Data Hub</b> conducted an asset scan of services available to youth in Englewood and West Englewood to provide a resource to identify organizations where youth could be referred for needed services in the greater Englewood community. To add or correct information in the Resource Directory, send an email to englewooddatahub@gmail.com.</p>
+				<p>This web-based project has been designed and implemented in 2017 by a group of researchers at the <b><a href="https://www.evl.uic.edu/">Electronic Visualization Laboratory</a></b>, <b><a href="https://www.uic.edu/">University of Illinois at Chicago</a></b>, with funding from the Feinberg Foundation. Details are available <a href="https://www.evl.uic.edu/entry.php?id=2331">here</a>.</p>
+				<p>In addition to using the EDH resource directory, the project was built using several Open Source components. The source code of these open source components along with license information can be found below. We acknowledge and are grateful to these developers for their contributions to the open source community.</p>
+				<ul>
+					<li>
+						<p>Project: <a href="https://www.openstreetmap.org/#map=4/38.01/-95.84">OpenStreetMap®</a> by the <a href="http://wiki.osmfoundation.org/wiki/Main_Page">OpenStreetMap Foundation (OSMF)</a></p>
+						<p>License: <a href="http://opendatacommons.org/licenses/odbl/">Open Data Commons Open Database License (ODbL)</a></p>
+					</li>
+					<li>
+						<p>Project: <a href="https://www.mapbox.com/">MapBox</a></p>
+						<p>License: <a href="https://www.mapbox.com/about/open/">Various (mostly BSD)</a></p>
+					</li>
+					<li>
+						<p>Projects: <a href="http://getbootstrap.com/">Bootstrap</a> and <a href="http://lesscss.org/">Less</a></p>
+						<p>License: <a href="https://github.com/less/less-docs/blob/master/LICENSE-MIT">MIT</a>, documentation under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></p>
+					</li>
+					<li>
+						<p>Project: <a href="https://d3js.org/">D3</a></p>
+						<p>License: <a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-clause</a></p>
+					</li>
+					<li>
+						<p>Project: <a href="https://jquery.com/">jQuery</a></p>
+						<p>License: <a href="https://tldrlegal.com/license/mit-license">MIT</a> and <a href="https://jquery.org/license/">jQuery License</a></p>
+					</li>
+					<li>
+						<p>Projects: <a href="http://leafletjs.com/">Leaflet</a> and <a href="https://github.com/ghybs/Leaflet.FeatureGroup.SubGroup">Leaflet.FeatureGroup.SubGroup</a></p>
+						<p>License: <a href="https://opensource.org/licenses/BSD-2-Clause">BSD-2-clause</a></p>
+					</li>
+					<li>
+						<p>Projects: <a href="https://lodash.com/">Lodash</a>, <a href="https://github.com/mourner/rbush">RBush</a>, <a href="http://turfjs.org/">Turf.js</a>, and <a href="https://github.com/Leaflet/Leaflet.markercluster">Leaflet.markercluster</a></p>
+						<p>License: <a href="https://tldrlegal.com/license/mit-license">MIT</a></p>
+					</li>
+				</ul>
 
-					<br><br>The project has been developed by a group of researchers at the Electronic Visualization Laboratory, University of Illinois at Chicago under the direction of G.Elisabeta Marai.<br>
-					Team members include: Andrew Burks, Isabel Lindmae, and Joshua Castor
-					<br><br>
-					Funded by the <strong>Feinberg Foundation</strong>.</em>
-
-				</p>
+				<br>
+				<div class="row">
+					<div class="col-md-6">
+						<p>Contact</p>
+						<p>Englewood Data Hub</p>
+						<p>englewooddatahub@gmail.com</p>
+					</div>
+					<div class="col-md-6">
+						 <img src="data/logo.jpg" class="img-responsive" id="image">
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>
+
+	<script>
+		$(document).ready(() => {
+			$("a").attr("target","_blank");
+		});
+	</script>
 </body>
