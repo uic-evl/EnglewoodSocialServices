@@ -19,38 +19,29 @@
 	  <!-- less.js to parse stylesheet/less -->
 	  <script src="./lib/js/less.min.js"></script>
 	  <style>
-	  	@import url(https://fonts.googleapis.com/css?family=Zilla+Slab);
+		@import url(https://fonts.googleapis.com/css?family=Zilla+Slab);
 		@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
-		  body {
-			    background-color: #E5ECEA;
-			}
+		body {
+			background-color: #E5ECEA;
+		}
 
-			#image{
-				position: relative;
-			    margin: auto;
-			    top: 0;
-			    left: 0;
-			    right: 0;
-			    bottom: 0;
-			}
+		img {
+			padding-top: 15px;
+		}
 
-			img {
-				padding-top: 15px;
-			}
+		h3 {
+			font-family: 'Zilla Slab', sans-serif;
+			font-size: 250%;
+		}
 
-			h3{
-				font-family: 'Zilla Slab', sans-serif;
-				font-size: 250%;
-			}
+		p {
+			font-family: 'Open Sans', sans-serif;
+		}
 
-			p{
-				font-family: 'Open Sans', sans-serif;
-			}
-
-			hr{
-			  border-top: 1px solid gray;
-			}
+		hr {
+			border-top: 1px solid gray;
+		}
 
 	</style>
 
@@ -60,7 +51,7 @@
 		<div class="row">
 			<div class="col-md-6"><br>
 				<button type="button" class="btn btn-default">
-					<a href="./index.html"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
+					<a href="./index.html" id="back-link"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
 				</button>
 			</div>
 			<div class="col-md-6">
@@ -77,4 +68,11 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$(document).ready(()=> {
+			if(location.search.indexOf("type=analytics") > -1){
+				$("#back-link").attr("href","./analytics.html");
+			}
+		})
+	</script>
 </body>
