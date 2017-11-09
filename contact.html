@@ -50,7 +50,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6"><br>
-				<button type="button" class="btn btn-default">
+				<button type="button" class="btn btn-default" id="back-button">
 					<a href="./index.html" id="back-link"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
 				</button>
 			</div>
@@ -73,6 +73,9 @@
 			if(location.search.indexOf("type=analytics") > -1){
 				$("#back-link").attr("href","./analytics.html");
 			}
+			$("#back-button").on("click", () => {
+				location.href = $("#back-button a").attr("href");
+			});
 		})
 	</script>
 </body>

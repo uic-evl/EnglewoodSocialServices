@@ -50,7 +50,7 @@
 	<div class="container">
 		<div class="row" >
 			<div class="col-md-6"><br>
-				<button type="button" class="btn btn-default">
+				<button type="button" class="btn btn-default" id="back-button">
 					<a href="./index.html" id="back-link"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
 				</button>
 			</div>
@@ -104,6 +104,9 @@
 	<script>
 		$(document).ready(() => {
 			$('a[id!="back-link"]').attr("target","_blank");
+			$("#back-button").on("click", () => {
+				location.href = $("#back-button a").attr("href");
+			});
 		});
 	</script>
 </body>
