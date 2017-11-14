@@ -3,9 +3,7 @@
 var App = App || {};
 
 let BrowserModel = function() {
-    let self = {
-
-    };
+    let self = {};
 
     // based off of https://stackoverflow.com/questions/2324944/in-javascript-how-do-i-determine-if-my-current-browser-is-firefox-on-a-computer
     function getBrowser() {
