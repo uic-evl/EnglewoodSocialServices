@@ -19,6 +19,10 @@ let BrowserMessageView = function (browserContainerDiv) {
         });
     }
 
+    function setBrowserName(name) {
+        self.messageContainer.selectAll("#user-browser").text(name);
+    }
+
     function showMessage() {
         self.$messageContainer.modal({
             backdrop: true,
@@ -33,6 +37,7 @@ let BrowserMessageView = function (browserContainerDiv) {
 
     return {
         showMessage,
-        hideMessage
+        hideMessage,
+        setBrowserName
     };
 };

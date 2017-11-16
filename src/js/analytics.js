@@ -52,6 +52,10 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   App.init = function () {
     $('[data-toggle="tooltip"]').tooltip(); //needed for button tooltips
     App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
+
+    App.views.browserMessage = new BrowserMessageView("#browserModal");
+    App.models.browser = new BrowserModel();
+    App.controllers.browserMessage = new BrowserMessageController();
     
     console.log("Loading Analytics");
     App.views.loadingMessage.startLoading("Loading Map");
@@ -215,6 +219,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.views.chartList.addSelection(selectionData.englewood);
 
         App.views.loadingMessage.finishLoading();
+
+        App.controllers.browserMessage.runBrowserCheck();
       })
       .catch(function(err) {
         console.error(err);

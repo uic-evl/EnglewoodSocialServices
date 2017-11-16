@@ -11,10 +11,13 @@ let BrowserModel = function() {
         let browsers = [
             { name: "Edge", identifier: "Edge" },
             { name: "Opera", identifier: "OPR" },
-            { name: "Internet Explorer", identifier: "MSIE"},
+            { name: "Opera", identifier: "Opera" },
+            { name: "Internet Explorer", identifier: "Trident" },
+            { name: "Internet Explorer", identifier: "MSIE" },
             { name: "Chrome", identifier: "Chrome" },
             { name: "Firefox", identifier: "Firefox" },
-            // { name: "Safari", identifier: "Safari" }, //disabled, as most agents have safari in them
+            { name: "UC Browser", identifier: "UCBrowser" },
+            { name: "Safari", identifier: "Safari" }, //most agents have safari in them, so may be incorrect
         ];
         let browser = browsers.reduce((acc, b) => agent.indexOf(b.identifier) > -1 ? (acc || b.name) : acc, undefined);
 

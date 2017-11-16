@@ -46,6 +46,7 @@
   <script src="./src/js/controllers/searchController.js"></script>
   <script src="./src/js/controllers/modalController.js"></script>
   <script src="./src/js/controllers/clearButtonController.js"></script>
+  <script src="./src/js/controllers/browserMessageController.js"></script>
 
   <!-- Main Script -->
   <script src="./src/js/finder.js"></script>
@@ -143,32 +144,32 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title row">
-            <div class="col-sm-12 col-md-8">
-              Browser Compatibility
+            <div class="col-sm-12">
+              Browser Incompatibility
             </div>
           </h2>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-12">
-              To access this project with full functionality, please use a Chrome or Firefox browser, not <span id="user-browser">your browser</span>.
+              To access this project with full functionality, please use a Chrome or Firefox browser, not your browser <b>(<span id="user-browser">Unsupported Browser</span>)</b>.
             </div>
             <div class="col-md-12">
-              Chrome can be downloaded for free from: <a href="https://www.google.com/chrome/browser/">https://www.google.com/chrome/browser/</a>
-            </div>
-            <div class="col-md-12">
+              <br>
+              Chrome can be downloaded for free from: <a href="https://www.google.com/chrome/browser/">https://www.google.com/chrome/browser/</a><br>
               Firefox can be downloaded for free from: <a href="https://www.mozilla.org/firefox">https://www.mozilla.org/firefox</a>
             </div>
             <div class="col-md-12">
-              You may continue using your current browser to access this project. However, understand that some features may not work as intended due to browser incompatibility.
+              <br>
+              You may continue using your current browser to access this project. However, some features may not work correctly due to browser incompatibility.
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" id="browserAcceptButton">
-              Continue
-              <span class="glyphicon glyphicon-log-out"></span>
-            </button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="browserAcceptButton">
+            Continue
+            <span class="glyphicon glyphicon-log-out"></span>
+          </button>
         </div>
       </div>
     </div>

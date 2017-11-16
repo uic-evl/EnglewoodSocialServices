@@ -57,6 +57,10 @@ window.onresize = function() {
     $('[data-toggle="popover"]').popover(); //needed for tooltip on landing page
     App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
 
+    App.views.browserMessage = new BrowserMessageView("#browserModal");
+    App.models.browser = new BrowserModel();
+    App.controllers.browserMessage = new BrowserMessageController();
+
     console.log("Loading Finder");
     App.views.loadingMessage.startLoading("Loading Map");
     App.views.map = new MapView("serviceMap");
@@ -94,6 +98,8 @@ window.onresize = function() {
         App.controllers.serviceFilterDropdown.populateDropdown(max_subdropdown_height);
 
         App.views.loadingMessage.finishLoading();
+
+        App.controllers.browserMessage.runBrowserCheck();
       })
       .catch(function(err) {
         console.log(err);
