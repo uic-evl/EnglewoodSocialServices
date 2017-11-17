@@ -71,6 +71,8 @@ let CensusDataModel = function() {
 
     subset.features = _.filter(subset.features, o => o.properties.data);
 
+    console.log(subset);
+
     return subset;
   }
 

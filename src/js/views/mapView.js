@@ -433,7 +433,7 @@ let MapView = function (div) {
 
       // console.log(colorScale.domain(), colorScale.range());
 
-      let svg = d3.select("#legend").append("svg").attr("width", 170).attr("height", 150)
+      let svg = d3.select("#legend").append("svg").attr("width", 160).attr("height", 150)
         .style('background-color',"rgba(150,150,150,0.75)")
         .attr('id','svgLegend');
 
@@ -444,12 +444,16 @@ let MapView = function (div) {
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
         .labelFormat(d3.format(".02f"))
-        .title("Census Count" + ((title) ? ` for ${title}` : "") + " per sq. mi.")
+        .title(((title) ? title : "Census Count") + " per sq. meter")
         .titleWidth(120)
         .scale(colorScaleQ);
 
       svg.select(".legendLinear")
         .call(legendLinear);
+
+      svg.select(".legendTitle")
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate(55,0)");
 
       //based off of https://stackoverflow.com/questions/7620509/how-does-one-get-the-height-width-of-an-svg-group-element
       svg.attr("height",+group.node().getBBox().height * 1.1)
@@ -482,7 +486,7 @@ let MapView = function (div) {
           }).join(" ");
           let subTypeTitle = `${description.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
           // return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
-          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this location:</b> ${layer.feature.properties.data.toFixed(2)}`;
+          return `<b>Count/m<sup>2</sup> of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this cell:</b> ${layer.feature.properties.data.toFixed(2)}`;
         }).addTo(self.choroplethLayer);
 
       self.rectLayer.eachLayer(rect => {

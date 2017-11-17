@@ -9,7 +9,7 @@ let ChartListView = function(listID) {
       top: 10,
       right: 20,
       bottom: 25,
-      left: 40
+      left: 50
     },
     barThickness: 100,
     chartList: null,
@@ -129,7 +129,7 @@ let ChartListView = function(listID) {
     if(customTitle){
       fullTitle = customTitle;
     }else if(property_data.type !== "service"){
-      fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" && property_data.type !== "lot" ? " (per sq. mi.)" : ""}`;
+      fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" && property_data.type !== "lot" ? " (per km<sup>2</sup>)" : ""}`;
     }else{
       fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
     }
@@ -210,7 +210,9 @@ let ChartListView = function(listID) {
           .text(`${self.selections[selectionKeys[index]].id}`);
       });
 
-    let yAxis = d3.axisLeft(yScale).tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
+    let yAxis = d3.axisLeft(yScale)
+      .tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]])
+      .tickFormat(d3.format(",.2f"));
     graph.content.append('g').classed('axis', true)
       .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
 
@@ -274,6 +276,7 @@ let ChartListView = function(listID) {
         propertyValue = 0;
       }
       //show data relative to area (i.e. density)
+      console.log(propertyValue,area);
       data.push({
         value: (propertyValue / area) || 0, //fix for NaN values
         color: curSelection.color,

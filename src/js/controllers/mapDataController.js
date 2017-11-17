@@ -349,7 +349,7 @@ let MapDataController = function () {
     if(d.type !== "census"){
       App.views.chartList.addPropertyChart(d);
     }else{
-      let title = d.title ? `<b>${d.subType}</b> (per sq. mi.)` : undefined;
+      let title = d.title ? `<b>${d.subType}</b> (per km<sup>2</sup>)` : undefined;
       App.views.chartList.addPropertyChart(d, title);
     }
   }
