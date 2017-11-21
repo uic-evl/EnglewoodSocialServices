@@ -486,7 +486,7 @@ let MapView = function (div) {
           }).join(" ");
           let subTypeTitle = `${description.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
           // return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
-          return `<b>Count/m<sup>2</sup> of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this cell:</b> ${layer.feature.properties.data.toFixed(2)}`;
+          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this cell:</b> ${layer.feature.properties.data.toFixed(2)}`;
         }).addTo(self.choroplethLayer);
 
       self.rectLayer.eachLayer(rect => {
