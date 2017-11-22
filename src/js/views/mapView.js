@@ -444,7 +444,7 @@ let MapView = function (div) {
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
         .labelFormat(d3.format(".02f"))
-        .title(((title) ? title : "Census Count") + " per sq. meter")
+        .title(((title) ? title : "Census Count") + " per grid cell")
         .titleWidth(120)
         .scale(colorScaleQ);
 
