@@ -443,8 +443,8 @@ let MapView = function (div) {
 
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
-        .labelFormat(d3.format(".02f"))
-        .title(((title) ? title : "Census Count") + " per grid cell")
+        .labelFormat(d3.format(".0f"))
+        .title(((title) ? title : "Census Count") + " per census block")
         .titleWidth(120)
         .scale(colorScaleQ);
 
@@ -485,8 +485,7 @@ let MapView = function (div) {
             return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`;
           }).join(" ");
           let subTypeTitle = `${description.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
-          // return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
-          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this cell:</b> ${layer.feature.properties.data.toFixed(2)}`;
+          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this block:</b> ${layer.feature.properties.data}`;
         }).addTo(self.choroplethLayer);
 
       self.rectLayer.eachLayer(rect => {

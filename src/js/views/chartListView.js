@@ -129,7 +129,7 @@ let ChartListView = function(listID) {
     if(customTitle){
       fullTitle = customTitle;
     }else if(property_data.type !== "service"){
-      fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}${property_data.type !== "error" && property_data.type !== "lot" ? " (per km<sup>2</sup>)" : ""}`;
+      fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
     }else{
       fullTitle = `<b>${mainTypeTitle}:</b> ${property_data.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
     }
@@ -211,8 +211,8 @@ let ChartListView = function(listID) {
       });
 
     let yAxis = d3.axisLeft(yScale)
-      .tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]])
-      .tickFormat(d3.format(",.2f"));
+      .tickValues([yScale.domain()[0], (yScale.domain()[1] - yScale.domain()[0]) / 2, yScale.domain()[1]]);
+      // .tickFormat(d3.format(",.2f"));
     graph.content.append('g').classed('axis', true)
       .attr('transform', `translate(${xOffset},${yOffset})`).call(yAxis);
 
@@ -272,13 +272,12 @@ let ChartListView = function(listID) {
       try {
         propertyValue = curSelection.data.census[property_data.mainType][property_data.subType];
       } catch (err) {
-        console.log(err);
+        console.error(err);
         propertyValue = 0;
       }
-      //show data relative to area (i.e. density)
-      console.log(propertyValue,area);
+      //show data totals
       data.push({
-        value: (propertyValue / area) || 0, //fix for NaN values
+        value: (propertyValue) || 0, //fix for NaN values
         color: curSelection.color,
         // id: curSelection.id
       });
