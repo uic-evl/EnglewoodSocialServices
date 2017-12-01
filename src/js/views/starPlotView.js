@@ -12,6 +12,10 @@ let StarPlotView = function(options){
             top: 0, bottom: 0,
             left: 0, right: 0
         },
+        titleMargin: {
+            top: 0, bottom: 0,
+            left: 0, right: 0
+        },
         plotFn: undefined,
         svg: undefined,
         svgGroup: undefined
@@ -28,6 +32,12 @@ let StarPlotView = function(options){
         if(options.margin){
             for(let p of Object.keys(self.margin)){
                 self.margin[p] = options.margin[p] || self.margin[p];
+            }
+        }
+
+        if (options.titleMargin) {
+            for (let p of Object.keys(self.titleMargin)) {
+                self.titleMargin[p] = options.titleMargin[p] || self.titleMargin[p];
             }
         }
 
@@ -55,7 +65,7 @@ let StarPlotView = function(options){
             .properties(properties) //array of strings corresponding to properties of dataum
             .scales(scales)
             .labels(labels)
-            .title(options.name);
+            // .title(() => self.name);
     };
 
     init();
@@ -78,8 +88,18 @@ let StarPlotView = function(options){
         }
         self.svgGroup = self.svg.append('g').attr("id","starplot-" + self.name);
 
-        self.svgGroup.datum(data).call(self.plotFn)
-            .style("transform", `translateX(${self.margin.left - self.margin.right}px) translateY(${self.margin.top - self.margin.bottom}px)`);
+        if(data){
+            self.svgGroup.datum(data).call(self.plotFn)
+                    .style("transform", `translateX(${self.margin.left - self.margin.right}px) translateY(${self.margin.top - self.margin.bottom}px)`)
+                .select(".star-title")
+                    .style("transform", `translateX(${self.titleMargin.left - self.titleMargin.right}px) translateY(${self.titleMargin.top - self.titleMargin.bottom}px)`)    
+        }else{
+            let $svg = $(self.svg.node());
+            self.svgGroup.append("text").text("Select a block to show data")
+                .attr("text-anchor", "middle")
+                .style("transform", `translateX(${$svg.width() / 2}px) translateY(${$svg.height() / 2}px)`);
+        }
+        
 
     }
 
