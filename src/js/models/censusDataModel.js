@@ -53,7 +53,7 @@ let CensusDataModel = function() {
     return Promise.all([allDataBlocksdP, mapTypeNamesP]);
   }
 
-  function getSubsetGeoJSON(propertyTypes) {
+  function getSubsetGeoJSON(propertyTypes, getMainType) {
     // return (self.gridData);
 
     let subset = {
@@ -64,6 +64,7 @@ let CensusDataModel = function() {
           geometry: feature.geometry,
           properties: {
             data: feature.properties.census[propertyTypes.mainType][propertyTypes.subType],
+            fullData: (getMainType) ? feature.properties.census[propertyTypes.mainType] : undefined,
             blockName: feature.properties.name10,
             description: propertyTypes
           }
@@ -135,10 +136,15 @@ let CensusDataModel = function() {
     return getDataWithinPolygon(boundsPolygon);
   }
 
+  function getSubCategories(mainType) {
+    return self.mapTypeNames[mainType];
+  }
+
   return {
     loadData,
     getSubsetGeoJSON,
     getDataWithinBounds,
-    getDataWithinPolygon
+    getDataWithinPolygon,
+    getSubCategories
   };
 };

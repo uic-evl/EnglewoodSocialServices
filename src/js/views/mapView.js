@@ -401,7 +401,7 @@ let MapView = function (div) {
     self.map.fitBounds(rect.bounds);
   }
 
-  function drawChoropleth(data, title) {
+  function drawChoropleth(data, title, options = {}) {
     // remove old choropleth
     if (self.choropleth) {
       self.choroplethLayer.removeLayer(self.choropleth);
@@ -412,7 +412,7 @@ let MapView = function (div) {
 
     // if data specified, add new choropleth
     if (data) {
-      console.log(data);
+      console.log("drawChloropleth",data);
       self.englewoodOutline.setStyle({fillOpacity: 0});
       let description;
 
@@ -472,6 +472,12 @@ let MapView = function (div) {
         .on("mouseover", function (geojson) {
           // console.log(layer);
           geojson.layer.bringToFront();
+        })
+        .on("click", function(geojson){
+          // console.log(geojson.layer);
+          if(typeof options.clickHandler === "function"){
+            options.clickHandler(geojson.layer);
+          }
         })
         // .on("mouseout", function(geojson) {
         //   // console.log(layer);
