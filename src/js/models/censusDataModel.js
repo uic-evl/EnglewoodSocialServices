@@ -13,13 +13,14 @@ let CensusDataModel = function() {
   self.tree = rbush();
 
   function loadData() {
-    // load mapTypeNames.json as well as allDataGrid.geojson
-    let allDataGridP = new Promise(function(resolve, reject) {
-      d3.json("./data/allDataGrid.geojson", function(err, json) {
+    // load mapTypeNames.json as well as allDataBlocks.geojson
+    let allDataBlocksdP = new Promise(function(resolve, reject) {
+      d3.json("./data/allDataBlocks.geojson", function(err, json) {
         if (err) reject(err);
 
         self.gridData = json;
 
+        // create tree containing all blocks
         for(let featureInd in self.gridData.features) {
           // Array<number>: bbox extent in [ minX, minY, maxX, maxY ] order
           let bbox = turf.bbox(self.gridData.features[featureInd]);
@@ -49,10 +50,10 @@ let CensusDataModel = function() {
       });
     });
 
-    return Promise.all([allDataGridP, mapTypeNamesP]);
+    return Promise.all([allDataBlocksdP, mapTypeNamesP]);
   }
 
-  function getSubsetGeoJSON(propertyTypes) {
+  function getSubsetGeoJSON(propertyTypes, getMainType) {
     // return (self.gridData);
 
     let subset = {
@@ -62,14 +63,19 @@ let CensusDataModel = function() {
           type: "Feature",
           geometry: feature.geometry,
           properties: {
-            data: feature.properties[propertyTypes.mainType][propertyTypes.subType],
+            data: feature.properties.census[propertyTypes.mainType][propertyTypes.subType],
+            fullData: (getMainType) ? feature.properties.census[propertyTypes.mainType] : undefined,
+            blockName: feature.properties.name10,
             description: propertyTypes
           }
         };
       })
     };
 
+    // ignore any features with no data
     subset.features = _.filter(subset.features, o => o.properties.data);
+
+    console.log(subset);
 
     return subset;
   }
@@ -103,7 +109,7 @@ let CensusDataModel = function() {
 
         for (let property of Object.keys(self.mapTypeNames)) {
           for (let subproperty of self.mapTypeNames[property]) {
-            boundData[property][subproperty] += (feature.properties[property][subproperty] * areaRatio);
+            boundData[property][subproperty] += (feature.properties.census[property][subproperty] * areaRatio);
           }
         }
       }
@@ -130,10 +136,15 @@ let CensusDataModel = function() {
     return getDataWithinPolygon(boundsPolygon);
   }
 
+  function getSubCategories(mainType) {
+    return self.mapTypeNames[mainType];
+  }
+
   return {
     loadData,
     getSubsetGeoJSON,
     getDataWithinBounds,
-    getDataWithinPolygon
+    getDataWithinPolygon,
+    getSubCategories
   };
 };

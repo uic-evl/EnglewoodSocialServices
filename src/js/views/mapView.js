@@ -401,7 +401,7 @@ let MapView = function (div) {
     self.map.fitBounds(rect.bounds);
   }
 
-  function drawChoropleth(data, title) {
+  function drawChoropleth(data, title, options = {}) {
     // remove old choropleth
     if (self.choropleth) {
       self.choroplethLayer.removeLayer(self.choropleth);
@@ -412,7 +412,7 @@ let MapView = function (div) {
 
     // if data specified, add new choropleth
     if (data) {
-      console.log(data);
+      console.log("drawChloropleth",data);
       self.englewoodOutline.setStyle({fillOpacity: 0});
       let description;
 
@@ -433,7 +433,7 @@ let MapView = function (div) {
 
       // console.log(colorScale.domain(), colorScale.range());
 
-      let svg = d3.select("#legend").append("svg").attr("width", 170).attr("height", 150)
+      let svg = d3.select("#legend").append("svg").attr("width", 160).attr("height", 150)
         .style('background-color',"rgba(150,150,150,0.75)")
         .attr('id','svgLegend');
 
@@ -443,13 +443,17 @@ let MapView = function (div) {
 
       var legendLinear = d3.legendColor()
         .shapeWidth(30)
-        .labelFormat(d3.format(".02f"))
-        .title("Census Count" + ((title) ? ` for ${title}` : "") + " per sq. mi.")
+        .labelFormat(d3.format(".0f"))
+        .title(((title) ? title : "Census Count") + " per census block")
         .titleWidth(120)
         .scale(colorScaleQ);
 
       svg.select(".legendLinear")
         .call(legendLinear);
+
+      svg.select(".legendTitle")
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate(55,0)");
 
       //based off of https://stackoverflow.com/questions/7620509/how-does-one-get-the-height-width-of-an-svg-group-element
       svg.attr("height",+group.node().getBBox().height * 1.1)
@@ -469,6 +473,12 @@ let MapView = function (div) {
           // console.log(layer);
           geojson.layer.bringToFront();
         })
+        .on("click", function(geojson){
+          // console.log(geojson.layer);
+          if(typeof options.clickHandler === "function"){
+            options.clickHandler(geojson.layer);
+          }
+        })
         // .on("mouseout", function(geojson) {
         //   // console.log(layer);
         //   geojson.layer.bringToBack();
@@ -481,8 +491,7 @@ let MapView = function (div) {
             return `${d[0].toUpperCase()}${d.slice(1).toLowerCase()}`;
           }).join(" ");
           let subTypeTitle = `${description.subType.replace(/[^a-zA-Z0-9- ]/g, "")}`;
-          // return JSON.stringify(layer.feature.properties.description) + "<br>" + layer.feature.properties.data.toFixed(2);
-          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this location:</b> ${layer.feature.properties.data.toFixed(2)}`;
+          return `<b>Count of <em>${mainTypeTitle} - ${subTypeTitle}</em> on this block:</b> ${layer.feature.properties.data}`;
         }).addTo(self.choroplethLayer);
 
       self.rectLayer.eachLayer(rect => {

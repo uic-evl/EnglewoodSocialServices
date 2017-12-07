@@ -19,6 +19,19 @@ let tree = rbush(),
 const ARC_SECOND_GRID_SIZE = 2.5; // 5 arc-second seems to be the right level
 const GRID_SIZE = ARC_SECOND_GRID_SIZE / 3600; // arc-second to decimal
 
+/* Notes from Josh in regards to sizing
+
+* 1 arc-second represents the distance of lat/long traveled on the earth's surface in 1 second (1/3600 of a degree)
+* arc-second to decimal -> 1 arc-second / 3600
+* grid is divided into squares of 2.5x2.5 arc-seconds converted to decimal (for math ops with lat/long coords)
+
+http://www.esri.com/news/arcuser/0400/wdside.html
+* 1 arc-second of latitude/longitude at equator = 30.87 meters, 101.27 feet, 1/3600 degree of latitude/longitude
+	* at equator is important as arc-seconds of longitude decreases as you move away from the equator
+
+
+*/
+
 // extents of englewood neighborhoods (west & regular)
 // [ -87.6796718667824, ***
 //   41.757630738509604,
@@ -111,6 +124,7 @@ for (let lat = extent.lat.min; lat < extent.lat.max + GRID_SIZE; lat += GRID_SIZ
       let intersectedFeature = turf.intersect(poly1, poly2);
 
       if (intersectedFeature) {
+        // units is m^2
         let areaIntersect = area.geometry(intersectedFeature.geometry);
         // only get population right now
 

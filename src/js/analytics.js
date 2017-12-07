@@ -52,6 +52,10 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
   App.init = function () {
     $('[data-toggle="tooltip"]').tooltip(); //needed for button tooltips
     App.views.loadingMessage = new LoadingMessageView("#loading-indicator");
+
+    App.views.browserMessage = new BrowserMessageView("#browserModal");
+    App.models.browser = new BrowserModel();
+    App.controllers.browserMessage = new BrowserMessageController();
     
     console.log("Loading Analytics");
     App.views.loadingMessage.startLoading("Loading Map");
@@ -167,7 +171,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
               // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "West Englewood"; })
               lot: splitLotData.westEnglewood
             },
-            area: turf.area(westEnglewoodPoly),
+            area: turf.area(westEnglewoodPoly) / (1000 * 1000), //turf.area returns area in m^2, divide by 1000^2 to get km^2
             color: "#1f77b4",
             id: "West Englewood",
             bounds: (function(poly){
@@ -190,7 +194,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
               // lot: App.models.landInventory.getDataByFilter((a) => { return a.Area === "Englewood"; })
               lot: splitLotData.englewood
             },
-            area: turf.area(englewoodPoly),
+            area: turf.area(englewoodPoly) / (1000 * 1000), //turf.area returns area in m^2, divide by 1000^2 to get km^2
             color: "#ff7f0e",
             id: "Englewood",
             bounds: (function (poly) {
@@ -215,6 +219,8 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
         App.views.chartList.addSelection(selectionData.englewood);
 
         App.views.loadingMessage.finishLoading();
+
+        App.controllers.browserMessage.runBrowserCheck();
       })
       .catch(function(err) {
         console.error(err);

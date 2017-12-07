@@ -312,32 +312,43 @@ let MapDataController = function () {
     return propertyName.replace(/\W+/g, '_')
   }
 
-  function mapButtonClick(d) {
-    // d3.event.stopPropagation(); // prevent menu close on link click
-
-    // toggle whether or not it is selected
-    if (d3.select(this).classed("btn-danger")) {
-      // removeMap.call(this, d);
-      App.views.map.drawChoropleth();
-    } else {
-      self.mapDataPanel.selectAll(".mapButton").each(removeMap);
-
-      // addMap.call(this, d);
-      let reducedData = App.models.censusData.getSubsetGeoJSON(d);
-      App.views.map.drawChoropleth(reducedData);
-    }
-
-    // let reducedData = App.models.censusData.getSubsetGeoJSON(d);
-    // App.views.map.drawChoropleth(reducedData);
-  }
-
   function addMap(d) {
     console.log("Adding map",d);
-    let reducedData = App.models.censusData.getSubsetGeoJSON(d);
+    let reducedData, starGraph;
+    const aggregatedMainTypes = ['Race of Householder', 'Household Size', 'Sex by Age'].map((m) => m.toLowerCase());
+    if(d.type === "census" && d.subType.indexOf("Total") > -1 && aggregatedMainTypes.indexOf(d.mainType.toLowerCase().replace(/_/g,' ')) > -1){
+      console.log("Found an aggregated type", d);
+      // d.graph = {
+      //   init: (parent) => {
+      //     // console.log(parent.datum()); //array of features
+
+      //     // initiialize starplotview graph
+      //     // starGraph = new StarPlotView({
+      //     //   parent,
+      //     //   name: d.mainType
+      //     // }); //
+      //   },
+      //   update: () => {}
+      // }
+      reducedData = App.models.censusData.getSubsetGeoJSON(d/*,true*/);
+    }else{
+      reducedData = App.models.censusData.getSubsetGeoJSON(d);
+    }
     let index = 0;
-    App.views.map.drawChoropleth(reducedData, d.title || d.mainType.split('').map((d) => {
-      return index++ === 0 ? d.toUpperCase() : d.toLowerCase()
-    }).join('').replace(/_/g," "));
+    App.views.map.drawChoropleth(
+      reducedData, 
+      d.title || d.mainType.split('').map((d) => {
+        return index++ === 0 ? d.toUpperCase() : d.toLowerCase()
+      }).join('').replace(/_/g," "),
+      {
+        clickHandler: (layer) => {
+          if(!d.graph) return;
+
+          console.log(layer);
+          console.log(App.models.censusData.getSubCategories(d.mainType));
+        } //update bars on click
+      }
+    );
   }
 
   function removeMap() {
@@ -349,7 +360,7 @@ let MapDataController = function () {
     if(d.type !== "census"){
       App.views.chartList.addPropertyChart(d);
     }else{
-      let title = d.title ? `<b>${d.subType}</b> (per sq. mi.)` : undefined;
+      let title = d.title ? `<b>${d.subType}</b>` : undefined;
       App.views.chartList.addPropertyChart(d, title);
     }
   }
