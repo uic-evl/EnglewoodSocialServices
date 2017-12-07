@@ -78,7 +78,8 @@ let FilterDropdownController = function() {
       .attr("class", "dropdown-submenu serviceType")
       .each(function(c1) {
         let listItem = d3.select(this);
-        let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1);
+        let tier2Categories = App.models.serviceTaxonomy.getTier2CategoriesOf(c1)
+          .map(c2 => ({ mainType: c1, subType: c2 }));
         let btnGroup = listItem.append("div").classed("btn-group row", true);
 
         // create link within tab
@@ -162,10 +163,10 @@ let FilterDropdownController = function() {
 
             listItem.select("ul").selectAll(".serviceSubtype")
               .each(function (d) {
-                self.filters[d] = selected;
-                current_service_properties.subFilters.push(d);
+                self.filters[d.subType] = selected;
+                current_service_properties.subFilters.push(d.subType);
 
-                updateSubCategoryIcon(d,c1);
+                updateSubCategoryIcon(d.subType,c1);
               });
 
             if (selected) {
@@ -180,25 +181,24 @@ let FilterDropdownController = function() {
         let secondaryDropdown = btnGroup.append("ul")
           .attr("class", "dropdown-menu");
 
-        // secondaryDropdown.append("li").attr("class", "divider");
-
         secondaryDropdown.selectAll(".secondaryCategory ")
           .data(tier2Categories)
           .enter().append("li")
           .attr("class", "secondaryCategory serviceSubtype")
           .append("a")
-          .datum(function (c2) {
-            return {
-              mainType: c1,
-              subType: c2
-            };
-          })
           .attr("id", d => "sub_" + convertPropertyToID(d.subType))
           .html(function (d) {
             return "<span class='glyphicon glyphicon-unchecked'></span>" + d.subType;
           })
-          .on("click", function (d) {
+          .on("click", function (d, index, elementsArr) {
             // d3.event.stopPropagation(); // prevent menu close on link click
+
+            if(typeof d === "string"){
+              d = {
+                mainType: c1,
+                subType: d3.select(elementsArr[index]).text()
+              };
+            }
 
             //reset other filters to allow for only one sub category selection at a time
             let isMainCategorySelection = Object.keys(self.filters).length > 1;
@@ -210,11 +210,11 @@ let FilterDropdownController = function() {
             self.filterDropdownList.selectAll(".glyphicon")
               .attr("class", "glyphicon glyphicon-unchecked");
             listItem.select("ul").selectAll(".serviceSubtype")
-              .each(function (subType) {
-                if (subType !== d.subType) {
-                  self.filters[subType] = false;
+              .each(function (subData) {
+                if (subData.subType !== d.subType) {
+                  self.filters[subData.subType] = false;
 
-                  updateSubCategoryIcon(subType,c1);
+                  updateSubCategoryIcon(subData.subType,c1);
                 }
               });
             let curSelection = self.filters[d.subType];
@@ -299,7 +299,6 @@ let FilterDropdownController = function() {
 
     let item = self.filterDropdownList.select(id);
     if(main){
-      console.log(main,category);
       item = self.filterDropdownList.selectAll(".serviceType #main_" + convertPropertyToID(main)).select(function(){ return this.parentNode; }).select(id);
     }else{
       item = self.filterDropdownList.select(id);
@@ -330,8 +329,6 @@ let FilterDropdownController = function() {
     //show/hide buttons based on previous configuration
     let visibilityState = App.controllers.serviceMarkerView.markersAreVisible();
     App.controllers.serviceMarkerView.setVisibilityState(visibilityState);
-
-    console.log();
   }
 
   return {
