@@ -2,6 +2,7 @@
 var auth = require('http-auth');
 var express = require('express');
 let bodyParser = require('body-parser');
+const cors = require('cors');
 
 var argv = require('yargs')
   .usage('Usage: $0 -p [integer] -i [string of IP address]')
@@ -28,11 +29,7 @@ var app = express();
 let admin = express();
 
 // enable cors
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(cors());
 
 admin.use(bodyParser.json());
 admin.use(auth.connect(basic));
