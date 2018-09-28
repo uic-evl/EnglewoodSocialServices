@@ -29,7 +29,7 @@ var app = express();
 let admin = express();
 
 // enable cors
-app.use(cors());
+app.use(cors({ origin: '*' }));
 
 admin.use(bodyParser.json());
 admin.use(auth.connect(basic));
