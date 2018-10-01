@@ -12,30 +12,12 @@ let LandInventoryModel = function () {
   };
 
   function loadCSV(path) {
-    return new Promise(function (fulfill, reject) {
-      d3.csv(path, function (error, csv) {
-        if (error) reject(error);
-
-        fulfill(csv);
-      });
-    });
-  }
-
-  function loadJSON(path) {
-    return new Promise(function (fulfill, reject) {
-      d3.json(path, function (error, json) {
-        if (error) reject(error);
-
-        console.log(json.length);
-        fulfill(json);
-      });
-    });
+    return App.controllers.dataDownload.getCsv(path);
   }
 
   function loadData() {
     let englewoodData, westEnglewoodData;
-    // let ePromise = loadJSON("./data/EnglewoodLandInventory.json")
-    let ePromise = loadCSV("./data/EnglewoodLandInventory.csv")
+    const ePromise = loadCSV("./data/EnglewoodLandInventory.csv")
       .then((data) => {
         englewoodData = data.map((c) => { 
           c.Area = "Englewood"; 
@@ -49,8 +31,8 @@ let LandInventoryModel = function () {
         });
         return;
       });
-    // let wePromise = loadJSON("./data/WestEnglewoodLandInventory.json")
-    let wePromise = loadCSV("./data/WestEnglewoodLandInventory.csv")
+
+    const wePromise = loadCSV("./data/WestEnglewoodLandInventory.csv")
       .then((data) => {
         westEnglewoodData = data.map((c) => { 
           c.Area = "West Englewood";
