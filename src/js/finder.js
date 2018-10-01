@@ -48,6 +48,7 @@ window.onresize = function() {
 
 
   // controllers
+  App.controllers.dataDownload = new DataDownloadController();
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
   App.controllers.listToMapLink = new ListToMapLinkingController();
   App.controllers.locationButton = new LocationButtonController();
