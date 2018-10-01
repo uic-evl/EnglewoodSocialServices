@@ -14,43 +14,35 @@ let CensusDataModel = function() {
 
   function loadData() {
     // load mapTypeNames.json as well as allDataBlocks.geojson
-    let allDataBlocksdP = new Promise(function(resolve, reject) {
-      d3.json("./data/allDataBlocks.geojson", function(err, json) {
-        if (err) reject(err);
-
+    const allDataBlocksP = App.controllers.dataDownload.getJson("./data/allDataBlocks.geojson")
+      .then(function (json) {
         self.gridData = json;
 
         // create tree containing all blocks
-        for(let featureInd in self.gridData.features) {
+        for (const featureInd in self.gridData.features) {
           // Array<number>: bbox extent in [ minX, minY, maxX, maxY ] order
-          let bbox = turf.bbox(self.gridData.features[featureInd]);
+          const bbox = turf.bbox(self.gridData.features[featureInd]);
 
-          let item = {
-              minX: bbox[0],
-              minY: bbox[1],
-              maxX: bbox[2],
-              maxY: bbox[3],
-              id: featureInd
+          const item = {
+            minX: bbox[0],
+            minY: bbox[1],
+            maxX: bbox[2],
+            maxY: bbox[3],
+            id: featureInd
           };
 
           self.tree.insert(item);
         }
-
-        resolve(json);
+        return json;
       });
-    });
 
-    let mapTypeNamesP = new Promise(function(resolve, reject) {
-      d3.json("./data/mapTypeNames.json", function(err, json) {
-        if (err) reject(err);
-
+    const mapTypeNamesP = App.controllers.dataDownload.getJson("./data/mapTypeNames.json")
+      .then(function (json) {
         self.mapTypeNames = json;
-
-        resolve(json);
+        return json;
       });
-    });
 
-    return Promise.all([allDataBlocksdP, mapTypeNamesP]);
+    return Promise.all([allDataBlocksP, mapTypeNamesP]);
   }
 
   function getSubsetGeoJSON(propertyTypes, getMainType) {
