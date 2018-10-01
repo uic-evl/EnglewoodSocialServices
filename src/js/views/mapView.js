@@ -100,18 +100,20 @@ let MapView = function (div) {
 
   function drawEnglewoodOutline() {
     //add outline of Englewood
-    d3.json("./data/EnglewoodCommunityAreaBoundaries.geojson", function (error, d) {
-      self.englewoodOutline = L.geoJSON(d, {
-        style: {
-          color: "#006837",
-          weight: 3,
-          opacity: .75,
-          fillColor: '#d9f0a3', //Outline color
-          fillOpacity: 0.35,
-          className: "geoJSON-englewoodOutline",
-        }
-      }).addTo(self.map);
-    });
+    return App.controllers.dataDownload.getJson("./data/EnglewoodCommunityAreaBoundaries.geojson")
+      .then(function (d) {
+        self.englewoodOutline = L.geoJSON(d, {
+          style: {
+            color: "#006837",
+            weight: 3,
+            opacity: .75,
+            fillColor: '#d9f0a3', //Outline color
+            fillOpacity: 0.35,
+            className: "geoJSON-englewoodOutline",
+          }
+        }).addTo(self.map);
+        return;
+      });
   }
 
   // initialize the different icon options by color

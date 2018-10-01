@@ -44,6 +44,7 @@ Promise.all([documentPromise, windowPromise, less.pageLoadFinished])
 
 
   // controllers
+  App.controllers.dataDownload = new DataDownloadController();
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
   App.controllers.mapData = new MapDataController();
   // App.controllers.locationButton = new LocationButtonController();
