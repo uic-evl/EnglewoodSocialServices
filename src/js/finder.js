@@ -48,7 +48,7 @@ window.onresize = function() {
 
 
   // controllers
-  App.controllers.dataDownload = new DataDownloadController('http://quahog.evl.uic.edu/');
+  App.controllers.dataDownload = new DataDownloadController('https://quahog.evl.uic.edu/');
   App.controllers.serviceFilterDropdown = new FilterDropdownController();
   App.controllers.listToMapLink = new ListToMapLinkingController();
   App.controllers.locationButton = new LocationButtonController();
