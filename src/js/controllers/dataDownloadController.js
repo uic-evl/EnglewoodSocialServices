@@ -7,7 +7,7 @@ const DataDownloadController = function (rootUrl) {
   };
 
   function init () {
-    self.rootUrl = rootUrl !== undefined ? rootUrl : 'http://purgato.evl.uic.edu/';
+    self.rootUrl = rootUrl !== undefined ? rootUrl : '';
   }
   init();
 
