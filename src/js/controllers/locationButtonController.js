@@ -106,7 +106,7 @@ let LocationButtonController = function() {
     var replaced = address.split(' ').join('+');
     console.log(replaced);
 
-    var object = d3.json("https://maps.googleapis.com/maps/api/geocode/json?address=" + replaced + "&key=AIzaSyAUDFjBPoiSQprcBvEhc9w6SJeR3EK4IGI", function(err, d) {
+    var object = d3.json("https://maps.googleapis.com/maps/api/geocode/json?address=" + replaced + "&key=AIzaSyBlnApjIRhIVdu187k1ZAPfor0k3vYra98", function (err, d) {
       
       if (d.results && d.results[0]) {
       let pos = d.results[0].geometry.location;
