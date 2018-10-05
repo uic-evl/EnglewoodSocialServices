@@ -37,6 +37,7 @@ function initHttps () {
     const credentials = {
       key: fs.readFileSync('../evl2017/_.evl.uic.edu.key', 'utf8'),
       cert: fs.readFileSync('../evl2017/_.evl.uic.edu.crt', 'utf8'),
+      ca: fs.readFileSync('../evl2017/_.evl.uic.edu-ca.crt', 'utf8'),
     };
     const httpsServer = https.createServer(credentials, app);
     if (argv.ip.length > 0) {
