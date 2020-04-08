@@ -1,4 +1,5 @@
 FROM node:lts
+LABEL maintainer avatar<evl.avatar@gmail.com>
 
 WORKDIR /usr/src/app
 COPY package.json .
