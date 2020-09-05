@@ -1,5 +1,5 @@
-FROM node:boron
-MAINTAINER	EVL avatar <evl.avatar@gmail.com>
+FROM node:lts
+LABEL maintainer avatar<evl.avatar@gmail.com>
 
 WORKDIR /usr/src/app
 COPY package.json .

@@ -27,7 +27,9 @@
     "express": "^4.16.3",
     "fs-extra": "^4.0.1",
     "http-auth": "^3.2.3",
-    "pm2": "^2.6.1",
-    "yargs": "^8.0.2"
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "pm2": "^2.6.1"
   }
 }
